@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html data-ng-app><!-- InstanceBegin template="/Templates/tsielv2.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+	<meta charset="utf-8">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
+    <!-- InstanceEndEditable -->
+    <!-- InstanceBeginEditable name="head" -->
+    <style type="text/css">
+<!--
+.Estilo1 {
+	color: #FF0000;
+	font-size: 24px;
+}
+-->
+    </style>
+    <!-- InstanceEndEditable -->
+	<style type="text/css">
+        <!--
+        body {
+            margin-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            background-color: #035687;
+        }
+        .menutop {
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+		html, body
+		{
+		  height: 100%;
+		}
+        -->
+    </style>
+	<script src="scripts/angular.min.js"></script>
+</head>
+<head>
+</head>
+
+<body>
+<table width="1024" border="0" align="center" cellpadding="0" cellspacing="0" style="height: 100%;">
+  <tr>
+    <td height="75" valign="top" background="img/topfondo.jpg"><table width="1024" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="310" height="50">&nbsp;</td>
+        <td width="714" height="50">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="menutop">{menutop}</span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="#FFFFFF">
+	<!-- InstanceBeginEditable name="contenido" -->
+	<table width="970" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:20px">
+      <tr>
+        <td><table width="970" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="425" height="40">SISTEMA DE INFORMACI&Oacute;N EN L&Iacute;NEA</td>
+            <td width="120" height="40">&nbsp;</td>
+            <td width="425" height="40" style="outline:1px solid #CCCCCC"><form name="form1" method="post" action="">
+              <table width="420" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="162">Seleccione per&iacute;odo a consultar:</td>
+                  <td width="110"><select name="select" id="select">
+                    <option value="enero" selected>Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiempre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                  </select>                  </td>
+                  <td width="80"><select name="select2" id="select2">
+                    <option value="2014" selected>2014</option>
+                    <option value="2015">2015</option>
+                  </select>                  </td>
+                  <td width="68"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
+                </tr>
+              </table>
+                </form>            </td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right">Bienvenido: {usrlogin}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><table width="970" border="0" cellspacing="0" cellpadding="0">
+          <tr bgcolor="#F5AA1D">
+            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="menutop">EVALUACIONES PARCIALES</span></td>
+            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td align="center" bgcolor="#DFDFDF"><table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="100">Tienda</td>
+            <td width="20">&nbsp;</td>
+            <td width="100">Horario</td>
+            <td width="20">&nbsp;</td>
+            <td width="110">Tipo Visita</td>
+            <td width="20">&nbsp;</td>
+            <td width="60">&nbsp;</td>
+            <td width="150">Menu</td>
+            <td width="20">&nbsp;</td>
+            <td width="110" align="center">Puntaje</td>
+            <td width="20">&nbsp;</td>
+            <td width="220" rowspan="2" align="center">{puntaje}</td>
+          </tr>
+          <tr valign="top">
+            <td>{tienda}</td>
+            <td>&nbsp;</td>
+            <td>{horario}</td>
+            <td>&nbsp;</td>
+            <td>{tipvisita}</td>
+            <td>&nbsp;</td>
+            <td>{foto}</td>
+            <td>{menu}</td>
+            <td>&nbsp;</td>
+            <td align="center">Obtenido:</td>
+            <td>&nbsp;</td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr bgcolor="#F5AA1D">
+        <td><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
+      </tr>
+      <tr>
+        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="177">Tiempo de espera en la fila</td>
+            <td width="19">&nbsp;</td>
+            <td width="69">{tef}</td>
+            <td width="19">&nbsp;</td>
+            <td width="167">Tiempo de espera en caja</td>
+            <td width="20">&nbsp;</td>
+            <td width="70">{tec}</td>
+            <td width="20">&nbsp;</td>
+            <td width="140">N° cajas en uso</td>
+            <td width="20">&nbsp;</td>
+            <td width="229">{ncu}</td>
+          </tr>
+          <tr>
+            <td>Tiempo de la orden lista</td>
+            <td>&nbsp;</td>
+            <td>{tol}</td>
+            <td>&nbsp;</td>
+            <td>Tiempo total</td>
+            <td>&nbsp;</td>
+            <td>{tt}</td>
+            <td>&nbsp;</td>
+            <td>N° clientes en la fila</td>
+            <td>&nbsp;</td>
+            <td>{ncf}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="200">Empleado que toma la orden</td>
+            <td width="20">&nbsp;</td>
+            <td width="140">{eto}</td>
+            <td width="20">&nbsp;</td>
+            <td width="570">{dateto}</td>
+          </tr>
+          <tr>
+            <td>Empleado que entrega la orden</td>
+            <td>&nbsp;</td>
+            <td>{eeo}</td>
+            <td>&nbsp;</td>
+            <td>{dateeo}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td bgcolor="#FF0000"><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalles adicionales importantes observados durante su visita:</span></td>
+      </tr>
+      <tr>
+        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>{detalles}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="326" align="center"><span class="Estilo1">PUNTOS PERDIDOS POR MOMENTOS</span></td>
+            <td width="40">&nbsp;</td>
+            <td width="584">{grafico}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+    </table>
+	<!-- InstanceEndEditable -->    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>
