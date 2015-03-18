@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html data-ng-app><!-- InstanceBegin template="/Templates/tsielv2.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+	<meta charset="utf-8">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
+    <!-- InstanceEndEditable -->
+    <!-- InstanceBeginEditable name="head" -->
+    <link rel="stylesheet" href="css/normalizze.css" />
+    <link rel="stylesheet" href="css/popelt.css" />
+    <link rel="stylesheet" href="css/demoz.css" />
+    <script src="scripts/jquery-1.11.2.min.js"></script>
+    <script src="scripts/popelt-v1.0.min.js"></script>
+	<!-- InstanceEndEditable -->
+	<style type="text/css">
+        <!--
+        body {
+            margin-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            background-color: #035687;
+        }
+        .menutop {
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+		html, body
+		{
+		  height: 100%;
+		}
+        -->
+    </style>
+	<script src="scripts/angular.min.js"></script>
+</head>
+<head>
+</head>
+
+<body>
+<table width="1024" border="0" align="center" cellpadding="0" cellspacing="0" style="height: 100%;">
+  <tr>
+    <td height="75" valign="top" background="img/topfondo.jpg"><table width="1024" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="310" height="50">&nbsp;</td>
+        <td width="714" height="50">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="menutop">{menutop}</span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="#FFFFFF">
+	<!-- InstanceBeginEditable name="contenido" -->
+	<table width="970" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:20px">
+      <tr>
+        <td><table width="970" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="425" height="40" style="outline:1px solid #CCCCCC"><table width="420" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="130">&nbsp;Filtrar por locales:</td>
+                  <td width="290"><input name="buscarloc" type="text" id="buscarloc" maxlength="32" style="width:250px"></td>
+                </tr>
+            </table></td>
+            <td width="120" height="40">&nbsp;</td>
+            <td width="425" height="40" style="outline:1px solid #CCCCCC"><form name="form1" method="post" action="">
+              <table width="420" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="162">Seleccione per&iacute;odo a consultar:</td>
+                  <td width="110"><select name="select" id="select">
+                    <option value="enero" selected>Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiempre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                  </select>                  </td>
+                  <td width="80"><select name="select2" id="select2">
+                    <option value="2014" selected>2014</option>
+                    <option value="2015">2015</option>
+                  </select>                  </td>
+                  <td width="68"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
+                </tr>
+              </table>
+                        </form>            </td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right">Bienvenido: {usrlogin}</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><table width="970" border="0" cellspacing="0" cellpadding="0">
+          <tr bgcolor="#DF0000">
+            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="menutop">ALERTAS DE INCIDENCIAS</span></td>
+            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><table width="970" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+          <tr>
+            <td width="105">Fecha</td>
+            <td width="83">Hora</td>
+            <td width="113">Tienda</td>
+            <td width="69">Gps</td>
+            <td width="170">Incidencia</td>
+            <td width="327">Comentarios G&amp;N</td>
+            <td width="25">&nbsp;</td>
+          </tr>
+          <!-- START BLOCK : alertas -->
+          <tr bgcolor="#FFFFFF">
+            <td>{fecha}</td>
+            <td>{hora}</td>
+            <td>{tienda}</td>
+            <td>{gps}</td>
+            <td>{incidencia}</td>
+            <td>{comentario}</td>
+            <td><img src="img/lapizedit.jpg" width="18" height="18" border="0" style="cursor:hand" class="link_popup" myid={id}></td>
+          </tr>
+		  <!-- END BLOCK : alertas -->
+        </table>
+        <script type="text/javascript">
+		$('.link_popup').click(function(){
+			//alert($(this).attr('myid'));
+			var p = new Popelt({
+				contentType: 'ajax',
+				loadUrl: 'verincidencia.php?IA=' + $(this).attr('myid'),
+				focus: true
+			});
+			//p.addCloseButton();
+			p.addButton('Cerrar');
+			p.show();
+		});
+		</script>
+        </td>
+      </tr>
+    </table>
+	<!-- InstanceEndEditable -->    </td>
+  </tr>
+</table>
+</body>
+<!-- InstanceEnd --></html>

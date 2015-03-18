@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>{tit_sit}</title>
+<link type="image/x-icon" href="fav_inge.ico" rel="shortcut icon" />
+
+<style type="text/css">
+<!--
+body {
+	background-image: url(imagenes/fondo.gif);
+	background-repeat: repeat;
+}
+body,td,th {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #666;
+	line-height: 1px;
+}
+-->
+</style>
+
+<link href="../inge_css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+<link href="../estilos_textos.css" rel="stylesheet" type="text/css" />
+</head>
+
+<!-- Contenedor panel principal --><body onload="MM_preloadImages('../imagenes/Menu_top/menutop_on_inicio.jpg','../imagenes/Menu_top/menutop_on_conozca.jpg','../imagenes/Menu_top/menutop_on_informes.jpg','../imagenes/Menu_top/menutop_on_certificaciones.jpg','../imagenes/Menu_top/menutop_on_contactenos.jpg','../imagenes/Menu_top/btn_buscar_ON.jpg','../imagenes/Panel_menu/Btn_on_laboratorio.jpg','../imagenes/Panel_menu/Btn_on_termografia.jpg','../imagenes/Panel_menu/Btn_on_asesorias.jpg','../imagenes/Panel_menu/Btn_on_equipos.jpg','../imagenes/Panel_menu/Btn_on_seminarios.jpg','../imagenes/Panel_menu/Btn_on_noticias.jpg','../imagenes/Panel_menu/Btn_on_ingresar.jpg','../imagenes/Menu_top/menutop_on_ensayos.jpg')">
+
+<div id="contenedor_principal">
+  <div id="panel_principal">
+    <!-- Contenedor TOP -->
+    <div id="contenedor_TOP">
+      <div id="cabecera"> <img src="../imagenes/Cabecera.jpg" width="854" height="86" alt="header" /> </div>
+      <!-- Contenedor TOP -->
+    </div>
+    <!-- Contenedor MAIN -->
+    <div id="contenedor_MAIN">
+      <div id="menu_top">
+        <!-- inicio -->
+        <div class="boton_menutop"><a href="../home_inge.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('inicio','','../imagenes/Menu_top/menutop_on_inicio.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_inicio.jpg" alt="inicio" name="inicio" width="99" height="24" border="0" id="inicio" /></a></div>
+        <!-- conozca -->
+        <div class="boton_menutop"><a href="../conozca.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('conozca','','../imagenes/Menu_top/menutop_on_conozca.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_conozca.jpg" alt="conozca" name="conozca" width="131" height="24" border="0" id="conozca" /></a></div>
+        <!-- informes -->
+        <div class="boton_menutop"><a href="../informes.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('informes','','../imagenes/Menu_top/menutop_on_informes.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_informes.jpg" alt="informes" name="informes" width="108" height="24" border="0" id="informes" /></a></div>
+        <!-- certificaciones -->
+        <div class="boton_menutop"><a href="../certificacion.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('certificaciones','','../imagenes/Menu_top/menutop_on_certificaciones.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_certificaciones.jpg" alt="certificaciones" name="certificaciones" width="116" height="24" border="0" id="certificaciones" /></a></div>
+        <!-- contactenos -->
+        <div class="boton_menutop"><a href="../ensayos.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('ensayos','','../imagenes/Menu_top/menutop_on_ensayos.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_ensayos.jpg" alt="ensayos" name="ensayos" width="94" height="24" border="0" id="ensayos" /></a>
+        </div>
+        <!-- contactenos -->
+        <div class="boton_menutop"><a href="../contacto.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('contactenos','','../imagenes/Menu_top/menutop_on_contactenos.jpg',1)"><img src="../imagenes/Menu_top/menutop_off_contactenos.jpg" alt="contactenos" name="contactenos" width="109" height="24" border="0" id="contactenos" /></a></div>
+        <form action="busqueda.php" method="post" name="buscar2">
+        <div id="buscar">
+          <div id="text_buscar">
+            <input name="buscar" type="text" class="campo_buscar" size="22" />
+          </div> 
+          <div id="btn_buscar"><a href="javascript:document.buscar2.submit();" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('buscar','','../imagenes/Menu_top/btn_buscar_ON.jpg',1)"><img src="../imagenes/Menu_top/btn_buscar_OFF.jpg" alt="buscar" name="buscar" width="62" height="24" border="0" id="buscar2" /></a></div>
+        </div>
+        </form>
+      </div>
+      
+	<!-- panel izquierdo contenido -->
+	<div id="p_contenido1">
+<!-- TemplateBeginEditable name="contenido" -->
+<div id="panel_celeste"><!-- id del panel gral celeste que encierra los paneles amarillos de contenido -->
+
+<!-- titulo panel contenido --><div class="titulo_panel">
+       		(imagen del titulo de panel)
+<!-- titulo panel contenido --></div>
+    	
+        
+        <div class="contenido"><!-- caja contenedora de los bloques amarillos de contenido específico -->
+           	  <div class="pan_amarillo_abrir"></div>
+       		  
+              	<div class="pan_amarillo_central">
+           	    <div class="contenido_titulo"> Titulo Panel contenido </div>
+               		<div class="contenido_panamarillo">
+	                (contenido info del panel)
+                    </div>
+                    </div>
+                
+                <div class="pan_amarillo_cierre"></div>
+        		<!-- cierre panel celeste de contenido -->
+ 				<div class="panel_celeste_cierre"></div>
+        
+        </div><!-- final de la caja contenedora de los bloques amarillos de contenido específico -->
+</div><!-- final del panel gral celeste que encierra los paneles amarillos de contenido -->
+
+    
+<!-- TemplateEndEditable -->
+	</div><!-- cierre panel izquierdo contenido -->
+    
+    <!-- menuprincipal panel derecho -->
+      <div id="menu">
+        <!-- pan 1 -->
+        <div class="pan_menu_1">
+          <div class="btn_pmenu"><a href="../categorias.php?id=2" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('lab','','../imagenes/Panel_menu/Btn_on_laboratorio.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_laboratorio.jpg" alt="lab" name="lab" width="198" height="34" border="0" id="lab" /></a></div>
+          <div class="btn_pmenu"><a href="../categorias.php?id=4" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('term','','../imagenes/Panel_menu/Btn_on_termografia.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_termografia.jpg" alt="term" name="term" width="198" height="34" border="0" id="term" /></a></div>
+          <div class="btn_pmenu"><a href="../categorias.php?id=5" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('sgl','','../imagenes/Panel_menu/Btn_on_asesorias.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_asesorias.jpg" alt="sgl" name="sgl" width="198" height="50" border="0" id="sgl" /></a></div>
+          <div class="btn_pmenu"><a href="../categorias.php?id=1" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('equip','','../imagenes/Panel_menu/Btn_on_equipos.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_equipos.jpg" alt="equip" name="equip" width="198" height="34" border="0" id="equip" /></a></div>
+        </div>
+        <!-- pan 2 -->
+        <div class="pan_menu_2">
+          <div class="btn_pmenu"><a href="../seminarios.php" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('sem','','../imagenes/Panel_menu/Btn_on_seminarios.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_seminarios.jpg" alt="sem" name="sem" width="198" height="34" border="0" id="sem" /></a></div>
+          <div class="btn_space"></div>
+          <div class="btn_pmenu"><a href="../categorias.php?id=3" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('not','','../imagenes/Panel_menu/Btn_on_noticias.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_noticias.jpg" alt="not" name="not" width="198" height="34" border="0" id="not" /></a></div>
+        </div>
+        <!-- pan 3 -->
+        <div class="pan_menu_3">
+		{inicoment}
+          <form action="login.php" method="post" name="form1">
+          <div id="ingresar2">
+            <div id="text_user">
+              <label class="usu">Usuario</label>
+              <input class="text" name="usuario" type="text" size="3" />
+            </div>
+            <div id="text_pass">
+              <label class="usu">Contraseña</label>
+              <input class="text" name="pass" type="password" size="3" />
+            </div>
+          </div>
+          <div class="btn_pmenu"><a href="javascript:document.form1.submit();" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('ing','','../imagenes/Panel_menu/Btn_on_ingresar.jpg',1)"><img src="../imagenes/Panel_menu/Btn_off_ingresar.jpg" alt="ing" name="ing" width="198" height="34" border="0" id="ing" /></a></div>
+			</form>
+         {fincoment}
+        </div>
+        <!-- menuprincipal panel derecho -->
+      </div>
+      <!-- Contenedor MAIN -->
+    </div>
+    <!-- Contenedor pie pagina -->
+    <div id="contenedor_PIEPAG">
+    		<div id="texto_piepag">
+            	<div class="titulo_ppag">{pie_pag}</div><div class="separador_pp"></div>
+                <div class="fono_ppag">{fono}</div><div class="separador_pp"></div>
+                <div class="dire_ppag"> {direccion}</div>
+            </div>
+    </div><!-- Contenedor pie pagina -->
+    <!-- Contenedor panel principal -->
+  </div>
+</div>
+
+</body>
+</html>

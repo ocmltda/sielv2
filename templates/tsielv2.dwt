@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html data-ng-app>
+<head>
+	<meta charset="utf-8">
+    <!-- TemplateBeginEditable name="doctitle" -->
+    <title>.: Tack Chile | Sistema de Información en Linea :.</title>
+    <!-- TemplateEndEditable -->
+    <!-- TemplateBeginEditable name="head" -->
+    <!-- TemplateEndEditable -->
+	<style type="text/css">
+        <!--
+        body {
+            margin-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            background-color: #035687;
+        }
+        .menutop {
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+		html, body
+		{
+		  height: 100%;
+		}
+        -->
+    </style>
+	<script src="scripts/angular.min.js"></script>
+</head>
+<head>
+</head>
+
+<body>
+<table width="1024" border="0" align="center" cellpadding="0" cellspacing="0" style="height: 100%;">
+  <tr>
+    <td height="75" valign="top" background="../img/topfondo.jpg"><table width="1024" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="310" height="50">&nbsp;</td>
+        <td width="714" height="50">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="menutop">{menutop}</span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="#FFFFFF">
+	<!-- TemplateBeginEditable name="contenido" -->
+	<!-- TemplateEndEditable -->
+    </td>
+  </tr>
+</table>
+</body>
+</html>

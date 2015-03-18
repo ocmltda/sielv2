@@ -1,0 +1,1559 @@
+@charset "utf-8";
+/* CSS Document */
+27/10/2009 13:43:16
+
+#contenedor_principal {
+	margin: auto;
+	clear: both;
+	height: auto;
+	width: inherit;
+}
+
+#panel_principal {
+	margin: auto;
+	clear: both;
+	height: 610px;
+	width: 900px;
+	position: relative;
+	float: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#panel_n1 {
+	background-image: url(imagenes/home/Panel_n1.jpg);
+	background-repeat: no-repeat;
+	height: 204px;
+	width: 650px;
+	background-position: center center;
+	margin-left: 1px;
+}
+html>body #panel_n1 {
+	background-image: url(imagenes/home/Panel_n1.jpg);
+	background-repeat: no-repeat;
+	height: 204px;
+	width: 650px;
+	background-position: center center;
+	margin-left: 4px;
+}
+#contenedor_TOP {
+	width: 900px;
+	position: relative;
+	height: 99px;
+}
+#text_user {
+	float: left;
+	width: 85px;
+	height: 30px;
+}
+#text_pass {
+	float: left;
+	width: 95px;
+	height: 30px;
+	margin-left: 5px;
+}
+#Panel_laboratorio {
+	background-image: url(imagenes/home/Panel_laboratorio.jpg);
+	background-repeat: no-repeat;
+	width: 320px;
+	float: left;
+	height: 225px;
+	margin-left: 2px;
+}
+html>body #Panel_laboratorio {
+	background-image: url(imagenes/home/Panel_laboratorio.jpg);
+	background-repeat: no-repeat;
+	width: 320px;
+	float: left;
+	height: 225px;
+	margin-left: 4px;
+}
+#Panel_equipos {
+	background-image: url(imagenes/home/Panel_equipos.jpg);
+	background-repeat: no-repeat;
+	height: 225px;
+	width: 317px;
+	position: relative;
+	float: left;
+	margin-left: 4px;
+}
+#p_contenido1 {
+	float: left;
+	width: 645px;
+	margin-top: 1px;
+	padding-left: 20px;
+	position: relative;
+	height: auto;
+}
+
+#cabecera {
+	height: 93px;
+	width: 876px;
+	background-image: url(imagenes/MPAbrir_cabecera.gif);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	position: relative;
+	padding-left: 24px;
+	padding-top: 6px;
+}
+#menu_top {
+	height: 32px;
+	width: 882px;
+	position: relative;
+	background-image: url(imagenes/Menu_top/Menutop_fondo.gif);
+	background-repeat: no-repeat;
+	background-position: center top;
+	padding-left: 18px;
+	padding-top: 0px;
+}
+html>body #menu_top {
+	height: 32px;
+	width: 882px;
+	position: relative;
+	background-image: url(imagenes/Menu_top/Menutop_fondo.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	padding-left: 18px;
+	padding-top: 0px;
+}
+.boton_menutop {
+	height: 24px;
+	width: auto;
+	padding-top: 5px;
+	float: left;
+	position: relative;
+}
+#contenedor_MAIN {
+	width: 900px;
+	position: relative;
+	background-image: url(imagenes/MPRepetir_fndo.gif);
+	background-repeat: repeat-y;
+	float: left;
+	background-position: center;
+}
+#p_contenido {
+	float: left;
+	width: 577px;
+	position: relative;
+	margin-top: 5px;
+}
+.panel_cabecera {
+	float: left;
+	width: auto;
+	position: relative;
+}
+#ingresar2 {
+	width: 190px;
+	height: 30px;
+	margin-top: 30px;
+	margin-left: auto;
+}
+.imagen1 {
+	float: left;
+	width: auto;
+	position: relative;
+	background-color: #FAE292;
+	padding: 10px;
+	margin-top: 3px;
+	margin-bottom: 10px;
+}
+.imagen {
+	float: right;
+	position: relative;
+	height: auto;
+	width: 250px;
+	vertical-align: top;
+}
+.box_space {
+	width: 500px;
+	position: relative;
+	height: 15px;
+	float: left;
+}
+#buscar {
+	height: 30px;
+	width: 215px;
+	float: left;
+}
+#text_buscar {
+	width: 121px;
+	float: left;
+	padding-top: 7px;
+	margin-left: 4px;
+}
+#btn_buscar {
+	height: 24px;
+	width: 62px;
+	float: right;
+	margin-left: 5px;
+	position: relative;
+	margin-right: 10px;
+	padding-top: 5px;
+}
+html>body #btn_buscar {
+	height: 24px;
+	width: 62px;
+	float: right;
+	margin-left: 5px;
+	position: relative;
+	margin-right: 20px;
+	padding-top: 5px;
+}
+.pan_botomcierre {
+	background-image: url(imagenes/panel_cierre.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	width: 597px;
+	position: relative;
+	height: 17px;
+}
+#menu {
+	float: right;
+	width: 207px;
+	position: relative;
+	height: auto;
+	padding-right: 14px;
+}
+.pan_menu_1 {
+	background-image: url(imagenes/Panel_menu/1Panel_servicios.jpg);
+	background-repeat: no-repeat;
+	height: 162px;
+	width: 200px;
+	position: relative;
+	float: right;
+	padding-top: 31px;
+	padding-left: 6px;
+	padding-right: 9px;
+	margin-top: 3px;
+	background-position: center center;
+}
+.pan_menu_2 {
+	background-image: url(imagenes/Panel_menu/2Panel_capacitacion.jpg);
+	background-repeat: no-repeat;
+	height: 92px;
+	width: 200px;
+	position: relative;
+	float: right;
+	padding-top: 46px;
+	padding-right: 9px;
+	padding-left: 6px;
+	background-position: center center;
+}
+.pan_menu_3 {
+	background-image: url(imagenes/Panel_menu/3Panel_clientes.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 101px;
+	width: 200px;
+	position: relative;
+	float: right;
+	padding: 0 9px 0 6px;
+	margin: 0 0 10px 0;
+	display: block;
+
+}
+html>body .pan_menu_3 {
+	background-image: url(imagenes/Panel_menu/3Panel_clientes.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 101px;
+	width: 200px;
+	position: relative;
+	float: right;
+	padding: 0 9px 0 6px;
+	margin: 0 0 5px 0;
+	display: block;
+}
+.btn_pmenu {
+	width: 198px;
+	position: relative;
+	height: auto;
+}
+#ingresar {
+	height: 33px;
+	width: 164px;
+	margin-left: 7px;
+}
+
+
+.btn_space {
+	width: 164px;
+	position: relative;
+	height: 15px;
+}
+#contenedor_PIEPAG {
+	background-repeat: no-repeat;
+	width: 900px;
+	position: relative;
+	background-position: center top;
+	height: 35px;
+	float: left;
+	background-image: url(imagenes/MPCierre_Piepagina.gif);
+	margin-bottom: 20px;
+}
+.campo_buscar {
+	float: right;
+	height: 12px;
+	width: 106px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #666;
+}
+#panel_celeste {
+	float: left;
+	width: 645px;
+	position: relative;
+	margin-top: 5px;
+	padding-left: 5px;
+	margin-bottom: 10px;
+	height: auto;
+}
+.panel_celeste_cierre {
+	float: left;
+	width: 645px;
+	position: relative;
+	background-image: url(imagenes/Panel_contenido/panelceleste_cierre.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 8px;
+	margin: -12px 0 0 0;
+}
+html>body .panel_celeste_cierre {
+	float: left;
+	width: 645px;
+	position: relative;
+	background-image: url(imagenes/Panel_contenido/panelceleste_cierre.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 8px;
+	margin: 0 0 0 0;
+}
+.pan_amarillo_abrir {
+	background-image: url(imagenes/Panel_contenido/Panelamarillo_abrir.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	height: 14px;
+	width: 630px;
+	position: relative;
+	background-position: center bottom;
+	margin: 0 1px 0 3px ;
+}
+.pan_amarillo_central {
+	width: 630px;
+	float: left;
+	position: relative;
+	height: auto;
+	background-color: #FBF3B4;
+	margin: 0 1px 0 3px ;
+}
+.pan_amarillo_cierre {
+	background-image: url(imagenes/Panel_contenido/Panelamarillo_cierre.jpg);
+	background-repeat: no-repeat;
+	width: 630px;
+	float: left;
+	position: relative;
+	height: 10px;
+	background-position: center top;
+	margin: 0 0 0 3px;
+	display: block;
+}
+html>body .pan_amarillo_abrir {
+	background-image: url(imagenes/Panel_contenido/Panelamarillo_abrir.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	height: 14px;
+	width: 630px;
+	position: relative;
+	background-position: center bottom;
+	margin-left: 8px;
+}
+html>body .pan_amarillo_central {
+	width: 630px;
+	float: left;
+	position: relative;
+	height: auto;
+	background-color: #FBF3B4;
+	margin-left: 7px;
+}
+html>body .pan_amarillo_cierre {
+	background-image: url(imagenes/Panel_contenido/Panelamarillo_cierre.jpg);
+	background-repeat: no-repeat;
+	width: 630px;
+	float: left;
+	position: relative;
+	height: 10px;
+	background-position: center top;
+	margin: 0 0 0 8px;
+	display: block;
+}
+.contenido_titulo {
+	float: left;
+	width: 630px;
+	position: relative;
+	height: auto;
+	visibility: visible;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFF;
+	text-align: center;
+	background-color: #b83126;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	letter-spacing: 1pt;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+.contenido_panamarillo {
+	width: 600px;
+	float: left;
+	position: relative;
+	height: auto;
+	padding-right: 15px;
+	padding-left: 15px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #0546A0;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+}
+html>body .contenido_panamarillo {
+	width: 600px;
+	float: left;
+	position: relative;
+	height: auto;
+	padding-right: 15px;
+	padding-left: 15px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #0546A0;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+}
+.contenido {
+	float: left;
+	width: 645px;
+	position: relative;
+	height: auto;
+	background-image: url(imagenes/Panel_contenido/panelceleste_fondo.jpg);
+	background-repeat: repeat-y;
+	background-position: center center;
+	margin: -4px 0 0 0;
+}
+html>body .contenido {
+	float: left;
+	width: 645px;
+	position: relative;
+	height: auto;
+	background-image: url(imagenes/Panel_contenido/panelceleste_fondo.jpg);
+	background-repeat: repeat-y;
+	background-position: center center;
+	margin: 0 0 0 0;
+}
+.imagenes {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #0546A0;
+	font-style: italic;
+	float: left;
+	width: 100px;
+	margin-top: 5px;
+	list-style-type: none;
+}
+.imagenes {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #0546A0;
+	font-style: italic;
+	float: left;
+	width: 100px;
+	margin-top: 5px;
+	list-style-type: none;
+}
+
+#posicion_ensayos {
+	height: auto;
+	width: 590px;
+	float: left;
+	margin-bottom: 5px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+#contenido_ensayos {
+	float: left;
+	position: relative;
+	height: auto;
+	width: 450px;
+	margin-right: 20px;
+}
+#fotos_ensayos {
+	float: left;
+	position: relative;
+	height: auto;
+	width: 130px;
+}
+.cuadros {
+	float: left;
+	width: 290px;
+	height: 350px;
+	position: relative;
+}
+.botones {
+	float: left;
+	position: relative;
+	width: 320px;
+	height: auto;
+	margin-left: 25px;
+	margin-top: 10px;
+}
+html>body .botones {
+	float: left;
+	position: relative;
+	width: 320px;
+	height: auto;
+	margin-left: 55px;
+	margin-top: 10px;
+}
+.pan_amarillo_abrir_cto {
+	background-image: url(imagenes/Panel_contenido/Panelamarillocntco_abrir.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	height: 12px;
+	width: 408px;
+	position: relative;
+	background-position: center bottom;
+	margin-left: 4px;
+	margin-top: 2px;
+}
+.pan_amarillo_central_cto {
+	width: 408px;
+	float: left;
+	position: static;
+	height: auto;
+	background-color: #FBF3B4;
+	margin-left: 4px;
+}
+.pan_amarillo_cierre_cto {
+	background-image: url(imagenes/Panel_contenido/Panelamarillocntco_cierre.jpg);
+	background-repeat: no-repeat;
+	width: 408px;
+	float: left;
+	position: relative;
+	height: 10px;
+	background-position: center top;
+	margin-left: 4px;
+}
+html>body .pan_amarillo_abrir_cto {
+	background-image: url(imagenes/Panel_contenido/Panelamarillocntco_abrir.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	height: 12px;
+	width: 408px;
+	position: relative;
+	background-position: center bottom;
+	margin-left: 7px;
+	margin-top: 2px;
+}
+html>body .pan_amarillo_central_cto {
+	width: 408px;
+	float: left;
+	position: static;
+	height: auto;
+	background-color: #FBF3B4;
+	margin-left: 7px;
+}
+html>body .pan_amarillo_cierre_cto {
+	background-image: url(imagenes/Panel_contenido/Panelamarillocntco_cierre.jpg);
+	background-repeat: no-repeat;
+	width: 408px;
+	float: left;
+	position: relative;
+	height: 10px;
+	background-position: center top;
+	margin-left: 7px;
+}
+.contenido_titulo_cto {
+	float: left;
+	width: 408px;
+	position: relative;
+	height: auto;
+	visibility: visible;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFF;
+	text-align: center;
+	background-color: #b83126;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	letter-spacing: 1pt;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+.contenido_panamarillo_cto {
+	width: 375px;
+	float: left;
+	position: relative;
+	height: 400px;
+	padding-left: 15px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #0546A0;
+	text-align: left;
+	vertical-align: middle;
+}
+#pan_amarillo_ctctoder {
+	width: 212px;
+	float: right;
+	position: relative;
+	height: auto;
+	margin-right: 4px;
+	vertical-align: top;
+	margin-top: 2px;
+}
+html>body #pan_amarillo_ctctoder {
+	width: 214px;
+	float: right;
+	position: relative;
+	height: auto;
+	margin-right: 7px;
+	vertical-align: top;
+	margin-top: 2px;
+}
+#pan_amarcentral_ctctoder {
+	width: 214px;
+	float: right;
+	position: relative;
+	height: auto;
+	vertical-align: top;
+	background-color: #FBF3B4;
+	background-position: center;
+	margin: 0 0 0 4px;
+	padding-bottom: 5px;
+}
+html>body #pan_amarcentral_ctctoder {
+	width: 214px;
+	float: right;
+	position: relative;
+	height: auto;
+	vertical-align: top;
+	background-color: #FBF3B4;
+	background-position: center;
+}
+.fotoctcto {
+	background-image: url(imagenes/Panel_contenido/ctco_fotoarroba.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 128px;
+	width: 198px;
+	position: relative;
+	float: left;
+	margin-left: 4px;
+}
+.cont_ctctoderecha {
+	height: auto;
+	width: 198px;
+	position: relative;
+	float: left;
+	background-color: #FC6;
+	margin: 7px 0 0 4px;
+	padding: 5px 0 10px 0;
+}
+html>body .fotoctcto {
+	background-image: url(imagenes/Panel_contenido/ctco_fotoarroba.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 128px;
+	width: 198px;
+	position: relative;
+	float: left;
+	margin-left: 8px;
+}
+html>body .cont_ctctoderecha {
+	height: auto;
+	width: 198px;
+	position: relative;
+	float: left;
+	margin-left: 8px;
+	background-color: #FC6;
+	margin-top: 7px;
+	padding: 5px 0 10px 0;
+}
+#abrir_ctctoderecha {
+	background-image: url(imagenes/Panel_contenido/ctco_panamar_abrir.jpg);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	height: 13px;
+	width: 214px;
+	position: relative;
+	float: right;
+	margin: 1px 0 0 4px;
+}
+html>body #abrir_ctctoderecha {
+	background-image: url(imagenes/Panel_contenido/ctco_panamar_abrir.jpg);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	height: 13px;
+	width: 214px;
+	position: relative;
+	float: right;
+	margin: 1px 0 0 0
+}
+#cerrar_ctctoderecha {
+	background-image: url(imagenes/Panel_contenido/ctco_panamar_cierre.jpg);
+	background-repeat: no-repeat;
+	background-position: center top;
+	height: 6px;
+	width: 214px;
+	position: relative;
+	float: right;
+	margin: 0 0 0 4px;
+}
+html>body #cerrar_ctctoderecha {
+	background-image: url(imagenes/Panel_contenido/ctco_panamar_cierre.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 6px;
+	width: 214px;
+	position: relative;
+	float: right;
+}
+.nom_empresa {
+	height: auto;
+	width: 180px;
+	position: relative;
+	float: left;
+	margin: 5px 0 5px 0;
+	padding: 0 9px 0 9px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform: capitalize;
+	text-align: center;
+	color: #0546A0;
+}
+.dire_empresa {
+	height: auto;
+	width: 180px;
+	position: relative;
+	float: left;
+	margin: 3px 0 3px 0;
+	padding: 0 9px 0 9px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: normal;
+	text-transform: capitalize;
+	text-align: center;
+	color: #333;
+}
+.correo {
+	float: left;
+	width: 214px;
+	position: relative;
+	height: auto;
+	visibility: visible;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #FFF;
+	text-align: center;
+	background-color: #b83126;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	letter-spacing: 1pt;
+	margin-bottom: 5px;
+}
+#contacto {
+	float: left;
+	width: 410px;
+	position: relative;
+	height: auto;
+}
+#pan_amarillo_contacto2 {
+	background-image: url(imagenes/Panel_contenido/Panelamarillocntco_der.jpg);
+	float: right;
+	height: 284px;
+	width: 214px;
+	background-repeat: no-repeat;
+}
+.separacion {
+	background-image: url(imagenes/Menu_top/Menutop_fondo.gif);
+	height: 15px;
+	width: 610px;
+	float: left;
+}
+contenido_categoria {
+	float: left;
+	height: auto;
+	width: 600px;
+}
+.image {
+	height: 100px;
+	width: 100px;
+	float: left;
+	position: relative;
+	margin-bottom: 30px;
+}
+.descripcion {
+	width: 460px;
+	height: auto;
+	float: right;
+	margin-left: 5px;
+	position: relative;
+}
+
+.escritura {
+	float: right;
+	height: auto;
+	width: 430px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	
+}
+.seminarios {
+	height: auto;
+	width: 600px;
+	float: left;
+}
+
+.imagen {
+	height: 150px;
+	width: 150px;
+	float: left;
+	position: relative;
+	padding-top: 10px;
+	padding-left: 10px;
+}
+.datos {
+	width: 90px;
+	float: left;
+	height: 325px;
+	position: relative;
+}
+.form2 {
+	height: auto;
+	width: 380px;
+	float: left;
+	position: relative;
+}
+#dt {
+	float: left;
+	width: 80px;
+	margin-top: 8px;
+	margin-left: 5px;
+	height: 20px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	font-weight: normal;
+	letter-spacing: 1pt;
+}
+#ct {
+	margin-top: 7px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	width: 280px;
+	height: 15px;
+	float: left;
+	position: relative;
+}
+#ct_btn {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	width: 125px;
+	float: right;
+	position: relative;
+	margin-left: 10px;
+}
+#ct_btn_volver {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	width: 125px;
+	position: relative;
+	margin-top: 10px;
+}
+#ct_txt {
+	margin-top: 7px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	width: 280px;
+	height: auto;
+	float: left;
+	position: relative;
+}
+#res {
+	width: 350px;
+	height: auto;
+	margin: 50px 0 75px 15px;
+	text-align: center;
+	float: left;
+	position: relative;
+}
+#li {
+	list-style-type: none;
+	margin-top: 20px;
+	margin-left: 100px;
+}
+#vol {
+	height: 60px;
+	width: 245px;
+	margin-left: 70px;
+	background-image: url(imagenes/logocontacto.jpg);
+	margin-top: 35px;
+}
+.se {
+	background-image: url(imagenes/Menu_top/Menutop_fondo.gif);
+	height: 20px;
+	width: 630px;
+	float: left;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	text-align: center;
+	color: #FFF;
+}
+.cod {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #0546A0;
+	font-weight: bold;
+	letter-spacing: 2px;
+	position: relative;
+	height: auto;
+	width: 400px;
+}
+.imagen_servicios {
+	height: auto;
+	width: 270px;
+	float: right;
+	position: relative;
+	padding-top: 5px;
+	padding-left: 20px;
+	padding-bottom: 5px;
+}
+.imagen_2 {
+	height: auto;
+	width: 190px;
+	float: right;
+	position: relative;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+#login_user {
+	float: left;
+	position: static;
+	padding-top: 40px;
+	width: 200px;
+	text-align: center;
+}
+#label_usuario {
+	color: #FFF;
+	font-size: 10pt;
+	width: 90px;
+}
+#link_usuario {
+	text-decoration: none;
+	font-weight: bold;
+	color: #00C;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+#flash {
+	clear: both;
+	height: 240px;
+	width: 320px;
+	position: relative;
+	margin-top: 50px;
+	margin-right: 290px;
+	margin-left: 290px;
+}
+#p_contenido_flash {
+	float: left;
+	width: 640px;
+	margin-top: 5px;
+	padding-left: 130px;
+	position: relative;
+	padding-right: 130px;
+	left: auto;
+	top: auto;
+	right: auto;
+	bottom: auto;
+	margin-bottom: 15px;
+}
+#elementos {
+	height: 100px;
+	width: 100px;
+	float: left;
+	position: relative;
+}
+#texto_piepag {
+	width: 740px;
+	position: relative;
+	height: 35px;
+	float: left;
+	padding: 0 80px 0 80px;
+}
+.titulo_ppag {
+	float: left;
+	height: 15px;
+	width: 235px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bold;
+	color: #FFF;
+	padding: 7px 0 8px 0;
+	letter-spacing: 1px;
+	text-align: left;
+	vertical-align: middle;
+}
+.separador_pp {
+	background-image: url(imagenes/slash.gif);
+	background-repeat: no-repeat;
+	float: left;
+	height: 15px;
+	width: 4px;
+	position: relative;
+	margin: 9px 5px 6px 5px;
+}
+.fono_ppag {
+	float: left;
+	height: 15px;
+	width: 165px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFF;
+	padding: 7px 0 8px 0;
+	text-align: center;
+	vertical-align: middle;
+}
+.dire_ppag {
+	float: left;
+	height: 15px;
+	width: 310px;
+	position: relative;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFF;
+	padding: 7px 0 8px 0;
+	text-align: right;
+	vertical-align: middle;
+}
+.quimicos {
+	float: left;
+	width: 150px;
+	height:200;
+}
+.qui {
+	width: 100px;
+	height: 530px;
+	float: left;
+	margin-top: 5px;
+	padding-top: 5px;
+	position: relative;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.qui8 {
+	width: 100px;
+	height: 240px;
+	float: left;
+	margin-top: 5px;
+	padding-top: 5px;
+	position: relative;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+#qui2 {
+	float: left;
+	height: 28px;
+	width: 110px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	padding-bottom: 3px;
+}
+html>body #quidos {
+	float: left;
+	height: 28px;
+	width: 110px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-top: 3px;
+}
+#quidos {
+	float: left;
+	height: 28px;
+	width: 110px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-top: -22px;
+}
+#quimi2 {
+	float: left;
+	height: 28px;
+	width: 65px;
+	position: relative;
+	padding-Bottom:3px;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	text-align: center;
+}
+#qui22 {
+	float: left;
+	height: 18px;
+	width: 65px;
+	position: relative;
+}
+#quimico2 {
+	float: left;
+	height: 18px;
+	width: 65px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	text-align: center;
+	margin-bottom: 2px;
+}
+html>body #quimico2 {
+	float: left;
+	height: 18px;
+	width: 65px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	text-align: center;
+	margin-bottom: 0px;
+}
+#paginacion {
+	margin: 0 auto 5px auto;
+	clear: both;
+	width: 225px;
+	position: relative;
+	height: 15px;
+	padding: 5px 15px 5px 15px;
+}
+html>body #paginacion {
+	margin: 25px auto 10px auto;
+	clear: both;
+	width: 225px;
+	position: relative;
+	height: 15px;
+	padding: 5px 15px 5px 15px;
+}
+.pag_mover {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #06C;
+	letter-spacing: 1pt;
+	text-align: center;
+	vertical-align: middle;
+	float: left;
+	height: 15px;
+	width: 50px;
+	padding: 0 5px 0 5px;
+	position: relative;
+}
+.pag_num {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bolder;
+	color: #0546A0;
+	letter-spacing: 1pt;
+	text-align: center;
+	vertical-align: middle;
+	float: left;
+	height: 15px;
+	width: auto;
+	padding: 0 5px 0 5px;
+	position: relative;
+}
+.quimi {
+	float: left;
+	height: 530px;
+	width: 70px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	margin-top: 5px;
+	text-align: center;
+	border-left-width: 1px;
+	padding-top: 5px;
+}
+.quimic {
+	float: left;
+	height: 529px;
+	width: 68px;
+	position: relative;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	padding-top: 6px;
+	margin-top: 5px;
+	border-left-width: 1px;
+}
+.quimicos2 {
+	float: left;
+	height: 239px;
+	width: 68px;
+	position: relative;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	padding-top: 6px;
+	margin-top: 5px;
+	border-left-width: 1px;
+}
+.empresa {
+	width: 625px;
+	height: auto;
+	float: left;
+	position: relative;
+	display: block;
+}
+.personal {
+	float: left;
+	height: 160px;
+	width: 100px;
+	padding-left: 1px;
+}
+html>body .personal {
+	float: left;
+	height: 190px;
+	width: 100px;
+	padding-left: 2px;
+}
+.personal2 {
+	float: left;
+	height: auto;
+	width: 296px;
+	position: relative;
+	padding-left: 4px;
+}
+.personal3 {
+	float: right;
+	height: 160px;
+	width: 120px;
+}
+#empresa_format {
+	height: auto;
+	width: 280px;
+	float: left;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-bottom: 3px;
+}
+html>body #empresa_format {
+	height: auto;
+	width: 300px;
+	float: left;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-bottom: 3px;
+}
+#per22 {
+	float: left;
+	height: auto;
+	width: 250px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 7pt;
+	margin-bottom: 3px;
+}
+/*version mozilla firefox*/
+html>body .datos2 {
+	float: left;
+	height: 430px;
+	width: 606px;
+	position: relative;
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-size: 10pt;
+	padding-left: 15px;
+	padding-bottom: 15px;
+}
+.datos2 {
+	float: left;
+	height: 430px;
+	width: 620px;
+	position: relative;
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-size: 10pt;
+	padding-left: 5px;
+	padding-bottom: 15px;
+}
+#comentario {
+	width: 620px;
+	height: 240px;
+	float: left;
+	position: relative;
+	margin-top: 10px;
+	margin-left: -3px;
+}
+html>body #comentario {
+	width: 620px;
+	height: 240px;
+	float: left;
+	position: relative;
+	margin-top: 10px;
+	margin-left: -15px;
+}
+#formato_text {
+	float: left;
+	height: auto;
+	width: auto;
+	margin-left: 30px;
+	font-size: 14px;
+}
+html>body #formato_text {
+	float: left;
+	height: auto;
+	width: auto;
+	margin-left: 30px;
+}
+
+#per {
+	height: 12px;
+	width: 95px;
+	float: left;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-bottom: 15px;
+}
+html>body #per {
+	height: 12px;
+	width: 100px;
+	float: left;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-bottom: 17px;
+}
+#per2 {
+	float: left;
+	height: auto;
+	width: 150px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	margin-bottom: 3px;
+}
+#per4 {
+	float: left;
+	height: 20px;
+	width: 70px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	border-top-width: 1px;
+	border-right-style: solid;
+	text-align: center;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+}
+#per5 {
+	float: left;
+	height: 30px;
+	width: 70px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+	border-top-width: 1px;
+	border-right-style: solid;
+	text-align: center;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	display: block;
+}
+#per6 {
+	float: left;
+	height: 50px;
+	width: 68px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 7pt;
+	text-align: center;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+
+}
+html>body #per6 {
+	float: left;
+	height: 50px;
+	width: 70px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 7pt;
+	border-top-width: 1px;
+	border-right-style: solid;
+	text-align: center;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+
+}
+#per41 {
+	float: left;
+	height: 20px;
+	width: 100px;
+	position: relative;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 8pt;
+}
+body>html .fechas {
+	height: 200px;
+	width: 70px;
+	float: left;
+	position: relative;
+}
+body>html .personal22 {
+	float: left;
+	height: 200px;
+	width: 70px;
+	-moz-border-bottom-colors: left;
+	position: relative;
+}
+.fechas {
+	height: 190px;
+	width: 72px;
+	float: left;
+	position: relative;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+}
+.personal22 {
+	float: left;
+	height: 200px;
+	width: 72px;
+	position: relative;
+}
+#check {
+	position: relative;
+	float: left;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+#emp_format2 {
+	height: 30px;
+	float: left;
+	width: 300px;
+	position: relative;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 14px;
+	font-weight: bold;
+	font-style: normal;
+	color: #00F;
+	margin-left: 20px;
+}
+#graf_btn {
+	float: left;
+	height: 30px;
+	width: 500px;
+	margin-left: 10px;
+	position: relative;
+	margin-top: 5px;
+}
+#link_volver {
+	margin-top: 10px;
+	float: right;
+	position: relative;
+	height: 20px;
+	width: 100px;
+	margin-right: 110px;
+	margin-left: -10px;
+}
+html>body #link_volver {
+	margin-top: 50px;
+	float: left;
+	position: relative;
+	margin-left: -190px;
+	height: 20px;
+	width: 100px;
+}
+#otrolink {
+	float: right;
+	height: 30px;
+	width: 100px;
+	margin-top: 10px;
+	position: relative;
+	margin-right: 116px;
+	margin-left: 0px;
+}
+html>body #otrolink {
+	float: right;
+	height: 30px;
+	width: 100px;
+	margin-top: 40px;
+	position: relative;
+	margin-left: -200px;
+	margin-right: 230px;
+}
+#volver_informe {
+	margin-top: 10px;
+	height: 30px;
+	width: 80px;
+	float: right;
+}

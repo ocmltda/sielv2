@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Incidencia</title>
+</head>
+
+<body>
+<form name="form1" method="post" action="">
+  <table width="580" border="0" cellspacing="0" cellpadding="5">
+    <tr valign="top">
+      <td width="320"><table width="320" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>{local}</td>
+        </tr>
+        <tr>
+          <td>{fecha} {hora}</td>
+        </tr>
+        <tr>
+          <td>Ubicación: {gps}</td>
+        </tr>
+        <tr>
+          <td>{incidencia}</td>
+        </tr>
+        <tr>
+          <td align="right">Comentarios</td>
+        </tr>
+        <tr>
+          <td align="right"><textarea name="comentario" id="comentario" cols="45" rows="5" style="width:320px" readonly>{comentario}</textarea></td>
+        </tr>
+        <tr>
+          <td>Próxima acción: 
+            <select name="accion" id="accion">
+              <!-- START BLOCK : tipos_acciones -->
+              <option value="{idta}" {selected}>{tipoaccion}</option>
+              <!-- END BLOCK : tipos_acciones -->
+            </select>
+            </td>
+        </tr>
+      </table></td>
+      <td width="240"><table width="240" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right">Registro Fotográfico</td>
+        </tr>
+        <tr>
+          <td align="right">{foto}</td>
+        </tr>
+      </table></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

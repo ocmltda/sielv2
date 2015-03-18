@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>PREVIEW DE GRAFICO</title>
+<script language="javascript" type="text/javascript" src="Scripts/js-class.js"></script>
+<script language="javascript" type="text/javascript" src="Scripts/bluff.js"></script>
+<script language="javascript" type="text/javascript" src="Scripts/excanvas.js"></script>
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- <div style="margin: 24px 100px;"> -->
+   <canvas id="example" width="640" height="480"></canvas>
+<!-- </div> -->
+<script type="text/javascript">
+window.onload = function() {
+          var g = new Bluff.Line('example', '640x480');
+          g.title = 'GRAFICO DE MUESTRAS';
+          g.tooltips = true;
+          
+          g.theme_37signals();
+          <!-- START BLOCK : items -->
+          g.data("{nombre}", [{datos}]);
+          <!-- END BLOCK : items -->
+          
+          g.labels = {0: '0', 2: '2', 4: '4', 6: '6', 8: '8'};
+          
+          g.draw();
+}
+</script>
+</body>
+</html>
