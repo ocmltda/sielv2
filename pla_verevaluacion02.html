@@ -5,16 +5,7 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
     <!-- InstanceEndEditable -->
-    <!-- InstanceBeginEditable name="head" -->
-    <style type="text/css">
-<!--
-.Estilo1 {
-	color: #FF0000;
-	font-size: 24px;
-}
--->
-    </style>
-    <!-- InstanceEndEditable -->
+    <!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
 	<style type="text/css">
         <!--
         body {
@@ -103,140 +94,88 @@
         </table></td>
       </tr>
       <tr>
-        <td align="center" bgcolor="#DFDFDF"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="100">Tienda</td>
-            <td width="20">&nbsp;</td>
-            <td width="100">Horario</td>
-            <td width="20">&nbsp;</td>
-            <td width="110">Tipo Visita</td>
-            <td width="20">&nbsp;</td>
-            <td width="60">&nbsp;</td>
-            <td width="150">Menu</td>
-            <td width="20">&nbsp;</td>
-            <td width="110" align="center">Puntaje</td>
-            <td width="20">&nbsp;</td>
-            <td width="220" rowspan="2" align="center">{puntaje}</td>
-          </tr>
-          <tr valign="top">
-            <td>{tienda}</td>
-            <td>&nbsp;</td>
-            <td>{horario}</td>
-            <td>&nbsp;</td>
-            <td>{tipvisita}</td>
-            <td>&nbsp;</td>
-            <td>{foto}</td>
-            <td>{menu}</td>
-            <td>&nbsp;</td>
-            <td align="center">Obtenido:</td>
-            <td>&nbsp;</td>
-            </tr>
-        </table></td>
-      </tr>
-      <tr bgcolor="#F5AA1D">
-        <td><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
-      </tr>
-      <tr>
         <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="177">Tiempo de espera en la fila</td>
-            <td width="19">&nbsp;</td>
-            <td width="69">{tef}</td>
-            <td width="19">&nbsp;</td>
-            <td width="167">Tiempo de espera en caja</td>
-            <td width="20">&nbsp;</td>
-            <td width="70">{tec}</td>
-            <td width="20">&nbsp;</td>
-            <td width="140">N° cajas en uso</td>
-            <td width="20">&nbsp;</td>
-            <td width="229">{ncu}</td>
-          </tr>
-          <tr>
-            <td>Tiempo de la orden lista</td>
-            <td>&nbsp;</td>
-            <td>{tol}</td>
-            <td>&nbsp;</td>
-            <td>Tiempo total</td>
-            <td>&nbsp;</td>
-            <td>{tt}</td>
-            <td>&nbsp;</td>
-            <td>N° clientes en la fila</td>
-            <td>&nbsp;</td>
-            <td>{ncf}</td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td align="center">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="200">Empleado que toma la orden</td>
-            <td width="20">&nbsp;</td>
-            <td width="140">{eto}</td>
-            <td width="20">&nbsp;</td>
-            <td width="570">{dateto}</td>
-          </tr>
-          <tr>
-            <td>Empleado que entrega la orden</td>
-            <td>&nbsp;</td>
-            <td>{eeo}</td>
-            <td>&nbsp;</td>
-            <td>{dateeo}</td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td align="center">&nbsp;</td>
-      </tr>
-      <tr>
-        <td bgcolor="#FF0000"><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalles adicionales importantes observados durante su visita:</span></td>
-      </tr>
-      <tr>
-        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td>{detalles}</td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td align="center">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="326" align="center"><span class="Estilo1">PUNTOS PERDIDOS POR MOMENTOS</span></td>
-            <td width="40">&nbsp;</td>
-            <td width="584">{grafico}</td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td align="center">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="center"><table width="950" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="475">Tendencia de la tienda</td>
-            <td width="475">Los puntos mas perdidos de los ultimos 4 meses</td>
-          </tr>
-          <tr valign="top">
-            <td>{graficott}</td>
-            <td><table width="460" border="0" cellspacing="0" cellpadding="0">
+            <td width="650"><table width="630" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td height="24">Preguntas</td>
-                <td height="24">N° Veces Perdidos</td>
+                <td width="200">Cliente</td>
+                <td width="20">:</td>
+                <td width="410">{cliente}</td>
               </tr>
-              <!-- START BLOCK : preguntas -->
-              <tr valign="top">
-                <td height="24">{pregunta}</td>
-                <td height="24">{totper}</td>
+              <tr>
+                <td>Tienda</td>
+                <td>:</td>
+                <td>{tienda}</td>
               </tr>
-			  <!-- END BLOCK : preguntas -->
+              <tr>
+                <td>Fecha</td>
+                <td>:</td>
+                <td>{fecha}</td>
+              </tr>
+              <tr>
+                <td>Hora</td>
+                <td>:</td>
+                <td>{hora}</td>
+              </tr>
+              <tr>
+                <td>Nombre Promotor</td>
+                <td>:</td>
+                <td>{nomprom}</td>
+              </tr>
+              <tr>
+                <td>Promotores en PDV Movistar</td>
+                <td>:</td>
+                <td>{prom}</td>
+              </tr>
+              <tr>
+                <td>Clientes en stand de Movistar</td>
+                <td>:</td>
+                <td>{clistand}</td>
+              </tr>
+            </table></td>
+            <td width="300"><table width="290" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Puntaje Obtenido</td>
+                <td>{puntaje}</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
             </table></td>
           </tr>
         </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">
+        <!-- START BLOCK : hitos -->
+        <table width="950" border="0" cellspacing="0" cellpadding="0">
+          <tr bgcolor="#F5AA1D">
+            <td width="830" bgcolor="#F5AA1D"><span class="menutop">{tithito}</span></td>
+            <td width="120" align="center"><span class="menutop">Respuesta</span></td>
+          </tr>
+          <!-- START BLOCK : preguntas -->
+          <tr>
+            <td>{pregunta}</td>
+            <td align="center">{respuesta}</td>
+          </tr>
+          <!-- END BLOCK : preguntas -->
+          <tr>
+            <td colspan="2">Comentario</td>
+            </tr>
+          <tr>
+            <td colspan="2">{comentario}</td>
+            </tr>
+        </table>
+        <!-- END BLOCK : hitos -->
+        </td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>

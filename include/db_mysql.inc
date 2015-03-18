@@ -17,7 +17,7 @@ class DB_Sql {
   var $User     = "";
   var $Password = "";*/
   var $Host     = "localhost";
-  var $Database = "tackcl_sielv2";
+  var $Database = "sielv2";
   var $User     = "root";
   var $Password = "";
 
@@ -74,7 +74,7 @@ class DB_Sql {
     /* establish connection, select database */
     if ( 0 == $this->Link_ID ) {
     
-      $this->Link_ID=mysql_pconnect($Host, $User, $Password);
+      $this->Link_ID=@mysql_pconnect($Host, $User, $Password); //20150318 agregue el @ ya que daba error de Deprecated: mysql_pconnect()
       if (!$this->Link_ID) {
         $this->halt("pconnect($Host, $User, \$Password) failed.");
         return 0;
