@@ -17,7 +17,7 @@ class DB_Sql {
   var $User     = "";
   var $Password = "";*/
   var $Host     = "localhost";
-  var $Database = "sielv2";
+  var $Database = "tackcl_sielv2";
   var $User     = "root";
   var $Password = "";
 

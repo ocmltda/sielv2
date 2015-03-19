@@ -87,35 +87,85 @@
       </tr>
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
-          <tr bgcolor="#F5AA1D">
-            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="menutop">EVALUACIONES PARCIALES</span></td>
-            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <tr bgcolor="#5EA5D9">
+            <td width="585" height="40" bgcolor="#5EA5D9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="menutop">ESTADOS DE AVANCE</span></td>
+            <td width="385" height="40" align="right" bgcolor="#5EA5D9"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table></td>
       </tr>
       <tr>
-        <td><table width="970" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="50">ID</td>
-            <td width="90">Fecha Visita</td>
-            <td width="280">Locales</td>
-            <td width="100">Servicio</td>
-            <td width="212">Dirección</td>
-            <td width="70" align="center">Puntaje</td>
-            <td width="90" align="center">Acciones</td>
+            <td width="550"><table width="540" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="270">{grafico1}</td>
+                <td width="270">{grafico2}</td>
+              </tr>
+              <tr>
+                <td><table width="266" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="2" bgcolor="#5EA5D9">TOTAL EVALUACIONES</td>
+                    </tr>
+                  <tr>
+                    <td width="200">Total evaluaciones programadas</td>
+                    <td width="66">{tep}</td>
+                  </tr>
+                  <tr>
+                    <td>Total evaluaciones realizadas</td>
+                    <td>{ter}</td>
+                  </tr>
+                  <tr>
+                    <td>Total evaluaciones en curso</td>
+                    <td>{tec}</td>
+                  </tr>
+                </table></td>
+                <td><table width="266" border="0" cellspacing="0" cellpadding="0">
+                  <tr bgcolor="#5EA5D9">
+                    <td width="82">Zonas</td>
+                    <td width="50">Total</td>
+                    <td width="70">Realizadas</td>
+                    <td width="64">En curso</td>
+                  </tr>
+                  <tr>
+                    <td>Zona Norte</td>
+                    <td>{tzn}</td>
+                    <td>{rzn}</td>
+                    <td>{czn}</td>
+                  </tr>
+                  <tr>
+                    <td>Zona Centro</td>
+                    <td>{tzc}</td>
+                    <td>{rzc}</td>
+                    <td>{czc}</td>
+                  </tr>
+                  <tr>
+                    <td>Zona Sur</td>
+                    <td>{tzs}</td>
+                    <td>{rzs}</td>
+                    <td>{czs}</td>
+                  </tr>
+                </table></td>
+              </tr>
+            </table></td>
+            <td width="400">{grafico3}</td>
           </tr>
-          <!-- START BLOCK : evaluaciones -->
-          <tr bgcolor="#FFFFFF">
-            <td>{id}</td>
-            <td>{fecvisita}</td>
-            <td>{local}</td>
-            <td>{servicio}</td>
-            <td>{direccion}</td>
-            <td align="center">{puntaje}</td>
-            <td align="center" bgcolor="#FFFFFF"><a href="verevaluacion01.php?IDE={id}">Ver</a></td>
-          </tr>
-		  <!-- END BLOCK : evaluaciones -->
         </table></td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">
+        <!-- START BLOCK : hitos -->        <!-- END BLOCK : hitos -->        </td>
+      </tr>
+      <tr>
+        <td align="center">{grafico4}</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
       </tr>
     </table>
 	<!-- InstanceEndEditable -->    </td>
