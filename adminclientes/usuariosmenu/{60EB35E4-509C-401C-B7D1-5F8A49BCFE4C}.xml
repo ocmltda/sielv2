@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<configuration date="2015/03/21" author="e.World Technology Ltd.">
+<project id="{60EB35E4-509C-401C-B7D1-5F8A49BCFE4C}" file="C:\wamp\www\tack\sielv2\_FUENTES\usuariosmenu.pmp" name="usuariosmenu" product="PHPMaker" version="9.2" datetime="2015/03/21 23:30:52" languagefolder="phplang" userlevel="">
+<table id="empresa" name="empresa" caption="Empresa" userlevel="" priv="1"/>
+<table id="_menu" name="menu" caption="Menú" userlevel="" priv="1"/>
+<table id="percat" name="percat" caption="Perfil y Menús" userlevel="" priv="1"/>
+<table id="perfil" name="perfil" caption="Perfil" userlevel="" priv="1"/>
+<table id="users" name="users" caption="Usuarios" userlevel="" priv="1"/>
+</project></configuration>

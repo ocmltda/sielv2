@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+
+    <script type="text/javascript">
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Día', 'Evaluaciones'],
+          ['01-mar',  10],
+          ['02-mar',  11],
+          ['03-mar',  5],
+          ['04-mar',  14],
+          ['05-mar',  18],
+          ['06-mar',  7],
+          ['07-mar',  12],
+          ['08-mar',  19],
+          ['09-mar',  16],
+          ['10-mar',  8],
+          ['11-mar',  12],
+          ['12-mar',  10],
+          ['13-mar',  17],
+          ['14-mar',  3],
+          ['15-mar',  6],
+		  ['16-mar',  10],
+          ['17-mar',  11],
+          ['18-mar',  5],
+          ['19-mar',  14],
+          ['20-mar',  18],
+          ['21-mar',  7],
+          ['22-mar',  12],
+          ['23-mar',  19],
+          ['24-mar',  16],
+          ['25-mar',  8],
+          ['26-mar',  12],
+          ['27-mar',  10],
+          ['28-mar',  17],
+          ['29-mar',  3],
+          ['30-mar',  6],
+          ['31-mar',  16]
+        ]);
+
+        var options = {
+          title: 'EVALUACIONES REALIZADAS POR DÍA',
+		  legend: 'none',
+          //legend: { position: 'bottom' },
+		  pointSize: 5,
+		  fontSize: 10,
+		  fontName: 'Verdana, Arial',
+		  width: 950,
+		  height: 350
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="curve_chart" style="width: 950px; height: 350px"></div>
+  </body>
+</html>
