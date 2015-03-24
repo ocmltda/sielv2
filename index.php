@@ -28,7 +28,10 @@ else
 		else
 			$menutop = '<a href="' . $db->Record['men_link'] . '" style="color:white">' . $db->Record['men_nombre'] . '</a>';
 	}
-	$t->assign("menutop", $menutop . '');
+	if ($menutop)
+		$t->assign("menutop", '<a href="index.php" style="color:white">Inicio</a> | ' . $menutop . ' | <a href="logout.php" style="color:white">Cerrar Sesión</a>');
+	else
+		$t->assign("menutop", '<a href="index.php" style="color:white">Inicio</a> | <a href="logout.php" style="color:white">Cerrar Sesión</a>');
 
 	//print the result
 	$t->printToScreen();

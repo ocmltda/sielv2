@@ -366,9 +366,9 @@
 </field>
 <field id="men_nombre"><phrase id="fldcaption" value="Menú"/>
 </field>
-<field id="men_orden"><phrase id="fldcaption" value="Orden"/>
-</field>
 <field id="men_link"><phrase id="fldcaption" value="Link"/>
+</field>
+<field id="men_orden"><phrase id="fldcaption" value="Orden"/>
 </field>
 </table>
 <table id="percat"><phrase id="tblcaption" value="Perfiles Menú"/>
