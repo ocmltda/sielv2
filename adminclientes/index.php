@@ -20,7 +20,7 @@ class cdefault {
 	var $PageID = 'default';
 
 	// Project ID
-	var $ProjectID = "{60EB35E4-509C-401C-B7D1-5F8A49BCFE4C}";
+	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Page object name
 	var $PageObjName = 'default';
@@ -175,7 +175,7 @@ class cdefault {
 	//
 	function Page_Main() {
 		global $Security, $Language;
-		$this->Page_Terminate("empresalist.php"); // Exit and go to default page
+		$this->Page_Terminate("percatlist.php"); // Exit and go to default page
 	}
 
 	// Page Load event

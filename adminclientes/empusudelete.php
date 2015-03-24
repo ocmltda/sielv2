@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg9.php" ?>
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
-<?php include_once "_menuinfo.php" ?>
+<?php include_once "empusuinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -13,9 +13,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$p_menu_delete = NULL; // Initialize page object first
+$empusu_delete = NULL; // Initialize page object first
 
-class cp_menu_delete extends c_menu {
+class cempusu_delete extends cempusu {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -24,10 +24,10 @@ class cp_menu_delete extends c_menu {
 	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Table name
-	var $TableName = 'menu';
+	var $TableName = 'empusu';
 
 	// Page object name
-	var $PageObjName = 'p_menu_delete';
+	var $PageObjName = 'empusu_delete';
 
 	// Page name
 	function PageName() {
@@ -162,10 +162,10 @@ class cp_menu_delete extends c_menu {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (_menu)
-		if (!isset($GLOBALS["_menu"])) {
-			$GLOBALS["_menu"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["_menu"];
+		// Table object (empusu)
+		if (!isset($GLOBALS["empusu"])) {
+			$GLOBALS["empusu"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["empusu"];
 		}
 
 		// Page ID
@@ -174,7 +174,7 @@ class cp_menu_delete extends c_menu {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'menu', TRUE);
+			define("EW_TABLE_NAME", 'empusu', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -189,7 +189,7 @@ class cp_menu_delete extends c_menu {
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
-		$this->men_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->emu_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -239,10 +239,10 @@ class cp_menu_delete extends c_menu {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("_menulist.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("empusulist.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in _menu class, _menuinfo.php
+		// SQL constructor in empusu class, empusuinfo.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -313,9 +313,9 @@ class cp_menu_delete extends c_menu {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->men_id->setDbValue($rs->fields('men_id'));
-		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
-		$this->men_orden->setDbValue($rs->fields('men_orden'));
+		$this->emu_id->setDbValue($rs->fields('emu_id'));
+		$this->usuarios_id->setDbValue($rs->fields('usuarios_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Render row values based on field settings
@@ -329,38 +329,75 @@ class cp_menu_delete extends c_menu {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// men_id
-		// men_nombre
-		// men_orden
+		// emu_id
+		// usuarios_id
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-			// men_id
-			$this->men_id->ViewValue = $this->men_id->CurrentValue;
-			$this->men_id->ViewCustomAttributes = "";
+			// emu_id
+			$this->emu_id->ViewValue = $this->emu_id->CurrentValue;
+			$this->emu_id->ViewCustomAttributes = "";
 
-			// men_nombre
-			$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
-			$this->men_nombre->ViewCustomAttributes = "";
+			// usuarios_id
+			if (strval($this->usuarios_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `usuario` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `usuarios`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$this->usuarios_id->ViewValue .= ew_ValueSeparator(1,$this->usuarios_id) . $rswrk->fields('Disp2Fld');
+					$rswrk->Close();
+				} else {
+					$this->usuarios_id->ViewValue = $this->usuarios_id->CurrentValue;
+				}
+			} else {
+				$this->usuarios_id->ViewValue = NULL;
+			}
+			$this->usuarios_id->ViewCustomAttributes = "";
 
-			// men_orden
-			$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
-			$this->men_orden->ViewCustomAttributes = "";
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
 
-			// men_id
-			$this->men_id->LinkCustomAttributes = "";
-			$this->men_id->HrefValue = "";
-			$this->men_id->TooltipValue = "";
+			// emu_id
+			$this->emu_id->LinkCustomAttributes = "";
+			$this->emu_id->HrefValue = "";
+			$this->emu_id->TooltipValue = "";
 
-			// men_nombre
-			$this->men_nombre->LinkCustomAttributes = "";
-			$this->men_nombre->HrefValue = "";
-			$this->men_nombre->TooltipValue = "";
+			// usuarios_id
+			$this->usuarios_id->LinkCustomAttributes = "";
+			$this->usuarios_id->HrefValue = "";
+			$this->usuarios_id->TooltipValue = "";
 
-			// men_orden
-			$this->men_orden->LinkCustomAttributes = "";
-			$this->men_orden->HrefValue = "";
-			$this->men_orden->TooltipValue = "";
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -406,7 +443,7 @@ class cp_menu_delete extends c_menu {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['men_id'];
+				$sThisKey .= $row['emu_id'];
 				$conn->raiseErrorFn = 'ew_ErrorFn';
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -502,27 +539,27 @@ class cp_menu_delete extends c_menu {
 <?php
 
 // Create page object
-if (!isset($p_menu_delete)) $p_menu_delete = new cp_menu_delete();
+if (!isset($empusu_delete)) $empusu_delete = new cempusu_delete();
 
 // Page init
-$p_menu_delete->Page_Init();
+$empusu_delete->Page_Init();
 
 // Page main
-$p_menu_delete->Page_Main();
+$empusu_delete->Page_Main();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Page object
-var p_menu_delete = new ew_Page("p_menu_delete");
-p_menu_delete.PageID = "delete"; // Page ID
-var EW_PAGE_ID = p_menu_delete.PageID; // For backward compatibility
+var empusu_delete = new ew_Page("empusu_delete");
+empusu_delete.PageID = "delete"; // Page ID
+var EW_PAGE_ID = empusu_delete.PageID; // For backward compatibility
 
 // Form object
-var f_menudelete = new ew_Form("f_menudelete");
+var fempusudelete = new ew_Form("fempusudelete");
 
 // Form_CustomValidate event
-f_menudelete.Form_CustomValidate = 
+fempusudelete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -531,14 +568,16 @@ f_menudelete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-f_menudelete.ValidateRequired = true;
+fempusudelete.ValidateRequired = true;
 <?php } else { ?>
-f_menudelete.ValidateRequired = false; 
+fempusudelete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fempusudelete.Lists["x_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_usuario","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusudelete.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -547,75 +586,75 @@ f_menudelete.ValidateRequired = false;
 <?php
 
 // Load records for display
-if ($p_menu_delete->Recordset = $p_menu_delete->LoadRecordset())
-	$p_menu_deleteTotalRecs = $p_menu_delete->Recordset->RecordCount(); // Get record count
-if ($p_menu_deleteTotalRecs <= 0) { // No record found, exit
-	if ($p_menu_delete->Recordset)
-		$p_menu_delete->Recordset->Close();
-	$p_menu_delete->Page_Terminate("_menulist.php"); // Return to list
+if ($empusu_delete->Recordset = $empusu_delete->LoadRecordset())
+	$empusu_deleteTotalRecs = $empusu_delete->Recordset->RecordCount(); // Get record count
+if ($empusu_deleteTotalRecs <= 0) { // No record found, exit
+	if ($empusu_delete->Recordset)
+		$empusu_delete->Recordset->Close();
+	$empusu_delete->Page_Terminate("empusulist.php"); // Return to list
 }
 ?>
-<p><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("Delete") ?>&nbsp;<?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $_menu->TableCaption() ?></span></p>
-<p class="phpmaker"><a href="<?php echo $_menu->getReturnUrl() ?>" id="a_GoBack" class="ewLink"><?php echo $Language->Phrase("GoBack") ?></a></p>
-<?php $p_menu_delete->ShowPageHeader(); ?>
+<p><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("Delete") ?>&nbsp;<?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $empusu->TableCaption() ?></span></p>
+<p class="phpmaker"><a href="<?php echo $empusu->getReturnUrl() ?>" id="a_GoBack" class="ewLink"><?php echo $Language->Phrase("GoBack") ?></a></p>
+<?php $empusu_delete->ShowPageHeader(); ?>
 <?php
-$p_menu_delete->ShowMessage();
+$empusu_delete->ShowMessage();
 ?>
-<form name="f_menudelete" id="f_menudelete" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<form name="fempusudelete" id="fempusudelete" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post">
 <br>
-<input type="hidden" name="t" value="_menu">
+<input type="hidden" name="t" value="empusu">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($p_menu_delete->RecKeys as $key) { ?>
+<?php foreach ($empusu_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridMiddlePanel">
-<table id="tbl__menudelete" class="ewTable ewTableSeparate">
-<?php echo $_menu->TableCustomInnerHtml ?>
+<table id="tbl_empusudelete" class="ewTable ewTableSeparate">
+<?php echo $empusu->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-		<td><span id="elh__menu_men_id" class="_menu_men_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_id->FldCaption() ?></td></tr></table></span></td>
-		<td><span id="elh__menu_men_nombre" class="_menu_men_nombre"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_nombre->FldCaption() ?></td></tr></table></span></td>
-		<td><span id="elh__menu_men_orden" class="_menu_men_orden"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_orden->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_empusu_emu_id" class="empusu_emu_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->emu_id->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_empusu_usuarios_id" class="empusu_usuarios_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->usuarios_id->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_empusu_clientes_id" class="empusu_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->clientes_id->FldCaption() ?></td></tr></table></span></td>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$p_menu_delete->RecCnt = 0;
+$empusu_delete->RecCnt = 0;
 $i = 0;
-while (!$p_menu_delete->Recordset->EOF) {
-	$p_menu_delete->RecCnt++;
-	$p_menu_delete->RowCnt++;
+while (!$empusu_delete->Recordset->EOF) {
+	$empusu_delete->RecCnt++;
+	$empusu_delete->RowCnt++;
 
 	// Set row properties
-	$_menu->ResetAttrs();
-	$_menu->RowType = EW_ROWTYPE_VIEW; // View
+	$empusu->ResetAttrs();
+	$empusu->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$p_menu_delete->LoadRowValues($p_menu_delete->Recordset);
+	$empusu_delete->LoadRowValues($empusu_delete->Recordset);
 
 	// Render row
-	$p_menu_delete->RenderRow();
+	$empusu_delete->RenderRow();
 ?>
-	<tr<?php echo $_menu->RowAttributes() ?>>
-		<td<?php echo $_menu->men_id->CellAttributes() ?>><span id="el<?php echo $p_menu_delete->RowCnt ?>__menu_men_id" class="_menu_men_id">
-<span<?php echo $_menu->men_id->ViewAttributes() ?>>
-<?php echo $_menu->men_id->ListViewValue() ?></span>
+	<tr<?php echo $empusu->RowAttributes() ?>>
+		<td<?php echo $empusu->emu_id->CellAttributes() ?>><span id="el<?php echo $empusu_delete->RowCnt ?>_empusu_emu_id" class="empusu_emu_id">
+<span<?php echo $empusu->emu_id->ViewAttributes() ?>>
+<?php echo $empusu->emu_id->ListViewValue() ?></span>
 </span></td>
-		<td<?php echo $_menu->men_nombre->CellAttributes() ?>><span id="el<?php echo $p_menu_delete->RowCnt ?>__menu_men_nombre" class="_menu_men_nombre">
-<span<?php echo $_menu->men_nombre->ViewAttributes() ?>>
-<?php echo $_menu->men_nombre->ListViewValue() ?></span>
+		<td<?php echo $empusu->usuarios_id->CellAttributes() ?>><span id="el<?php echo $empusu_delete->RowCnt ?>_empusu_usuarios_id" class="empusu_usuarios_id">
+<span<?php echo $empusu->usuarios_id->ViewAttributes() ?>>
+<?php echo $empusu->usuarios_id->ListViewValue() ?></span>
 </span></td>
-		<td<?php echo $_menu->men_orden->CellAttributes() ?>><span id="el<?php echo $p_menu_delete->RowCnt ?>__menu_men_orden" class="_menu_men_orden">
-<span<?php echo $_menu->men_orden->ViewAttributes() ?>>
-<?php echo $_menu->men_orden->ListViewValue() ?></span>
+		<td<?php echo $empusu->clientes_id->CellAttributes() ?>><span id="el<?php echo $empusu_delete->RowCnt ?>_empusu_clientes_id" class="empusu_clientes_id">
+<span<?php echo $empusu->clientes_id->ViewAttributes() ?>>
+<?php echo $empusu->clientes_id->ListViewValue() ?></span>
 </span></td>
 	</tr>
 <?php
-	$p_menu_delete->Recordset->MoveNext();
+	$empusu_delete->Recordset->MoveNext();
 }
-$p_menu_delete->Recordset->Close();
+$empusu_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -625,10 +664,10 @@ $p_menu_delete->Recordset->Close();
 <input type="submit" name="Action" value="<?php echo ew_BtnCaption($Language->Phrase("DeleteBtn")) ?>">
 </form>
 <script type="text/javascript">
-f_menudelete.Init();
+fempusudelete.Init();
 </script>
 <?php
-$p_menu_delete->ShowPageFooter();
+$empusu_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -640,5 +679,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$p_menu_delete->Page_Terminate();
+$empusu_delete->Page_Terminate();
 ?>

@@ -9,6 +9,7 @@ $_menu = NULL;
 class c_menu extends cTable {
 	var $men_id;
 	var $men_nombre;
+	var $men_orden;
 
 	//
 	// Table class constructor
@@ -40,6 +41,11 @@ class c_menu extends cTable {
 		// men_nombre
 		$this->men_nombre = new cField('_menu', 'menu', 'x_men_nombre', 'men_nombre', '`men_nombre`', '`men_nombre`', 200, -1, FALSE, '`men_nombre`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['men_nombre'] = &$this->men_nombre;
+
+		// men_orden
+		$this->men_orden = new cField('_menu', 'menu', 'x_men_orden', 'men_orden', '`men_orden`', '`men_orden`', 2, -1, FALSE, '`men_orden`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->men_orden->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['men_orden'] = &$this->men_orden;
 	}
 
 	// Single column sort
@@ -432,6 +438,7 @@ class c_menu extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->men_id->setDbValue($rs->fields('men_id'));
 		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
+		$this->men_orden->setDbValue($rs->fields('men_orden'));
 	}
 
 	// Render list row values
@@ -444,6 +451,7 @@ class c_menu extends cTable {
    // Common render codes
 		// men_id
 		// men_nombre
+		// men_orden
 		// men_id
 
 		$this->men_id->ViewValue = $this->men_id->CurrentValue;
@@ -452,6 +460,10 @@ class c_menu extends cTable {
 		// men_nombre
 		$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
 		$this->men_nombre->ViewCustomAttributes = "";
+
+		// men_orden
+		$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
+		$this->men_orden->ViewCustomAttributes = "";
 
 		// men_id
 		$this->men_id->LinkCustomAttributes = "";
@@ -462,6 +474,11 @@ class c_menu extends cTable {
 		$this->men_nombre->LinkCustomAttributes = "";
 		$this->men_nombre->HrefValue = "";
 		$this->men_nombre->TooltipValue = "";
+
+		// men_orden
+		$this->men_orden->LinkCustomAttributes = "";
+		$this->men_orden->HrefValue = "";
+		$this->men_orden->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -487,9 +504,11 @@ class c_menu extends cTable {
 			if ($ExportPageType == "view") {
 				if ($this->men_id->Exportable) $Doc->ExportCaption($this->men_id);
 				if ($this->men_nombre->Exportable) $Doc->ExportCaption($this->men_nombre);
+				if ($this->men_orden->Exportable) $Doc->ExportCaption($this->men_orden);
 			} else {
 				if ($this->men_id->Exportable) $Doc->ExportCaption($this->men_id);
 				if ($this->men_nombre->Exportable) $Doc->ExportCaption($this->men_nombre);
+				if ($this->men_orden->Exportable) $Doc->ExportCaption($this->men_orden);
 			}
 			$Doc->EndExportRow();
 		}
@@ -521,9 +540,11 @@ class c_menu extends cTable {
 				if ($ExportPageType == "view") {
 					if ($this->men_id->Exportable) $Doc->ExportField($this->men_id);
 					if ($this->men_nombre->Exportable) $Doc->ExportField($this->men_nombre);
+					if ($this->men_orden->Exportable) $Doc->ExportField($this->men_orden);
 				} else {
 					if ($this->men_id->Exportable) $Doc->ExportField($this->men_id);
 					if ($this->men_nombre->Exportable) $Doc->ExportField($this->men_nombre);
+					if ($this->men_orden->Exportable) $Doc->ExportField($this->men_orden);
 				}
 				$Doc->EndExportRow();
 			}

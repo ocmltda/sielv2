@@ -21,7 +21,7 @@ class cpercat_delete extends cpercat {
 	var $PageID = 'delete';
 
 	// Project ID
-	var $ProjectID = "{60EB35E4-509C-401C-B7D1-5F8A49BCFE4C}";
+	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Table name
 	var $TableName = 'percat';
@@ -314,8 +314,8 @@ class cpercat_delete extends cpercat {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->pcat_id->setDbValue($rs->fields('pcat_id'));
-		$this->per_id->setDbValue($rs->fields('per_id'));
 		$this->men_id->setDbValue($rs->fields('men_id'));
+		$this->tipos_usuarios_id->setDbValue($rs->fields('tipos_usuarios_id'));
 	}
 
 	// Render row values based on field settings
@@ -330,36 +330,14 @@ class cpercat_delete extends cpercat {
 
 		// Common render codes for all row types
 		// pcat_id
-		// per_id
 		// men_id
+		// tipos_usuarios_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// pcat_id
 			$this->pcat_id->ViewValue = $this->pcat_id->CurrentValue;
 			$this->pcat_id->ViewCustomAttributes = "";
-
-			// per_id
-			if (strval($this->per_id->CurrentValue) <> "") {
-				$sFilterWrk = "`per_id`" . ew_SearchString("=", $this->per_id->CurrentValue, EW_DATATYPE_NUMBER);
-			$sSqlWrk = "SELECT `per_id`, `per_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `perfil`";
-			$sWhereWrk = "";
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `per_nombre` ASC";
-				$rswrk = $conn->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->per_id->ViewValue = $rswrk->fields('DispFld');
-					$rswrk->Close();
-				} else {
-					$this->per_id->ViewValue = $this->per_id->CurrentValue;
-				}
-			} else {
-				$this->per_id->ViewValue = NULL;
-			}
-			$this->per_id->ViewCustomAttributes = "";
 
 			// men_id
 			if (strval($this->men_id->CurrentValue) <> "") {
@@ -370,7 +348,7 @@ class cpercat_delete extends cpercat {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `men_nombre` ASC";
+			$sSqlWrk .= " ORDER BY `men_orden` ASC";
 				$rswrk = $conn->Execute($sSqlWrk);
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$this->men_id->ViewValue = $rswrk->fields('DispFld');
@@ -383,20 +361,42 @@ class cpercat_delete extends cpercat {
 			}
 			$this->men_id->ViewCustomAttributes = "";
 
+			// tipos_usuarios_id
+			if (strval($this->tipos_usuarios_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->tipos_usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tipos_usuarios`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `tipo` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->tipos_usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->tipos_usuarios_id->ViewValue = $this->tipos_usuarios_id->CurrentValue;
+				}
+			} else {
+				$this->tipos_usuarios_id->ViewValue = NULL;
+			}
+			$this->tipos_usuarios_id->ViewCustomAttributes = "";
+
 			// pcat_id
 			$this->pcat_id->LinkCustomAttributes = "";
 			$this->pcat_id->HrefValue = "";
 			$this->pcat_id->TooltipValue = "";
 
-			// per_id
-			$this->per_id->LinkCustomAttributes = "";
-			$this->per_id->HrefValue = "";
-			$this->per_id->TooltipValue = "";
-
 			// men_id
 			$this->men_id->LinkCustomAttributes = "";
 			$this->men_id->HrefValue = "";
 			$this->men_id->TooltipValue = "";
+
+			// tipos_usuarios_id
+			$this->tipos_usuarios_id->LinkCustomAttributes = "";
+			$this->tipos_usuarios_id->HrefValue = "";
+			$this->tipos_usuarios_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -573,8 +573,8 @@ fpercatdelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-fpercatdelete.Lists["x_per_id"] = {"LinkField":"x_per_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_per_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fpercatdelete.Lists["x_men_id"] = {"LinkField":"x_men_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_men_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fpercatdelete.Lists["x_tipos_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipo","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
 </script>
@@ -614,8 +614,8 @@ $percat_delete->ShowMessage();
 	<thead>
 	<tr class="ewTableHeader">
 		<td><span id="elh_percat_pcat_id" class="percat_pcat_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->pcat_id->FldCaption() ?></td></tr></table></span></td>
-		<td><span id="elh_percat_per_id" class="percat_per_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->per_id->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_percat_men_id" class="percat_men_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->men_id->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_percat_tipos_usuarios_id" class="percat_tipos_usuarios_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->tipos_usuarios_id->FldCaption() ?></td></tr></table></span></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -641,13 +641,13 @@ while (!$percat_delete->Recordset->EOF) {
 <span<?php echo $percat->pcat_id->ViewAttributes() ?>>
 <?php echo $percat->pcat_id->ListViewValue() ?></span>
 </span></td>
-		<td<?php echo $percat->per_id->CellAttributes() ?>><span id="el<?php echo $percat_delete->RowCnt ?>_percat_per_id" class="percat_per_id">
-<span<?php echo $percat->per_id->ViewAttributes() ?>>
-<?php echo $percat->per_id->ListViewValue() ?></span>
-</span></td>
 		<td<?php echo $percat->men_id->CellAttributes() ?>><span id="el<?php echo $percat_delete->RowCnt ?>_percat_men_id" class="percat_men_id">
 <span<?php echo $percat->men_id->ViewAttributes() ?>>
 <?php echo $percat->men_id->ListViewValue() ?></span>
+</span></td>
+		<td<?php echo $percat->tipos_usuarios_id->CellAttributes() ?>><span id="el<?php echo $percat_delete->RowCnt ?>_percat_tipos_usuarios_id" class="percat_tipos_usuarios_id">
+<span<?php echo $percat->tipos_usuarios_id->ViewAttributes() ?>>
+<?php echo $percat->tipos_usuarios_id->ListViewValue() ?></span>
 </span></td>
 	</tr>
 <?php

@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg9.php" ?>
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
-<?php include_once "_menuinfo.php" ?>
+<?php include_once "empusuinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -13,9 +13,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$p_menu_view = NULL; // Initialize page object first
+$empusu_view = NULL; // Initialize page object first
 
-class cp_menu_view extends c_menu {
+class cempusu_view extends cempusu {
 
 	// Page ID
 	var $PageID = 'view';
@@ -24,10 +24,10 @@ class cp_menu_view extends c_menu {
 	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Table name
-	var $TableName = 'menu';
+	var $TableName = 'empusu';
 
 	// Page object name
-	var $PageObjName = 'p_menu_view';
+	var $PageObjName = 'empusu_view';
 
 	// Page name
 	function PageName() {
@@ -188,15 +188,15 @@ class cp_menu_view extends c_menu {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (_menu)
-		if (!isset($GLOBALS["_menu"])) {
-			$GLOBALS["_menu"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["_menu"];
+		// Table object (empusu)
+		if (!isset($GLOBALS["empusu"])) {
+			$GLOBALS["empusu"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["empusu"];
 		}
 		$KeyUrl = "";
-		if (@$_GET["men_id"] <> "") {
-			$this->RecKey["men_id"] = $_GET["men_id"];
-			$KeyUrl .= "&men_id=" . urlencode($this->RecKey["men_id"]);
+		if (@$_GET["emu_id"] <> "") {
+			$this->RecKey["emu_id"] = $_GET["emu_id"];
+			$KeyUrl .= "&emu_id=" . urlencode($this->RecKey["emu_id"]);
 		}
 		$this->ExportPrintUrl = $this->PageUrl() . "export=print" . $KeyUrl;
 		$this->ExportHtmlUrl = $this->PageUrl() . "export=html" . $KeyUrl;
@@ -212,7 +212,7 @@ class cp_menu_view extends c_menu {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'menu', TRUE);
+			define("EW_TABLE_NAME", 'empusu', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -232,7 +232,7 @@ class cp_menu_view extends c_menu {
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
-		$this->men_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->emu_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -283,11 +283,11 @@ class cp_menu_view extends c_menu {
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
 		if ($this->IsPageRequest()) { // Validate request
-			if (@$_GET["men_id"] <> "") {
-				$this->men_id->setQueryStringValue($_GET["men_id"]);
-				$this->RecKey["men_id"] = $this->men_id->QueryStringValue;
+			if (@$_GET["emu_id"] <> "") {
+				$this->emu_id->setQueryStringValue($_GET["emu_id"]);
+				$this->RecKey["emu_id"] = $this->emu_id->QueryStringValue;
 			} else {
-				$sReturnUrl = "_menulist.php"; // Return to list
+				$sReturnUrl = "empusulist.php"; // Return to list
 			}
 
 			// Get action
@@ -297,11 +297,11 @@ class cp_menu_view extends c_menu {
 					if (!$this->LoadRow()) { // Load record based on key
 						if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 							$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-						$sReturnUrl = "_menulist.php"; // No matching record, return to list
+						$sReturnUrl = "empusulist.php"; // No matching record, return to list
 					}
 			}
 		} else {
-			$sReturnUrl = "_menulist.php"; // Not page request, return to list
+			$sReturnUrl = "empusulist.php"; // Not page request, return to list
 		}
 		if ($sReturnUrl <> "")
 			$this->Page_Terminate($sReturnUrl);
@@ -377,9 +377,9 @@ class cp_menu_view extends c_menu {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->men_id->setDbValue($rs->fields('men_id'));
-		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
-		$this->men_orden->setDbValue($rs->fields('men_orden'));
+		$this->emu_id->setDbValue($rs->fields('emu_id'));
+		$this->usuarios_id->setDbValue($rs->fields('usuarios_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Render row values based on field settings
@@ -398,38 +398,75 @@ class cp_menu_view extends c_menu {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// men_id
-		// men_nombre
-		// men_orden
+		// emu_id
+		// usuarios_id
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-			// men_id
-			$this->men_id->ViewValue = $this->men_id->CurrentValue;
-			$this->men_id->ViewCustomAttributes = "";
+			// emu_id
+			$this->emu_id->ViewValue = $this->emu_id->CurrentValue;
+			$this->emu_id->ViewCustomAttributes = "";
 
-			// men_nombre
-			$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
-			$this->men_nombre->ViewCustomAttributes = "";
+			// usuarios_id
+			if (strval($this->usuarios_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `usuario` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `usuarios`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$this->usuarios_id->ViewValue .= ew_ValueSeparator(1,$this->usuarios_id) . $rswrk->fields('Disp2Fld');
+					$rswrk->Close();
+				} else {
+					$this->usuarios_id->ViewValue = $this->usuarios_id->CurrentValue;
+				}
+			} else {
+				$this->usuarios_id->ViewValue = NULL;
+			}
+			$this->usuarios_id->ViewCustomAttributes = "";
 
-			// men_orden
-			$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
-			$this->men_orden->ViewCustomAttributes = "";
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
 
-			// men_id
-			$this->men_id->LinkCustomAttributes = "";
-			$this->men_id->HrefValue = "";
-			$this->men_id->TooltipValue = "";
+			// emu_id
+			$this->emu_id->LinkCustomAttributes = "";
+			$this->emu_id->HrefValue = "";
+			$this->emu_id->TooltipValue = "";
 
-			// men_nombre
-			$this->men_nombre->LinkCustomAttributes = "";
-			$this->men_nombre->HrefValue = "";
-			$this->men_nombre->TooltipValue = "";
+			// usuarios_id
+			$this->usuarios_id->LinkCustomAttributes = "";
+			$this->usuarios_id->HrefValue = "";
+			$this->usuarios_id->TooltipValue = "";
 
-			// men_orden
-			$this->men_orden->LinkCustomAttributes = "";
-			$this->men_orden->HrefValue = "";
-			$this->men_orden->TooltipValue = "";
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -496,27 +533,27 @@ class cp_menu_view extends c_menu {
 <?php
 
 // Create page object
-if (!isset($p_menu_view)) $p_menu_view = new cp_menu_view();
+if (!isset($empusu_view)) $empusu_view = new cempusu_view();
 
 // Page init
-$p_menu_view->Page_Init();
+$empusu_view->Page_Init();
 
 // Page main
-$p_menu_view->Page_Main();
+$empusu_view->Page_Main();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Page object
-var p_menu_view = new ew_Page("p_menu_view");
-p_menu_view.PageID = "view"; // Page ID
-var EW_PAGE_ID = p_menu_view.PageID; // For backward compatibility
+var empusu_view = new ew_Page("empusu_view");
+empusu_view.PageID = "view"; // Page ID
+var EW_PAGE_ID = empusu_view.PageID; // For backward compatibility
 
 // Form object
-var f_menuview = new ew_Form("f_menuview");
+var fempusuview = new ew_Form("fempusuview");
 
 // Form_CustomValidate event
-f_menuview.Form_CustomValidate = 
+fempusuview.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -525,66 +562,68 @@ f_menuview.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-f_menuview.ValidateRequired = true;
+fempusuview.ValidateRequired = true;
 <?php } else { ?>
-f_menuview.ValidateRequired = false; 
+fempusuview.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fempusuview.Lists["x_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_usuario","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusuview.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
-<p><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("View") ?>&nbsp;<?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $_menu->TableCaption() ?>&nbsp;&nbsp;</span><?php $p_menu_view->ExportOptions->Render("body"); ?>
+<p><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("View") ?>&nbsp;<?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $empusu->TableCaption() ?>&nbsp;&nbsp;</span><?php $empusu_view->ExportOptions->Render("body"); ?>
 </p>
 <p class="phpmaker">
-<a href="<?php echo $p_menu_view->ListUrl ?>" id="a_BackToList" class="ewLink"><?php echo $Language->Phrase("BackToList") ?></a>&nbsp;
-<?php if ($p_menu_view->AddUrl <> "") { ?>
-<a href="<?php echo $p_menu_view->AddUrl ?>" id="a_AddLink" class="ewLink"><?php echo $Language->Phrase("ViewPageAddLink") ?></a>&nbsp;
+<a href="<?php echo $empusu_view->ListUrl ?>" id="a_BackToList" class="ewLink"><?php echo $Language->Phrase("BackToList") ?></a>&nbsp;
+<?php if ($empusu_view->AddUrl <> "") { ?>
+<a href="<?php echo $empusu_view->AddUrl ?>" id="a_AddLink" class="ewLink"><?php echo $Language->Phrase("ViewPageAddLink") ?></a>&nbsp;
 <?php } ?>
-<?php if ($p_menu_view->EditUrl <> "") { ?>
-<a href="<?php echo $p_menu_view->EditUrl ?>" id="a_EditLink" class="ewLink"><?php echo $Language->Phrase("ViewPageEditLink") ?></a>&nbsp;
+<?php if ($empusu_view->EditUrl <> "") { ?>
+<a href="<?php echo $empusu_view->EditUrl ?>" id="a_EditLink" class="ewLink"><?php echo $Language->Phrase("ViewPageEditLink") ?></a>&nbsp;
 <?php } ?>
-<?php if ($p_menu_view->DeleteUrl <> "") { ?>
-<a href="<?php echo $p_menu_view->DeleteUrl ?>" id="a_DeleteLink" class="ewLink"><?php echo $Language->Phrase("ViewPageDeleteLink") ?></a>&nbsp;
+<?php if ($empusu_view->DeleteUrl <> "") { ?>
+<a href="<?php echo $empusu_view->DeleteUrl ?>" id="a_DeleteLink" class="ewLink"><?php echo $Language->Phrase("ViewPageDeleteLink") ?></a>&nbsp;
 <?php } ?>
 </p>
-<?php $p_menu_view->ShowPageHeader(); ?>
+<?php $empusu_view->ShowPageHeader(); ?>
 <?php
-$p_menu_view->ShowMessage();
+$empusu_view->ShowMessage();
 ?>
-<form name="f_menuview" id="f_menuview" class="ewForm" action="" method="post">
-<input type="hidden" name="t" value="_menu">
+<form name="fempusuview" id="fempusuview" class="ewForm" action="" method="post">
+<input type="hidden" name="t" value="empusu">
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridMiddlePanel">
-<table id="tbl__menuview" class="ewTable">
-<?php if ($_menu->men_id->Visible) { // men_id ?>
-	<tr id="r_men_id"<?php echo $_menu->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh__menu_men_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_id->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $_menu->men_id->CellAttributes() ?>><span id="el__menu_men_id">
-<span<?php echo $_menu->men_id->ViewAttributes() ?>>
-<?php echo $_menu->men_id->ViewValue ?></span>
+<table id="tbl_empusuview" class="ewTable">
+<?php if ($empusu->emu_id->Visible) { // emu_id ?>
+	<tr id="r_emu_id"<?php echo $empusu->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_empusu_emu_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->emu_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $empusu->emu_id->CellAttributes() ?>><span id="el_empusu_emu_id">
+<span<?php echo $empusu->emu_id->ViewAttributes() ?>>
+<?php echo $empusu->emu_id->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>
-<?php if ($_menu->men_nombre->Visible) { // men_nombre ?>
-	<tr id="r_men_nombre"<?php echo $_menu->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh__menu_men_nombre"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_nombre->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $_menu->men_nombre->CellAttributes() ?>><span id="el__menu_men_nombre">
-<span<?php echo $_menu->men_nombre->ViewAttributes() ?>>
-<?php echo $_menu->men_nombre->ViewValue ?></span>
+<?php if ($empusu->usuarios_id->Visible) { // usuarios_id ?>
+	<tr id="r_usuarios_id"<?php echo $empusu->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_empusu_usuarios_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->usuarios_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $empusu->usuarios_id->CellAttributes() ?>><span id="el_empusu_usuarios_id">
+<span<?php echo $empusu->usuarios_id->ViewAttributes() ?>>
+<?php echo $empusu->usuarios_id->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>
-<?php if ($_menu->men_orden->Visible) { // men_orden ?>
-	<tr id="r_men_orden"<?php echo $_menu->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh__menu_men_orden"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_orden->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $_menu->men_orden->CellAttributes() ?>><span id="el__menu_men_orden">
-<span<?php echo $_menu->men_orden->ViewAttributes() ?>>
-<?php echo $_menu->men_orden->ViewValue ?></span>
+<?php if ($empusu->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $empusu->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_empusu_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $empusu->clientes_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $empusu->clientes_id->CellAttributes() ?>><span id="el_empusu_clientes_id">
+<span<?php echo $empusu->clientes_id->ViewAttributes() ?>>
+<?php echo $empusu->clientes_id->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>
@@ -594,10 +633,10 @@ $p_menu_view->ShowMessage();
 </form>
 <br>
 <script type="text/javascript">
-f_menuview.Init();
+fempusuview.Init();
 </script>
 <?php
-$p_menu_view->ShowPageFooter();
+$empusu_view->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -609,5 +648,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$p_menu_view->Page_Terminate();
+$empusu_view->Page_Terminate();
 ?>

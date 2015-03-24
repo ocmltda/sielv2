@@ -26,7 +26,7 @@ if (!function_exists("G")) {
 function CurrentProjectID() {
 	if (isset($GLOBALS["Page"]))
 		return $GLOBALS["Page"]->ProjectID;
-	return "{60EB35E4-509C-401C-B7D1-5F8A49BCFE4C}";
+	return "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 }
 
 // Get current page object

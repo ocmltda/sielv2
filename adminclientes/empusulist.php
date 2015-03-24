@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg9.php" ?>
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
-<?php include_once "percatinfo.php" ?>
+<?php include_once "empusuinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -13,9 +13,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$percat_list = NULL; // Initialize page object first
+$empusu_list = NULL; // Initialize page object first
 
-class cpercat_list extends cpercat {
+class cempusu_list extends cempusu {
 
 	// Page ID
 	var $PageID = 'list';
@@ -24,10 +24,10 @@ class cpercat_list extends cpercat {
 	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Table name
-	var $TableName = 'percat';
+	var $TableName = 'empusu';
 
 	// Page object name
-	var $PageObjName = 'percat_list';
+	var $PageObjName = 'empusu_list';
 
 	// Page name
 	function PageName() {
@@ -188,10 +188,10 @@ class cpercat_list extends cpercat {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (percat)
-		if (!isset($GLOBALS["percat"])) {
-			$GLOBALS["percat"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["percat"];
+		// Table object (empusu)
+		if (!isset($GLOBALS["empusu"])) {
+			$GLOBALS["empusu"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["empusu"];
 		}
 
 		// Initialize URLs
@@ -202,12 +202,12 @@ class cpercat_list extends cpercat {
 		$this->ExportXmlUrl = $this->PageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv";
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf";
-		$this->AddUrl = "percatadd.php";
+		$this->AddUrl = "empusuadd.php";
 		$this->InlineAddUrl = $this->PageUrl() . "a=add";
 		$this->GridAddUrl = $this->PageUrl() . "a=gridadd";
 		$this->GridEditUrl = $this->PageUrl() . "a=gridedit";
-		$this->MultiDeleteUrl = "percatdelete.php";
-		$this->MultiUpdateUrl = "percatupdate.php";
+		$this->MultiDeleteUrl = "empusudelete.php";
+		$this->MultiUpdateUrl = "empusuupdate.php";
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -215,7 +215,7 @@ class cpercat_list extends cpercat {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'percat', TRUE);
+			define("EW_TABLE_NAME", 'empusu', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -247,7 +247,7 @@ class cpercat_list extends cpercat {
 		// Set up list options
 		$this->SetupListOptions();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
-		$this->pcat_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
+		$this->emu_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -432,8 +432,8 @@ class cpercat_list extends cpercat {
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
 		if (count($arrKeyFlds) >= 1) {
-			$this->pcat_id->setFormValue($arrKeyFlds[0]);
-			if (!is_numeric($this->pcat_id->FormValue))
+			$this->emu_id->setFormValue($arrKeyFlds[0]);
+			if (!is_numeric($this->emu_id->FormValue))
 				return FALSE;
 		}
 		return TRUE;
@@ -443,18 +443,18 @@ class cpercat_list extends cpercat {
 	function AdvancedSearchWhere() {
 		global $Security;
 		$sWhere = "";
-		$this->BuildSearchSql($sWhere, $this->pcat_id, FALSE); // pcat_id
-		$this->BuildSearchSql($sWhere, $this->men_id, FALSE); // men_id
-		$this->BuildSearchSql($sWhere, $this->tipos_usuarios_id, FALSE); // tipos_usuarios_id
+		$this->BuildSearchSql($sWhere, $this->emu_id, FALSE); // emu_id
+		$this->BuildSearchSql($sWhere, $this->usuarios_id, FALSE); // usuarios_id
+		$this->BuildSearchSql($sWhere, $this->clientes_id, FALSE); // clientes_id
 
 		// Set up search parm
 		if ($sWhere <> "") {
 			$this->Command = "search";
 		}
 		if ($this->Command == "search") {
-			$this->pcat_id->AdvancedSearch->Save(); // pcat_id
-			$this->men_id->AdvancedSearch->Save(); // men_id
-			$this->tipos_usuarios_id->AdvancedSearch->Save(); // tipos_usuarios_id
+			$this->emu_id->AdvancedSearch->Save(); // emu_id
+			$this->usuarios_id->AdvancedSearch->Save(); // usuarios_id
+			$this->clientes_id->AdvancedSearch->Save(); // clientes_id
 		}
 		return $sWhere;
 	}
@@ -510,11 +510,11 @@ class cpercat_list extends cpercat {
 
 	// Check if search parm exists
 	function CheckSearchParms() {
-		if ($this->pcat_id->AdvancedSearch->IssetSession())
+		if ($this->emu_id->AdvancedSearch->IssetSession())
 			return TRUE;
-		if ($this->men_id->AdvancedSearch->IssetSession())
+		if ($this->usuarios_id->AdvancedSearch->IssetSession())
 			return TRUE;
-		if ($this->tipos_usuarios_id->AdvancedSearch->IssetSession())
+		if ($this->clientes_id->AdvancedSearch->IssetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -537,18 +537,18 @@ class cpercat_list extends cpercat {
 
 	// Clear all advanced search parameters
 	function ResetAdvancedSearchParms() {
-		$this->pcat_id->AdvancedSearch->UnsetSession();
-		$this->men_id->AdvancedSearch->UnsetSession();
-		$this->tipos_usuarios_id->AdvancedSearch->UnsetSession();
+		$this->emu_id->AdvancedSearch->UnsetSession();
+		$this->usuarios_id->AdvancedSearch->UnsetSession();
+		$this->clientes_id->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
 	function RestoreSearchParms() {
 
 		// Restore advanced search values
-		$this->pcat_id->AdvancedSearch->Load();
-		$this->men_id->AdvancedSearch->Load();
-		$this->tipos_usuarios_id->AdvancedSearch->Load();
+		$this->emu_id->AdvancedSearch->Load();
+		$this->usuarios_id->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -558,9 +558,9 @@ class cpercat_list extends cpercat {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->pcat_id); // pcat_id
-			$this->UpdateSort($this->men_id); // men_id
-			$this->UpdateSort($this->tipos_usuarios_id); // tipos_usuarios_id
+			$this->UpdateSort($this->emu_id); // emu_id
+			$this->UpdateSort($this->usuarios_id); // usuarios_id
+			$this->UpdateSort($this->clientes_id); // clientes_id
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -593,9 +593,9 @@ class cpercat_list extends cpercat {
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->pcat_id->setSort("");
-				$this->men_id->setSort("");
-				$this->tipos_usuarios_id->setSort("");
+				$this->emu_id->setSort("");
+				$this->usuarios_id->setSort("");
+				$this->clientes_id->setSort("");
 			}
 
 			// Reset start position
@@ -651,7 +651,7 @@ class cpercat_list extends cpercat {
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
 		if (TRUE)
-			$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->pcat_id->CurrentValue) . "\" class=\"phpmaker\" onclick='ew_ClickMultiCheckbox(event, this);'>";
+			$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->emu_id->CurrentValue) . "\" class=\"phpmaker\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -703,21 +703,21 @@ class cpercat_list extends cpercat {
 		global $objForm;
 
 		// Load search values
-		// pcat_id
+		// emu_id
 
-		$this->pcat_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_pcat_id"]);
-		if ($this->pcat_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->pcat_id->AdvancedSearch->SearchOperator = @$_GET["z_pcat_id"];
+		$this->emu_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_emu_id"]);
+		if ($this->emu_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->emu_id->AdvancedSearch->SearchOperator = @$_GET["z_emu_id"];
 
-		// men_id
-		$this->men_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_men_id"]);
-		if ($this->men_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->men_id->AdvancedSearch->SearchOperator = @$_GET["z_men_id"];
+		// usuarios_id
+		$this->usuarios_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_usuarios_id"]);
+		if ($this->usuarios_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->usuarios_id->AdvancedSearch->SearchOperator = @$_GET["z_usuarios_id"];
 
-		// tipos_usuarios_id
-		$this->tipos_usuarios_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_tipos_usuarios_id"]);
-		if ($this->tipos_usuarios_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->tipos_usuarios_id->AdvancedSearch->SearchOperator = @$_GET["z_tipos_usuarios_id"];
+		// clientes_id
+		$this->clientes_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_clientes_id"]);
+		if ($this->clientes_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->clientes_id->AdvancedSearch->SearchOperator = @$_GET["z_clientes_id"];
 	}
 
 	// Load recordset
@@ -769,9 +769,9 @@ class cpercat_list extends cpercat {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->pcat_id->setDbValue($rs->fields('pcat_id'));
-		$this->men_id->setDbValue($rs->fields('men_id'));
-		$this->tipos_usuarios_id->setDbValue($rs->fields('tipos_usuarios_id'));
+		$this->emu_id->setDbValue($rs->fields('emu_id'));
+		$this->usuarios_id->setDbValue($rs->fields('usuarios_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Load old record
@@ -779,8 +779,8 @@ class cpercat_list extends cpercat {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
-		if (strval($this->getKey("pcat_id")) <> "")
-			$this->pcat_id->CurrentValue = $this->getKey("pcat_id"); // pcat_id
+		if (strval($this->getKey("emu_id")) <> "")
+			$this->emu_id->CurrentValue = $this->getKey("emu_id"); // emu_id
 		else
 			$bValidKey = FALSE;
 
@@ -813,98 +813,112 @@ class cpercat_list extends cpercat {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// pcat_id
-		// men_id
-		// tipos_usuarios_id
+		// emu_id
+		// usuarios_id
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-			// pcat_id
-			$this->pcat_id->ViewValue = $this->pcat_id->CurrentValue;
-			$this->pcat_id->ViewCustomAttributes = "";
+			// emu_id
+			$this->emu_id->ViewValue = $this->emu_id->CurrentValue;
+			$this->emu_id->ViewCustomAttributes = "";
 
-			// men_id
-			if (strval($this->men_id->CurrentValue) <> "") {
-				$sFilterWrk = "`men_id`" . ew_SearchString("=", $this->men_id->CurrentValue, EW_DATATYPE_NUMBER);
-			$sSqlWrk = "SELECT `men_id`, `men_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `menu`";
+			// usuarios_id
+			if (strval($this->usuarios_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `usuario` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `usuarios`";
 			$sWhereWrk = "";
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `men_orden` ASC";
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
 				$rswrk = $conn->Execute($sSqlWrk);
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->men_id->ViewValue = $rswrk->fields('DispFld');
+					$this->usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$this->usuarios_id->ViewValue .= ew_ValueSeparator(1,$this->usuarios_id) . $rswrk->fields('Disp2Fld');
 					$rswrk->Close();
 				} else {
-					$this->men_id->ViewValue = $this->men_id->CurrentValue;
+					$this->usuarios_id->ViewValue = $this->usuarios_id->CurrentValue;
 				}
 			} else {
-				$this->men_id->ViewValue = NULL;
+				$this->usuarios_id->ViewValue = NULL;
 			}
-			$this->men_id->ViewCustomAttributes = "";
+			$this->usuarios_id->ViewCustomAttributes = "";
 
-			// tipos_usuarios_id
-			if (strval($this->tipos_usuarios_id->CurrentValue) <> "") {
-				$sFilterWrk = "`id`" . ew_SearchString("=", $this->tipos_usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
-			$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tipos_usuarios`";
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
 			$sWhereWrk = "";
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `tipo` ASC";
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
 				$rswrk = $conn->Execute($sSqlWrk);
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->tipos_usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
 					$rswrk->Close();
 				} else {
-					$this->tipos_usuarios_id->ViewValue = $this->tipos_usuarios_id->CurrentValue;
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
 				}
 			} else {
-				$this->tipos_usuarios_id->ViewValue = NULL;
+				$this->clientes_id->ViewValue = NULL;
 			}
-			$this->tipos_usuarios_id->ViewCustomAttributes = "";
+			$this->clientes_id->ViewCustomAttributes = "";
 
-			// pcat_id
-			$this->pcat_id->LinkCustomAttributes = "";
-			$this->pcat_id->HrefValue = "";
-			$this->pcat_id->TooltipValue = "";
+			// emu_id
+			$this->emu_id->LinkCustomAttributes = "";
+			$this->emu_id->HrefValue = "";
+			$this->emu_id->TooltipValue = "";
 
-			// men_id
-			$this->men_id->LinkCustomAttributes = "";
-			$this->men_id->HrefValue = "";
-			$this->men_id->TooltipValue = "";
+			// usuarios_id
+			$this->usuarios_id->LinkCustomAttributes = "";
+			$this->usuarios_id->HrefValue = "";
+			$this->usuarios_id->TooltipValue = "";
 
-			// tipos_usuarios_id
-			$this->tipos_usuarios_id->LinkCustomAttributes = "";
-			$this->tipos_usuarios_id->HrefValue = "";
-			$this->tipos_usuarios_id->TooltipValue = "";
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
-			// pcat_id
-			$this->pcat_id->EditCustomAttributes = "";
-			$this->pcat_id->EditValue = ew_HtmlEncode($this->pcat_id->AdvancedSearch->SearchValue);
+			// emu_id
+			$this->emu_id->EditCustomAttributes = "";
+			$this->emu_id->EditValue = ew_HtmlEncode($this->emu_id->AdvancedSearch->SearchValue);
 
-			// men_id
-			$this->men_id->EditCustomAttributes = "";
-
-			// tipos_usuarios_id
-			$this->tipos_usuarios_id->EditCustomAttributes = "";
+			// usuarios_id
+			$this->usuarios_id->EditCustomAttributes = "";
 			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `tipos_usuarios`";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `usuario` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `usuarios`";
 			$sWhereWrk = "";
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `tipo` ASC";
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->tipos_usuarios_id->EditValue = $arwrk;
+			$this->usuarios_id->EditValue = $arwrk;
+
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->clientes_id->EditValue = $arwrk;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -942,9 +956,9 @@ class cpercat_list extends cpercat {
 
 	// Load advanced search
 	function LoadAdvancedSearch() {
-		$this->pcat_id->AdvancedSearch->Load();
-		$this->men_id->AdvancedSearch->Load();
-		$this->tipos_usuarios_id->AdvancedSearch->Load();
+		$this->emu_id->AdvancedSearch->Load();
+		$this->usuarios_id->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
 	}
 
 	// Page Load event
@@ -1032,27 +1046,27 @@ class cpercat_list extends cpercat {
 <?php
 
 // Create page object
-if (!isset($percat_list)) $percat_list = new cpercat_list();
+if (!isset($empusu_list)) $empusu_list = new cempusu_list();
 
 // Page init
-$percat_list->Page_Init();
+$empusu_list->Page_Init();
 
 // Page main
-$percat_list->Page_Main();
+$empusu_list->Page_Main();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Page object
-var percat_list = new ew_Page("percat_list");
-percat_list.PageID = "list"; // Page ID
-var EW_PAGE_ID = percat_list.PageID; // For backward compatibility
+var empusu_list = new ew_Page("empusu_list");
+empusu_list.PageID = "list"; // Page ID
+var EW_PAGE_ID = empusu_list.PageID; // For backward compatibility
 
 // Form object
-var fpercatlist = new ew_Form("fpercatlist");
+var fempusulist = new ew_Form("fempusulist");
 
 // Form_CustomValidate event
-fpercatlist.Form_CustomValidate = 
+fempusulist.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1061,20 +1075,20 @@ fpercatlist.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-fpercatlist.ValidateRequired = true;
+fempusulist.ValidateRequired = true;
 <?php } else { ?>
-fpercatlist.ValidateRequired = false; 
+fempusulist.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-fpercatlist.Lists["x_men_id"] = {"LinkField":"x_men_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_men_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-fpercatlist.Lists["x_tipos_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipo","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusulist.Lists["x_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_usuario","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusulist.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
-var fpercatlistsrch = new ew_Form("fpercatlistsrch");
+var fempusulistsrch = new ew_Form("fempusulistsrch");
 
 // Validate function for search
-fpercatlistsrch.Validate = function(fobj) {
+fempusulistsrch.Validate = function(fobj) {
 	if (!this.ValidateRequired)
 		return true; // Ignore validation
 	fobj = fobj || this.Form;
@@ -1091,7 +1105,7 @@ fpercatlistsrch.Validate = function(fobj) {
 }
 
 // Form_CustomValidate event
-fpercatlistsrch.Form_CustomValidate = 
+fempusulistsrch.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1100,13 +1114,14 @@ fpercatlistsrch.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-fpercatlistsrch.ValidateRequired = true; // uses JavaScript validation
+fempusulistsrch.ValidateRequired = true; // uses JavaScript validation
 <?php } else { ?>
-fpercatlistsrch.ValidateRequired = false; // no JavaScript validation
+fempusulistsrch.ValidateRequired = false; // no JavaScript validation
 <?php } ?>
 
 // Dynamic selection lists
-fpercatlistsrch.Lists["x_tipos_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipo","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusulistsrch.Lists["x_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_usuario","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fempusulistsrch.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1115,54 +1130,88 @@ fpercatlistsrch.Lists["x_tipos_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
 	if ($bSelectLimit) {
-		$percat_list->TotalRecs = $percat->SelectRecordCount();
+		$empusu_list->TotalRecs = $empusu->SelectRecordCount();
 	} else {
-		if ($percat_list->Recordset = $percat_list->LoadRecordset())
-			$percat_list->TotalRecs = $percat_list->Recordset->RecordCount();
+		if ($empusu_list->Recordset = $empusu_list->LoadRecordset())
+			$empusu_list->TotalRecs = $empusu_list->Recordset->RecordCount();
 	}
-	$percat_list->StartRec = 1;
-	if ($percat_list->DisplayRecs <= 0 || ($percat->Export <> "" && $percat->ExportAll)) // Display all records
-		$percat_list->DisplayRecs = $percat_list->TotalRecs;
-	if (!($percat->Export <> "" && $percat->ExportAll))
-		$percat_list->SetUpStartRec(); // Set up start record position
+	$empusu_list->StartRec = 1;
+	if ($empusu_list->DisplayRecs <= 0 || ($empusu->Export <> "" && $empusu->ExportAll)) // Display all records
+		$empusu_list->DisplayRecs = $empusu_list->TotalRecs;
+	if (!($empusu->Export <> "" && $empusu->ExportAll))
+		$empusu_list->SetUpStartRec(); // Set up start record position
 	if ($bSelectLimit)
-		$percat_list->Recordset = $percat_list->LoadRecordset($percat_list->StartRec-1, $percat_list->DisplayRecs);
+		$empusu_list->Recordset = $empusu_list->LoadRecordset($empusu_list->StartRec-1, $empusu_list->DisplayRecs);
 ?>
-<p style="white-space: nowrap;"><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $percat->TableCaption() ?>&nbsp;&nbsp;</span>
-<?php $percat_list->ExportOptions->Render("body"); ?>
+<p style="white-space: nowrap;"><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $empusu->TableCaption() ?>&nbsp;&nbsp;</span>
+<?php $empusu_list->ExportOptions->Render("body"); ?>
 </p>
-<?php if ($percat->Export == "" && $percat->CurrentAction == "") { ?>
-<form name="fpercatlistsrch" id="fpercatlistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>" onsubmit="return ewForms[this.id].Submit();">
-<a href="javascript:fpercatlistsrch.ToggleSearchPanel();" style="text-decoration: none;"><img id="fpercatlistsrch_SearchImage" src="phpimages/collapse.gif" alt="" width="9" height="9" style="border: 0;"></a><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("Search") ?></span><br>
-<div id="fpercatlistsrch_SearchPanel">
+<?php if ($empusu->Export == "" && $empusu->CurrentAction == "") { ?>
+<form name="fempusulistsrch" id="fempusulistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>" onsubmit="return ewForms[this.id].Submit();">
+<a href="javascript:fempusulistsrch.ToggleSearchPanel();" style="text-decoration: none;"><img id="fempusulistsrch_SearchImage" src="phpimages/collapse.gif" alt="" width="9" height="9" style="border: 0;"></a><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("Search") ?></span><br>
+<div id="fempusulistsrch_SearchPanel">
 <input type="hidden" name="cmd" value="search">
-<input type="hidden" name="t" value="percat">
+<input type="hidden" name="t" value="empusu">
 <div class="ewBasicSearch">
 <?php
 if ($gsSearchError == "")
-	$percat_list->LoadAdvancedSearch(); // Load advanced search
+	$empusu_list->LoadAdvancedSearch(); // Load advanced search
 
 // Render for search
-$percat->RowType = EW_ROWTYPE_SEARCH;
+$empusu->RowType = EW_ROWTYPE_SEARCH;
 
 // Render row
-$percat->ResetAttrs();
-$percat_list->RenderRow();
+$empusu->ResetAttrs();
+$empusu_list->RenderRow();
 ?>
 <div id="xsr_1" class="ewRow">
-<?php if ($percat->tipos_usuarios_id->Visible) { // tipos_usuarios_id ?>
-	<span id="xsc_tipos_usuarios_id" class="ewCell">
-		<span class="ewSearchCaption"><?php echo $percat->tipos_usuarios_id->FldCaption() ?></span>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_tipos_usuarios_id" id="z_tipos_usuarios_id" value="="></span>
+<?php if ($empusu->usuarios_id->Visible) { // usuarios_id ?>
+	<span id="xsc_usuarios_id" class="ewCell">
+		<span class="ewSearchCaption"><?php echo $empusu->usuarios_id->FldCaption() ?></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_usuarios_id" id="z_usuarios_id" value="="></span>
 		<span class="ewSearchField">
-<select id="x_tipos_usuarios_id" name="x_tipos_usuarios_id"<?php echo $percat->tipos_usuarios_id->EditAttributes() ?>>
+<select id="x_usuarios_id" name="x_usuarios_id"<?php echo $empusu->usuarios_id->EditAttributes() ?>>
 <?php
-if (is_array($percat->tipos_usuarios_id->EditValue)) {
-	$arwrk = $percat->tipos_usuarios_id->EditValue;
+if (is_array($empusu->usuarios_id->EditValue)) {
+	$arwrk = $empusu->usuarios_id->EditValue;
 	$rowswrk = count($arwrk);
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($percat->tipos_usuarios_id->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		$selwrk = (strval($empusu->usuarios_id->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+<?php if ($arwrk[$rowcntwrk][2] <> "") { ?>
+<?php echo ew_ValueSeparator(1,$empusu->usuarios_id) ?><?php echo $arwrk[$rowcntwrk][2] ?>
+<?php } ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fempusulistsrch.Lists["x_usuarios_id"].Options = <?php echo (is_array($empusu->usuarios_id->EditValue)) ? ew_ArrayToJson($empusu->usuarios_id->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+	</span>
+<?php } ?>
+</div>
+<div id="xsr_2" class="ewRow">
+<?php if ($empusu->clientes_id->Visible) { // clientes_id ?>
+	<span id="xsc_clientes_id" class="ewCell">
+		<span class="ewSearchCaption"><?php echo $empusu->clientes_id->FldCaption() ?></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_clientes_id" id="z_clientes_id" value="="></span>
+		<span class="ewSearchField">
+<select id="x_clientes_id" name="x_clientes_id"<?php echo $empusu->clientes_id->EditAttributes() ?>>
+<?php
+if (is_array($empusu->clientes_id->EditValue)) {
+	$arwrk = $empusu->clientes_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($empusu->clientes_id->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
 		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
@@ -1174,67 +1223,67 @@ if (is_array($percat->tipos_usuarios_id->EditValue)) {
 ?>
 </select>
 <script type="text/javascript">
-fpercatlistsrch.Lists["x_tipos_usuarios_id"].Options = <?php echo (is_array($percat->tipos_usuarios_id->EditValue)) ? ew_ArrayToJson($percat->tipos_usuarios_id->EditValue, 1) : "[]" ?>;
+fempusulistsrch.Lists["x_clientes_id"].Options = <?php echo (is_array($empusu->clientes_id->EditValue)) ? ew_ArrayToJson($empusu->clientes_id->EditValue, 1) : "[]" ?>;
 </script>
 </span>
 	</span>
 <?php } ?>
 </div>
-<div id="xsr_2" class="ewRow">
+<div id="xsr_3" class="ewRow">
 	<input type="submit" name="btnsubmit" id="btnsubmit" value="<?php echo ew_BtnCaption($Language->Phrase("QuickSearchBtn")) ?>">&nbsp;
-	<a href="<?php echo $percat_list->PageUrl() ?>cmd=reset" id="a_ShowAll" class="ewLink"><?php echo $Language->Phrase("ShowAll") ?></a>&nbsp;
+	<a href="<?php echo $empusu_list->PageUrl() ?>cmd=reset" id="a_ShowAll" class="ewLink"><?php echo $Language->Phrase("ShowAll") ?></a>&nbsp;
 </div>
 </div>
 </div>
 </form>
 <?php } ?>
-<?php $percat_list->ShowPageHeader(); ?>
+<?php $empusu_list->ShowPageHeader(); ?>
 <?php
-$percat_list->ShowMessage();
+$empusu_list->ShowMessage();
 ?>
 <br>
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridUpperPanel">
-<?php if ($percat->CurrentAction <> "gridadd" && $percat->CurrentAction <> "gridedit") { ?>
+<?php if ($empusu->CurrentAction <> "gridadd" && $empusu->CurrentAction <> "gridedit") { ?>
 <form name="ewpagerform" id="ewpagerform" class="ewForm" action="<?php echo ew_CurrentPage() ?>">
 <table class="ewPager"><tr><td>
-<?php if (!isset($percat_list->Pager)) $percat_list->Pager = new cPrevNextPager($percat_list->StartRec, $percat_list->DisplayRecs, $percat_list->TotalRecs) ?>
-<?php if ($percat_list->Pager->RecordCount > 0) { ?>
+<?php if (!isset($empusu_list->Pager)) $empusu_list->Pager = new cPrevNextPager($empusu_list->StartRec, $empusu_list->DisplayRecs, $empusu_list->TotalRecs) ?>
+<?php if ($empusu_list->Pager->RecordCount > 0) { ?>
 	<table cellspacing="0" class="ewStdTable"><tbody><tr><td><span class="phpmaker"><?php echo $Language->Phrase("Page") ?>&nbsp;</span></td>
 <!--first page button-->
-	<?php if ($percat_list->Pager->FirstButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->FirstButton->Start ?>"><img src="phpimages/first.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></a></td>
+	<?php if ($empusu_list->Pager->FirstButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->FirstButton->Start ?>"><img src="phpimages/first.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></a></td>
 	<?php } else { ?>
 	<td><img src="phpimages/firstdisab.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($percat_list->Pager->PrevButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->PrevButton->Start ?>"><img src="phpimages/prev.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></a></td>
+	<?php if ($empusu_list->Pager->PrevButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->PrevButton->Start ?>"><img src="phpimages/prev.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></a></td>
 	<?php } else { ?>
 	<td><img src="phpimages/prevdisab.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--current page number-->
-	<td><input type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" id="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $percat_list->Pager->CurrentPage ?>" size="4"></td>
+	<td><input type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" id="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $empusu_list->Pager->CurrentPage ?>" size="4"></td>
 <!--next page button-->
-	<?php if ($percat_list->Pager->NextButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->NextButton->Start ?>"><img src="phpimages/next.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></a></td>	
+	<?php if ($empusu_list->Pager->NextButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->NextButton->Start ?>"><img src="phpimages/next.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></a></td>	
 	<?php } else { ?>
 	<td><img src="phpimages/nextdisab.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($percat_list->Pager->LastButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->LastButton->Start ?>"><img src="phpimages/last.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></a></td>	
+	<?php if ($empusu_list->Pager->LastButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->LastButton->Start ?>"><img src="phpimages/last.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></a></td>	
 	<?php } else { ?>
 	<td><img src="phpimages/lastdisab.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
-	<td><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $percat_list->Pager->PageCount ?></span></td>
+	<td><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $empusu_list->Pager->PageCount ?></span></td>
 	</tr></tbody></table>
 	</td>	
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-	<span class="phpmaker"><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $percat_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $percat_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $percat_list->Pager->RecordCount ?></span>
+	<span class="phpmaker"><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $empusu_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $empusu_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $empusu_list->Pager->RecordCount ?></span>
 <?php } else { ?>
-	<?php if ($percat_list->SearchWhere == "0=101") { ?>
+	<?php if ($empusu_list->SearchWhere == "0=101") { ?>
 	<span class="phpmaker"><?php echo $Language->Phrase("EnterSearchCriteria") ?></span>
 	<?php } else { ?>
 	<span class="phpmaker"><?php echo $Language->Phrase("NoRecord") ?></span>
@@ -1245,155 +1294,155 @@ $percat_list->ShowMessage();
 </form>
 <?php } ?>
 <span class="phpmaker">
-<?php if ($percat_list->AddUrl <> "") { ?>
-<a class="ewGridLink" href="<?php echo $percat_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
+<?php if ($empusu_list->AddUrl <> "") { ?>
+<a class="ewGridLink" href="<?php echo $empusu_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
-<?php if ($percat_list->TotalRecs > 0) { ?>
-<a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.fpercatlist, '<?php echo $percat_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
+<?php if ($empusu_list->TotalRecs > 0) { ?>
+<a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.fempusulist, '<?php echo $empusu_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
 </span>
 </div>
-<form name="fpercatlist" id="fpercatlist" class="ewForm" action="" method="post">
-<input type="hidden" name="t" value="percat">
-<div id="gmp_percat" class="ewGridMiddlePanel">
-<?php if ($percat_list->TotalRecs > 0) { ?>
-<table id="tbl_percatlist" class="ewTable ewTableSeparate">
-<?php echo $percat->TableCustomInnerHtml ?>
+<form name="fempusulist" id="fempusulist" class="ewForm" action="" method="post">
+<input type="hidden" name="t" value="empusu">
+<div id="gmp_empusu" class="ewGridMiddlePanel">
+<?php if ($empusu_list->TotalRecs > 0) { ?>
+<table id="tbl_empusulist" class="ewTable ewTableSeparate">
+<?php echo $empusu->TableCustomInnerHtml ?>
 <thead><!-- Table header -->
 	<tr class="ewTableHeader">
 <?php
 
 // Render list options
-$percat_list->RenderListOptions();
+$empusu_list->RenderListOptions();
 
 // Render list options (header, left)
-$percat_list->ListOptions->Render("header", "left");
+$empusu_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($percat->pcat_id->Visible) { // pcat_id ?>
-	<?php if ($percat->SortUrl($percat->pcat_id) == "") { ?>
-		<td><span id="elh_percat_pcat_id" class="percat_pcat_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $percat->pcat_id->FldCaption() ?></td></tr></thead></table></span></td>
+<?php if ($empusu->emu_id->Visible) { // emu_id ?>
+	<?php if ($empusu->SortUrl($empusu->emu_id) == "") { ?>
+		<td><span id="elh_empusu_emu_id" class="empusu_emu_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $empusu->emu_id->FldCaption() ?></td></tr></thead></table></span></td>
 	<?php } else { ?>
-		<td><div onmousedown="ew_Sort(event,'<?php echo $percat->SortUrl($percat->pcat_id) ?>',1);"><span id="elh_percat_pcat_id" class="percat_pcat_id">
-			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $percat->pcat_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($percat->pcat_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($percat->pcat_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $empusu->SortUrl($empusu->emu_id) ?>',1);"><span id="elh_empusu_emu_id" class="empusu_emu_id">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $empusu->emu_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($empusu->emu_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($empusu->emu_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
-<?php if ($percat->men_id->Visible) { // men_id ?>
-	<?php if ($percat->SortUrl($percat->men_id) == "") { ?>
-		<td><span id="elh_percat_men_id" class="percat_men_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $percat->men_id->FldCaption() ?></td></tr></thead></table></span></td>
+<?php if ($empusu->usuarios_id->Visible) { // usuarios_id ?>
+	<?php if ($empusu->SortUrl($empusu->usuarios_id) == "") { ?>
+		<td><span id="elh_empusu_usuarios_id" class="empusu_usuarios_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $empusu->usuarios_id->FldCaption() ?></td></tr></thead></table></span></td>
 	<?php } else { ?>
-		<td><div onmousedown="ew_Sort(event,'<?php echo $percat->SortUrl($percat->men_id) ?>',1);"><span id="elh_percat_men_id" class="percat_men_id">
-			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $percat->men_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($percat->men_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($percat->men_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $empusu->SortUrl($empusu->usuarios_id) ?>',1);"><span id="elh_empusu_usuarios_id" class="empusu_usuarios_id">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $empusu->usuarios_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($empusu->usuarios_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($empusu->usuarios_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
-<?php if ($percat->tipos_usuarios_id->Visible) { // tipos_usuarios_id ?>
-	<?php if ($percat->SortUrl($percat->tipos_usuarios_id) == "") { ?>
-		<td><span id="elh_percat_tipos_usuarios_id" class="percat_tipos_usuarios_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $percat->tipos_usuarios_id->FldCaption() ?></td></tr></thead></table></span></td>
+<?php if ($empusu->clientes_id->Visible) { // clientes_id ?>
+	<?php if ($empusu->SortUrl($empusu->clientes_id) == "") { ?>
+		<td><span id="elh_empusu_clientes_id" class="empusu_clientes_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $empusu->clientes_id->FldCaption() ?></td></tr></thead></table></span></td>
 	<?php } else { ?>
-		<td><div onmousedown="ew_Sort(event,'<?php echo $percat->SortUrl($percat->tipos_usuarios_id) ?>',1);"><span id="elh_percat_tipos_usuarios_id" class="percat_tipos_usuarios_id">
-			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $percat->tipos_usuarios_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($percat->tipos_usuarios_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($percat->tipos_usuarios_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $empusu->SortUrl($empusu->clientes_id) ?>',1);"><span id="elh_empusu_clientes_id" class="empusu_clientes_id">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $empusu->clientes_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($empusu->clientes_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($empusu->clientes_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
 <?php
 
 // Render list options (header, right)
-$percat_list->ListOptions->Render("header", "right");
+$empusu_list->ListOptions->Render("header", "right");
 ?>
 	</tr>
 </thead>
 <tbody>
 <?php
-if ($percat->ExportAll && $percat->Export <> "") {
-	$percat_list->StopRec = $percat_list->TotalRecs;
+if ($empusu->ExportAll && $empusu->Export <> "") {
+	$empusu_list->StopRec = $empusu_list->TotalRecs;
 } else {
 
 	// Set the last record to display
-	if ($percat_list->TotalRecs > $percat_list->StartRec + $percat_list->DisplayRecs - 1)
-		$percat_list->StopRec = $percat_list->StartRec + $percat_list->DisplayRecs - 1;
+	if ($empusu_list->TotalRecs > $empusu_list->StartRec + $empusu_list->DisplayRecs - 1)
+		$empusu_list->StopRec = $empusu_list->StartRec + $empusu_list->DisplayRecs - 1;
 	else
-		$percat_list->StopRec = $percat_list->TotalRecs;
+		$empusu_list->StopRec = $empusu_list->TotalRecs;
 }
-$percat_list->RecCnt = $percat_list->StartRec - 1;
-if ($percat_list->Recordset && !$percat_list->Recordset->EOF) {
-	$percat_list->Recordset->MoveFirst();
-	if (!$bSelectLimit && $percat_list->StartRec > 1)
-		$percat_list->Recordset->Move($percat_list->StartRec - 1);
-} elseif (!$percat->AllowAddDeleteRow && $percat_list->StopRec == 0) {
-	$percat_list->StopRec = $percat->GridAddRowCount;
+$empusu_list->RecCnt = $empusu_list->StartRec - 1;
+if ($empusu_list->Recordset && !$empusu_list->Recordset->EOF) {
+	$empusu_list->Recordset->MoveFirst();
+	if (!$bSelectLimit && $empusu_list->StartRec > 1)
+		$empusu_list->Recordset->Move($empusu_list->StartRec - 1);
+} elseif (!$empusu->AllowAddDeleteRow && $empusu_list->StopRec == 0) {
+	$empusu_list->StopRec = $empusu->GridAddRowCount;
 }
 
 // Initialize aggregate
-$percat->RowType = EW_ROWTYPE_AGGREGATEINIT;
-$percat->ResetAttrs();
-$percat_list->RenderRow();
-while ($percat_list->RecCnt < $percat_list->StopRec) {
-	$percat_list->RecCnt++;
-	if (intval($percat_list->RecCnt) >= intval($percat_list->StartRec)) {
-		$percat_list->RowCnt++;
+$empusu->RowType = EW_ROWTYPE_AGGREGATEINIT;
+$empusu->ResetAttrs();
+$empusu_list->RenderRow();
+while ($empusu_list->RecCnt < $empusu_list->StopRec) {
+	$empusu_list->RecCnt++;
+	if (intval($empusu_list->RecCnt) >= intval($empusu_list->StartRec)) {
+		$empusu_list->RowCnt++;
 
 		// Set up key count
-		$percat_list->KeyCount = $percat_list->RowIndex;
+		$empusu_list->KeyCount = $empusu_list->RowIndex;
 
 		// Init row class and style
-		$percat->ResetAttrs();
-		$percat->CssClass = "";
-		if ($percat->CurrentAction == "gridadd") {
+		$empusu->ResetAttrs();
+		$empusu->CssClass = "";
+		if ($empusu->CurrentAction == "gridadd") {
 		} else {
-			$percat_list->LoadRowValues($percat_list->Recordset); // Load row values
+			$empusu_list->LoadRowValues($empusu_list->Recordset); // Load row values
 		}
-		$percat->RowType = EW_ROWTYPE_VIEW; // Render view
+		$empusu->RowType = EW_ROWTYPE_VIEW; // Render view
 
 		// Set up row id / data-rowindex
-		$percat->RowAttrs = array_merge($percat->RowAttrs, array('data-rowindex'=>$percat_list->RowCnt, 'id'=>'r' . $percat_list->RowCnt . '_percat', 'data-rowtype'=>$percat->RowType));
+		$empusu->RowAttrs = array_merge($empusu->RowAttrs, array('data-rowindex'=>$empusu_list->RowCnt, 'id'=>'r' . $empusu_list->RowCnt . '_empusu', 'data-rowtype'=>$empusu->RowType));
 
 		// Render row
-		$percat_list->RenderRow();
+		$empusu_list->RenderRow();
 
 		// Render list options
-		$percat_list->RenderListOptions();
+		$empusu_list->RenderListOptions();
 ?>
-	<tr<?php echo $percat->RowAttributes() ?>>
+	<tr<?php echo $empusu->RowAttributes() ?>>
 <?php
 
 // Render list options (body, left)
-$percat_list->ListOptions->Render("body", "left", $percat_list->RowCnt);
+$empusu_list->ListOptions->Render("body", "left", $empusu_list->RowCnt);
 ?>
-	<?php if ($percat->pcat_id->Visible) { // pcat_id ?>
-		<td<?php echo $percat->pcat_id->CellAttributes() ?>><span id="el<?php echo $percat_list->RowCnt ?>_percat_pcat_id" class="percat_pcat_id">
-<span<?php echo $percat->pcat_id->ViewAttributes() ?>>
-<?php echo $percat->pcat_id->ListViewValue() ?></span>
-</span><a id="<?php echo $percat_list->PageObjName . "_row_" . $percat_list->RowCnt ?>"></a></td>
+	<?php if ($empusu->emu_id->Visible) { // emu_id ?>
+		<td<?php echo $empusu->emu_id->CellAttributes() ?>><span id="el<?php echo $empusu_list->RowCnt ?>_empusu_emu_id" class="empusu_emu_id">
+<span<?php echo $empusu->emu_id->ViewAttributes() ?>>
+<?php echo $empusu->emu_id->ListViewValue() ?></span>
+</span><a id="<?php echo $empusu_list->PageObjName . "_row_" . $empusu_list->RowCnt ?>"></a></td>
 	<?php } ?>
-	<?php if ($percat->men_id->Visible) { // men_id ?>
-		<td<?php echo $percat->men_id->CellAttributes() ?>><span id="el<?php echo $percat_list->RowCnt ?>_percat_men_id" class="percat_men_id">
-<span<?php echo $percat->men_id->ViewAttributes() ?>>
-<?php echo $percat->men_id->ListViewValue() ?></span>
-</span><a id="<?php echo $percat_list->PageObjName . "_row_" . $percat_list->RowCnt ?>"></a></td>
+	<?php if ($empusu->usuarios_id->Visible) { // usuarios_id ?>
+		<td<?php echo $empusu->usuarios_id->CellAttributes() ?>><span id="el<?php echo $empusu_list->RowCnt ?>_empusu_usuarios_id" class="empusu_usuarios_id">
+<span<?php echo $empusu->usuarios_id->ViewAttributes() ?>>
+<?php echo $empusu->usuarios_id->ListViewValue() ?></span>
+</span><a id="<?php echo $empusu_list->PageObjName . "_row_" . $empusu_list->RowCnt ?>"></a></td>
 	<?php } ?>
-	<?php if ($percat->tipos_usuarios_id->Visible) { // tipos_usuarios_id ?>
-		<td<?php echo $percat->tipos_usuarios_id->CellAttributes() ?>><span id="el<?php echo $percat_list->RowCnt ?>_percat_tipos_usuarios_id" class="percat_tipos_usuarios_id">
-<span<?php echo $percat->tipos_usuarios_id->ViewAttributes() ?>>
-<?php echo $percat->tipos_usuarios_id->ListViewValue() ?></span>
-</span><a id="<?php echo $percat_list->PageObjName . "_row_" . $percat_list->RowCnt ?>"></a></td>
+	<?php if ($empusu->clientes_id->Visible) { // clientes_id ?>
+		<td<?php echo $empusu->clientes_id->CellAttributes() ?>><span id="el<?php echo $empusu_list->RowCnt ?>_empusu_clientes_id" class="empusu_clientes_id">
+<span<?php echo $empusu->clientes_id->ViewAttributes() ?>>
+<?php echo $empusu->clientes_id->ListViewValue() ?></span>
+</span><a id="<?php echo $empusu_list->PageObjName . "_row_" . $empusu_list->RowCnt ?>"></a></td>
 	<?php } ?>
 <?php
 
 // Render list options (body, right)
-$percat_list->ListOptions->Render("body", "right", $percat_list->RowCnt);
+$empusu_list->ListOptions->Render("body", "right", $empusu_list->RowCnt);
 ?>
 	</tr>
 <?php
 	}
-	if ($percat->CurrentAction <> "gridadd")
-		$percat_list->Recordset->MoveNext();
+	if ($empusu->CurrentAction <> "gridadd")
+		$empusu_list->Recordset->MoveNext();
 }
 ?>
 </tbody>
 </table>
 <?php } ?>
-<?php if ($percat->CurrentAction == "") { ?>
+<?php if ($empusu->CurrentAction == "") { ?>
 <input type="hidden" name="a_list" id="a_list" value="">
 <?php } ?>
 </div>
@@ -1401,51 +1450,51 @@ $percat_list->ListOptions->Render("body", "right", $percat_list->RowCnt);
 <?php
 
 // Close recordset
-if ($percat_list->Recordset)
-	$percat_list->Recordset->Close();
+if ($empusu_list->Recordset)
+	$empusu_list->Recordset->Close();
 ?>
-<?php if ($percat_list->TotalRecs > 0) { ?>
+<?php if ($empusu_list->TotalRecs > 0) { ?>
 <div class="ewGridLowerPanel">
-<?php if ($percat->CurrentAction <> "gridadd" && $percat->CurrentAction <> "gridedit") { ?>
+<?php if ($empusu->CurrentAction <> "gridadd" && $empusu->CurrentAction <> "gridedit") { ?>
 <form name="ewpagerform" id="ewpagerform" class="ewForm" action="<?php echo ew_CurrentPage() ?>">
 <table class="ewPager"><tr><td>
-<?php if (!isset($percat_list->Pager)) $percat_list->Pager = new cPrevNextPager($percat_list->StartRec, $percat_list->DisplayRecs, $percat_list->TotalRecs) ?>
-<?php if ($percat_list->Pager->RecordCount > 0) { ?>
+<?php if (!isset($empusu_list->Pager)) $empusu_list->Pager = new cPrevNextPager($empusu_list->StartRec, $empusu_list->DisplayRecs, $empusu_list->TotalRecs) ?>
+<?php if ($empusu_list->Pager->RecordCount > 0) { ?>
 	<table cellspacing="0" class="ewStdTable"><tbody><tr><td><span class="phpmaker"><?php echo $Language->Phrase("Page") ?>&nbsp;</span></td>
 <!--first page button-->
-	<?php if ($percat_list->Pager->FirstButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->FirstButton->Start ?>"><img src="phpimages/first.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></a></td>
+	<?php if ($empusu_list->Pager->FirstButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->FirstButton->Start ?>"><img src="phpimages/first.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></a></td>
 	<?php } else { ?>
 	<td><img src="phpimages/firstdisab.gif" alt="<?php echo $Language->Phrase("PagerFirst") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($percat_list->Pager->PrevButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->PrevButton->Start ?>"><img src="phpimages/prev.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></a></td>
+	<?php if ($empusu_list->Pager->PrevButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->PrevButton->Start ?>"><img src="phpimages/prev.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></a></td>
 	<?php } else { ?>
 	<td><img src="phpimages/prevdisab.gif" alt="<?php echo $Language->Phrase("PagerPrevious") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--current page number-->
-	<td><input type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" id="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $percat_list->Pager->CurrentPage ?>" size="4"></td>
+	<td><input type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" id="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $empusu_list->Pager->CurrentPage ?>" size="4"></td>
 <!--next page button-->
-	<?php if ($percat_list->Pager->NextButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->NextButton->Start ?>"><img src="phpimages/next.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></a></td>	
+	<?php if ($empusu_list->Pager->NextButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->NextButton->Start ?>"><img src="phpimages/next.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></a></td>	
 	<?php } else { ?>
 	<td><img src="phpimages/nextdisab.gif" alt="<?php echo $Language->Phrase("PagerNext") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($percat_list->Pager->LastButton->Enabled) { ?>
-	<td><a href="<?php echo $percat_list->PageUrl() ?>start=<?php echo $percat_list->Pager->LastButton->Start ?>"><img src="phpimages/last.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></a></td>	
+	<?php if ($empusu_list->Pager->LastButton->Enabled) { ?>
+	<td><a href="<?php echo $empusu_list->PageUrl() ?>start=<?php echo $empusu_list->Pager->LastButton->Start ?>"><img src="phpimages/last.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></a></td>	
 	<?php } else { ?>
 	<td><img src="phpimages/lastdisab.gif" alt="<?php echo $Language->Phrase("PagerLast") ?>" width="16" height="16" style="border: 0;"></td>
 	<?php } ?>
-	<td><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $percat_list->Pager->PageCount ?></span></td>
+	<td><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $empusu_list->Pager->PageCount ?></span></td>
 	</tr></tbody></table>
 	</td>	
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-	<span class="phpmaker"><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $percat_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $percat_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $percat_list->Pager->RecordCount ?></span>
+	<span class="phpmaker"><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $empusu_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $empusu_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $empusu_list->Pager->RecordCount ?></span>
 <?php } else { ?>
-	<?php if ($percat_list->SearchWhere == "0=101") { ?>
+	<?php if ($empusu_list->SearchWhere == "0=101") { ?>
 	<span class="phpmaker"><?php echo $Language->Phrase("EnterSearchCriteria") ?></span>
 	<?php } else { ?>
 	<span class="phpmaker"><?php echo $Language->Phrase("NoRecord") ?></span>
@@ -1456,22 +1505,22 @@ if ($percat_list->Recordset)
 </form>
 <?php } ?>
 <span class="phpmaker">
-<?php if ($percat_list->AddUrl <> "") { ?>
-<a class="ewGridLink" href="<?php echo $percat_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
+<?php if ($empusu_list->AddUrl <> "") { ?>
+<a class="ewGridLink" href="<?php echo $empusu_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
-<?php if ($percat_list->TotalRecs > 0) { ?>
-<a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.fpercatlist, '<?php echo $percat_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
+<?php if ($empusu_list->TotalRecs > 0) { ?>
+<a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.fempusulist, '<?php echo $empusu_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
 </span>
 </div>
 <?php } ?>
 </td></tr></table>
 <script type="text/javascript">
-fpercatlistsrch.Init();
-fpercatlist.Init();
+fempusulistsrch.Init();
+fempusulist.Init();
 </script>
 <?php
-$percat_list->ShowPageFooter();
+$empusu_list->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -1483,5 +1532,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$percat_list->Page_Terminate();
+$empusu_list->Page_Terminate();
 ?>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/3/21" version="9.1.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2015/3/23" version="9.1.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -328,75 +328,86 @@
 		<phrase id="or" value="or"/>
 	</global>
 	<project><phrase id="footertext" value="&amp;copy;2013 e.World Technology Ltd. All rights reserved."/>
-<menu id="1"><phrase id="menutext" value="empresa"/>
+<menu id="1"><phrase id="menutext" value="clientes"/>
 </menu>
-<menu id="2"><phrase id="menutext" value="menu"/>
+<menu id="3"><phrase id="menutext" value="Menús"/>
 </menu>
-<menu id="3"><phrase id="menutext" value="perfil"/>
+<menu id="4"><phrase id="menutext" value="Menús por Perfiles"/>
 </menu>
-<menu id="4"><phrase id="menutext" value="percat"/>
+<menu id="2"><phrase id="menutext" value="Empresas Usuarios"/>
 </menu>
-<menu id="5"><phrase id="menutext" value="users"/>
+<menu id="5"><phrase id="menutext" value="tipos usuarios"/>
 </menu>
-<table id="alertas"/>
-<table id="clientes"/>
-<table id="empresa"><phrase id="tblcaption" value="empresa"/>
-<field id="emp_id"><phrase id="fldcaption" value="ID"/>
+<menu id="6"><phrase id="menutext" value="usuarios"/>
+</menu>
+<table id=""/>
+<table id="clientes"><phrase id="tblcaption" value="Clientes"/>
+<field id="id"><phrase id="fldcaption" value="id"/>
 </field>
-<field id="emp_nombre"><phrase id="fldcaption" value="Empresa"/>
+<field id="nombre"><phrase id="fldcaption" value="nombre"/>
+</field>
+<field id="logo"><phrase id="fldcaption" value="logo"/>
 </field>
 </table>
-<table id="generales"/>
-<table id="informes"/>
-<table id="items"/>
-<table id="locales"/>
-<table id="_menu"><phrase id="tblcaption" value="menu"/>
+<table id="empusu"><phrase id="tblcaption" value="Empresas Usuarios"/>
+<field id="emu_id"><phrase id="fldcaption" value="ID"/>
+</field>
+<field id="usuarios_id"><phrase id="fldcaption" value="Usuario"/>
+</field>
+<field id="clientes_id"><phrase id="fldcaption" value="Empresa"/>
+</field>
+</table>
+<table id=""/>
+<table id=""/>
+<table id=""/>
+<table id=""/>
+<table id="_menu"><phrase id="tblcaption" value="Menú"/>
 <field id="men_id"><phrase id="fldcaption" value="ID"/>
 </field>
 <field id="men_nombre"><phrase id="fldcaption" value="Menú"/>
 </field>
+<field id="men_orden"><phrase id="fldcaption" value="Orden"/>
+</field>
 </table>
-<table id="percat"><phrase id="tblcaption" value="percat"/>
+<table id="percat"><phrase id="tblcaption" value="Perfiles Menú"/>
 <field id="pcat_id"><phrase id="fldcaption" value="ID"/>
 </field>
-<field id="per_id"><phrase id="fldcaption" value="Perfil"/>
+<field id="men_id"><phrase id="fldcaption" value="Menú"/>
 </field>
-<field id="men_id"><phrase id="fldcaption" value="Menu"/>
-</field>
-</table>
-<table id="perfil"><phrase id="tblcaption" value="perfil"/>
-<field id="per_id"><phrase id="fldcaption" value="ID"/>
-</field>
-<field id="per_nombre"><phrase id="fldcaption" value="Perfil"/>
+<field id="tipos_usuarios_id"><phrase id="fldcaption" value="Perfil"/>
 </field>
 </table>
-<table id="planillas"/>
-<table id="preguntas"/>
-<table id="respuestas"/>
-<table id="tipos"/>
-<table id="tipos_acciones"/>
-<table id="tipos_usuarios"/>
-<table id="users"><phrase id="tblcaption" value="users"/>
-<field id="usu_id"><phrase id="fldcaption" value="ID"/>
+<table id=""/>
+<table id=""/>
+<table id=""/>
+<table id=""/>
+<table id=""/>
+<table id="tipos_usuarios"><phrase id="tblcaption" value="Tipos Usuarios"/>
+<field id="id"><phrase id="fldcaption" value="id"/>
 </field>
-<field id="emp_id"><phrase id="fldcaption" value="Empresa"/>
-</field>
-<field id="per_id"><phrase id="fldcaption" value="Perfil"/>
-</field>
-<field id="usu_nombre"><phrase id="fldcaption" value="Nombre"/>
-</field>
-<field id="usu_login"><phrase id="fldcaption" value="Username"/>
-</field>
-<field id="usu_pass"><phrase id="fldcaption" value="Password"/>
-</field>
-<field id="usu_vigente"><phrase id="fldcaption" value="Vigente"/>
-<phrase id="fldtagvalue1" value="1"/>
-<phrase id="fldtagcaption1" value="Si"/>
-<phrase id="fldtagvalue2" value="0"/>
-<phrase id="fldtagcaption2" value="No"/>
+<field id="tipo"><phrase id="fldcaption" value="tipo"/>
 </field>
 </table>
-<table id="usuarios"/>
-<table id="visitas"/>
+<table id="usuarios"><phrase id="tblcaption" value="Usuarios"/>
+<field id="id"><phrase id="fldcaption" value="id"/>
+</field>
+<field id="tipos_usuarios_id"><phrase id="fldcaption" value="tipos usuarios id"/>
+</field>
+<field id="usuario"><phrase id="fldcaption" value="usuario"/>
+</field>
+<field id="nombre"><phrase id="fldcaption" value="nombre"/>
+</field>
+<field id="password"><phrase id="fldcaption" value="password"/>
+</field>
+<field id="correo"><phrase id="fldcaption" value="correo"/>
+</field>
+<field id="telefono"><phrase id="fldcaption" value="telefono"/>
+</field>
+<field id="region"><phrase id="fldcaption" value="region"/>
+</field>
+<field id="comentario"><phrase id="fldcaption" value="comentario"/>
+</field>
+</table>
+<table id=""/>
 </project>
 </ew-language>

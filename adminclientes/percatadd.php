@@ -21,7 +21,7 @@ class cpercat_add extends cpercat {
 	var $PageID = 'add';
 
 	// Project ID
-	var $ProjectID = "{60EB35E4-509C-401C-B7D1-5F8A49BCFE4C}";
+	var $ProjectID = "{BCF8DC35-3764-486D-8181-0414D54343BE}";
 
 	// Table name
 	var $TableName = 'percat';
@@ -316,10 +316,10 @@ class cpercat_add extends cpercat {
 
 	// Load default values
 	function LoadDefaultValues() {
-		$this->per_id->CurrentValue = NULL;
-		$this->per_id->OldValue = $this->per_id->CurrentValue;
 		$this->men_id->CurrentValue = NULL;
 		$this->men_id->OldValue = $this->men_id->CurrentValue;
+		$this->tipos_usuarios_id->CurrentValue = NULL;
+		$this->tipos_usuarios_id->OldValue = $this->tipos_usuarios_id->CurrentValue;
 	}
 
 	// Load form values
@@ -327,11 +327,11 @@ class cpercat_add extends cpercat {
 
 		// Load from form
 		global $objForm;
-		if (!$this->per_id->FldIsDetailKey) {
-			$this->per_id->setFormValue($objForm->GetValue("x_per_id"));
-		}
 		if (!$this->men_id->FldIsDetailKey) {
 			$this->men_id->setFormValue($objForm->GetValue("x_men_id"));
+		}
+		if (!$this->tipos_usuarios_id->FldIsDetailKey) {
+			$this->tipos_usuarios_id->setFormValue($objForm->GetValue("x_tipos_usuarios_id"));
 		}
 	}
 
@@ -339,8 +339,8 @@ class cpercat_add extends cpercat {
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadOldRecord();
-		$this->per_id->CurrentValue = $this->per_id->FormValue;
 		$this->men_id->CurrentValue = $this->men_id->FormValue;
+		$this->tipos_usuarios_id->CurrentValue = $this->tipos_usuarios_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -373,8 +373,8 @@ class cpercat_add extends cpercat {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->pcat_id->setDbValue($rs->fields('pcat_id'));
-		$this->per_id->setDbValue($rs->fields('per_id'));
 		$this->men_id->setDbValue($rs->fields('men_id'));
+		$this->tipos_usuarios_id->setDbValue($rs->fields('tipos_usuarios_id'));
 	}
 
 	// Load old record
@@ -411,36 +411,14 @@ class cpercat_add extends cpercat {
 
 		// Common render codes for all row types
 		// pcat_id
-		// per_id
 		// men_id
+		// tipos_usuarios_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// pcat_id
 			$this->pcat_id->ViewValue = $this->pcat_id->CurrentValue;
 			$this->pcat_id->ViewCustomAttributes = "";
-
-			// per_id
-			if (strval($this->per_id->CurrentValue) <> "") {
-				$sFilterWrk = "`per_id`" . ew_SearchString("=", $this->per_id->CurrentValue, EW_DATATYPE_NUMBER);
-			$sSqlWrk = "SELECT `per_id`, `per_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `perfil`";
-			$sWhereWrk = "";
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `per_nombre` ASC";
-				$rswrk = $conn->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->per_id->ViewValue = $rswrk->fields('DispFld');
-					$rswrk->Close();
-				} else {
-					$this->per_id->ViewValue = $this->per_id->CurrentValue;
-				}
-			} else {
-				$this->per_id->ViewValue = NULL;
-			}
-			$this->per_id->ViewCustomAttributes = "";
 
 			// men_id
 			if (strval($this->men_id->CurrentValue) <> "") {
@@ -451,7 +429,7 @@ class cpercat_add extends cpercat {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `men_nombre` ASC";
+			$sSqlWrk .= " ORDER BY `men_orden` ASC";
 				$rswrk = $conn->Execute($sSqlWrk);
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$this->men_id->ViewValue = $rswrk->fields('DispFld');
@@ -464,32 +442,38 @@ class cpercat_add extends cpercat {
 			}
 			$this->men_id->ViewCustomAttributes = "";
 
-			// per_id
-			$this->per_id->LinkCustomAttributes = "";
-			$this->per_id->HrefValue = "";
-			$this->per_id->TooltipValue = "";
-
-			// men_id
-			$this->men_id->LinkCustomAttributes = "";
-			$this->men_id->HrefValue = "";
-			$this->men_id->TooltipValue = "";
-		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
-
-			// per_id
-			$this->per_id->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `per_id`, `per_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `perfil`";
+			// tipos_usuarios_id
+			if (strval($this->tipos_usuarios_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->tipos_usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tipos_usuarios`";
 			$sWhereWrk = "";
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `per_nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->per_id->EditValue = $arwrk;
+			$sSqlWrk .= " ORDER BY `tipo` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->tipos_usuarios_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->tipos_usuarios_id->ViewValue = $this->tipos_usuarios_id->CurrentValue;
+				}
+			} else {
+				$this->tipos_usuarios_id->ViewValue = NULL;
+			}
+			$this->tipos_usuarios_id->ViewCustomAttributes = "";
+
+			// men_id
+			$this->men_id->LinkCustomAttributes = "";
+			$this->men_id->HrefValue = "";
+			$this->men_id->TooltipValue = "";
+
+			// tipos_usuarios_id
+			$this->tipos_usuarios_id->LinkCustomAttributes = "";
+			$this->tipos_usuarios_id->HrefValue = "";
+			$this->tipos_usuarios_id->TooltipValue = "";
+		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// men_id
 			$this->men_id->EditCustomAttributes = "";
@@ -500,20 +484,36 @@ class cpercat_add extends cpercat {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `men_nombre` ASC";
+			$sSqlWrk .= " ORDER BY `men_orden` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
 			$this->men_id->EditValue = $arwrk;
 
+			// tipos_usuarios_id
+			$this->tipos_usuarios_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `tipos_usuarios`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `tipo` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->tipos_usuarios_id->EditValue = $arwrk;
+
 			// Edit refer script
-			// per_id
-
-			$this->per_id->HrefValue = "";
-
 			// men_id
+
 			$this->men_id->HrefValue = "";
+
+			// tipos_usuarios_id
+			$this->tipos_usuarios_id->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -536,6 +536,12 @@ class cpercat_add extends cpercat {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
+		if (!is_null($this->men_id->FormValue) && $this->men_id->FormValue == "") {
+			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->men_id->FldCaption());
+		}
+		if (!is_null($this->tipos_usuarios_id->FormValue) && $this->tipos_usuarios_id->FormValue == "") {
+			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->tipos_usuarios_id->FldCaption());
+		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -554,11 +560,11 @@ class cpercat_add extends cpercat {
 		global $conn, $Language, $Security;
 		$rsnew = array();
 
-		// per_id
-		$this->per_id->SetDbValueDef($rsnew, $this->per_id->CurrentValue, NULL, FALSE);
-
 		// men_id
 		$this->men_id->SetDbValueDef($rsnew, $this->men_id->CurrentValue, NULL, FALSE);
+
+		// tipos_usuarios_id
+		$this->tipos_usuarios_id->SetDbValueDef($rsnew, $this->tipos_usuarios_id->CurrentValue, 0, FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
@@ -694,6 +700,12 @@ fpercatadd.Validate = function(fobj) {
 	var startcnt = (rowcnt == 0) ? 0 : 1; // rowcnt == 0 => Inline-Add
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = "";
+		elm = fobj.elements["x" + infix + "_men_id"];
+		if (elm && !ew_HasValue(elm))
+			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($percat->men_id->FldCaption()) ?>");
+		elm = fobj.elements["x" + infix + "_tipos_usuarios_id"];
+		if (elm && !ew_HasValue(elm))
+			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($percat->tipos_usuarios_id->FldCaption()) ?>");
 
 		// Set up row object
 		ew_ElementsToRow(fobj, infix);
@@ -725,8 +737,8 @@ fpercatadd.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-fpercatadd.Lists["x_per_id"] = {"LinkField":"x_per_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_per_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fpercatadd.Lists["x_men_id"] = {"LinkField":"x_men_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_men_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fpercatadd.Lists["x_tipos_usuarios_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipo","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
 </script>
@@ -747,37 +759,9 @@ $percat_add->ShowMessage();
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridMiddlePanel">
 <table id="tbl_percatadd" class="ewTable">
-<?php if ($percat->per_id->Visible) { // per_id ?>
-	<tr id="r_per_id"<?php echo $percat->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_percat_per_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->per_id->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $percat->per_id->CellAttributes() ?>><span id="el_percat_per_id">
-<select id="x_per_id" name="x_per_id"<?php echo $percat->per_id->EditAttributes() ?>>
-<?php
-if (is_array($percat->per_id->EditValue)) {
-	$arwrk = $percat->per_id->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($percat->per_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-<script type="text/javascript">
-fpercatadd.Lists["x_per_id"].Options = <?php echo (is_array($percat->per_id->EditValue)) ? ew_ArrayToJson($percat->per_id->EditValue, 1) : "[]" ?>;
-</script>
-</span><?php echo $percat->per_id->CustomMsg ?></td>
-	</tr>
-<?php } ?>
 <?php if ($percat->men_id->Visible) { // men_id ?>
 	<tr id="r_men_id"<?php echo $percat->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_percat_men_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->men_id->FldCaption() ?></td></tr></table></span></td>
+		<td class="ewTableHeader"><span id="elh_percat_men_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->men_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
 		<td<?php echo $percat->men_id->CellAttributes() ?>><span id="el_percat_men_id">
 <select id="x_men_id" name="x_men_id"<?php echo $percat->men_id->EditAttributes() ?>>
 <?php
@@ -801,6 +785,34 @@ if (is_array($percat->men_id->EditValue)) {
 fpercatadd.Lists["x_men_id"].Options = <?php echo (is_array($percat->men_id->EditValue)) ? ew_ArrayToJson($percat->men_id->EditValue, 1) : "[]" ?>;
 </script>
 </span><?php echo $percat->men_id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($percat->tipos_usuarios_id->Visible) { // tipos_usuarios_id ?>
+	<tr id="r_tipos_usuarios_id"<?php echo $percat->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_percat_tipos_usuarios_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $percat->tipos_usuarios_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
+		<td<?php echo $percat->tipos_usuarios_id->CellAttributes() ?>><span id="el_percat_tipos_usuarios_id">
+<select id="x_tipos_usuarios_id" name="x_tipos_usuarios_id"<?php echo $percat->tipos_usuarios_id->EditAttributes() ?>>
+<?php
+if (is_array($percat->tipos_usuarios_id->EditValue)) {
+	$arwrk = $percat->tipos_usuarios_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($percat->tipos_usuarios_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fpercatadd.Lists["x_tipos_usuarios_id"].Options = <?php echo (is_array($percat->tipos_usuarios_id->EditValue)) ? ew_ArrayToJson($percat->tipos_usuarios_id->EditValue, 1) : "[]" ?>;
+</script>
+</span><?php echo $percat->tipos_usuarios_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 </table>

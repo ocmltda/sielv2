@@ -1,15 +1,15 @@
 <?php
 
 // Global variable for table object
-$percat = NULL;
+$empusu = NULL;
 
 //
-// Table class for percat
+// Table class for empusu
 //
-class cpercat extends cTable {
-	var $pcat_id;
-	var $men_id;
-	var $tipos_usuarios_id;
+class cempusu extends cTable {
+	var $emu_id;
+	var $usuarios_id;
+	var $clientes_id;
 
 	//
 	// Table class constructor
@@ -19,8 +19,8 @@ class cpercat extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'percat';
-		$this->TableName = 'percat';
+		$this->TableVar = 'empusu';
+		$this->TableName = 'empusu';
 		$this->TableType = 'TABLE';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -33,20 +33,20 @@ class cpercat extends cTable {
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// pcat_id
-		$this->pcat_id = new cField('percat', 'percat', 'x_pcat_id', 'pcat_id', '`pcat_id`', '`pcat_id`', 3, -1, FALSE, '`pcat_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->pcat_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['pcat_id'] = &$this->pcat_id;
+		// emu_id
+		$this->emu_id = new cField('empusu', 'empusu', 'x_emu_id', 'emu_id', '`emu_id`', '`emu_id`', 3, -1, FALSE, '`emu_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->emu_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['emu_id'] = &$this->emu_id;
 
-		// men_id
-		$this->men_id = new cField('percat', 'percat', 'x_men_id', 'men_id', '`men_id`', '`men_id`', 3, -1, FALSE, '`men_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->men_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['men_id'] = &$this->men_id;
+		// usuarios_id
+		$this->usuarios_id = new cField('empusu', 'empusu', 'x_usuarios_id', 'usuarios_id', '`usuarios_id`', '`usuarios_id`', 2, -1, FALSE, '`usuarios_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->usuarios_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['usuarios_id'] = &$this->usuarios_id;
 
-		// tipos_usuarios_id
-		$this->tipos_usuarios_id = new cField('percat', 'percat', 'x_tipos_usuarios_id', 'tipos_usuarios_id', '`tipos_usuarios_id`', '`tipos_usuarios_id`', 2, -1, FALSE, '`tipos_usuarios_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->tipos_usuarios_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['tipos_usuarios_id'] = &$this->tipos_usuarios_id;
+		// clientes_id
+		$this->clientes_id = new cField('empusu', 'empusu', 'x_clientes_id', 'clientes_id', '`clientes_id`', '`clientes_id`', 2, -1, FALSE, '`clientes_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->clientes_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['clientes_id'] = &$this->clientes_id;
 	}
 
 	// Single column sort
@@ -68,7 +68,7 @@ class cpercat extends cTable {
 
 	// Table level SQL
 	function SqlFrom() { // From
-		return "`percat`";
+		return "`empusu`";
 	}
 
 	function SqlSelect() { // Select
@@ -218,7 +218,7 @@ class cpercat extends cTable {
 	}
 
 	// Update Table
-	var $UpdateTable = "`percat`";
+	var $UpdateTable = "`empusu`";
 
 	// INSERT statement
 	function InsertSQL(&$rs) {
@@ -271,7 +271,7 @@ class cpercat extends cTable {
 	function DeleteSQL(&$rs, $where = "") {
 		$sql = "DELETE FROM " . $this->UpdateTable . " WHERE ";
 		if ($rs) {
-			$sql .= ew_QuotedName('pcat_id') . '=' . ew_QuotedValue($rs['pcat_id'], $this->pcat_id->FldDataType) . ' AND ';
+			$sql .= ew_QuotedName('emu_id') . '=' . ew_QuotedValue($rs['emu_id'], $this->emu_id->FldDataType) . ' AND ';
 		}
 		if (substr($sql, -5) == " AND ") $sql = substr($sql, 0, -5);
 		$filter = $this->CurrentFilter;
@@ -288,15 +288,15 @@ class cpercat extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`pcat_id` = @pcat_id@";
+		return "`emu_id` = @emu_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->pcat_id->CurrentValue))
+		if (!is_numeric($this->emu_id->CurrentValue))
 			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@pcat_id@", ew_AdjustSql($this->pcat_id->CurrentValue), $sKeyFilter); // Replace key value
+		$sKeyFilter = str_replace("@emu_id@", ew_AdjustSql($this->emu_id->CurrentValue), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -310,7 +310,7 @@ class cpercat extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "percatlist.php";
+			return "empusulist.php";
 		}
 	}
 
@@ -320,22 +320,22 @@ class cpercat extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "percatlist.php";
+		return "empusulist.php";
 	}
 
 	// View URL
 	function GetViewUrl() {
-		return $this->KeyUrl("percatview.php", $this->UrlParm());
+		return $this->KeyUrl("empusuview.php", $this->UrlParm());
 	}
 
 	// Add URL
 	function GetAddUrl() {
-		return "percatadd.php";
+		return "empusuadd.php";
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		return $this->KeyUrl("percatedit.php", $this->UrlParm($parm));
+		return $this->KeyUrl("empusuedit.php", $this->UrlParm($parm));
 	}
 
 	// Inline edit URL
@@ -345,7 +345,7 @@ class cpercat extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		return $this->KeyUrl("percatadd.php", $this->UrlParm($parm));
+		return $this->KeyUrl("empusuadd.php", $this->UrlParm($parm));
 	}
 
 	// Inline copy URL
@@ -355,15 +355,15 @@ class cpercat extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("percatdelete.php", $this->UrlParm());
+		return $this->KeyUrl("empusudelete.php", $this->UrlParm());
 	}
 
 	// Add key value to URL
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->pcat_id->CurrentValue)) {
-			$sUrl .= "pcat_id=" . urlencode($this->pcat_id->CurrentValue);
+		if (!is_null($this->emu_id->CurrentValue)) {
+			$sUrl .= "emu_id=" . urlencode($this->emu_id->CurrentValue);
 		} else {
 			return "javascript:alert(ewLanguage.Phrase('InvalidRecord'));";
 		}
@@ -395,7 +395,7 @@ class cpercat extends cTable {
 			$arKeys = ew_StripSlashes($_GET["key_m"]);
 			$cnt = count($arKeys);
 		} elseif (isset($_GET)) {
-			$arKeys[] = @$_GET["pcat_id"]; // pcat_id
+			$arKeys[] = @$_GET["emu_id"]; // emu_id
 
 			//return $arKeys; // do not return yet, so the values will also be checked by the following code
 		}
@@ -416,7 +416,7 @@ class cpercat extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->pcat_id->CurrentValue = $key;
+			$this->emu_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -437,9 +437,9 @@ class cpercat extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->pcat_id->setDbValue($rs->fields('pcat_id'));
-		$this->men_id->setDbValue($rs->fields('men_id'));
-		$this->tipos_usuarios_id->setDbValue($rs->fields('tipos_usuarios_id'));
+		$this->emu_id->setDbValue($rs->fields('emu_id'));
+		$this->usuarios_id->setDbValue($rs->fields('usuarios_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Render list row values
@@ -450,72 +450,73 @@ class cpercat extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// pcat_id
-		// men_id
-		// tipos_usuarios_id
-		// pcat_id
+		// emu_id
+		// usuarios_id
+		// clientes_id
+		// emu_id
 
-		$this->pcat_id->ViewValue = $this->pcat_id->CurrentValue;
-		$this->pcat_id->ViewCustomAttributes = "";
+		$this->emu_id->ViewValue = $this->emu_id->CurrentValue;
+		$this->emu_id->ViewCustomAttributes = "";
 
-		// men_id
-		if (strval($this->men_id->CurrentValue) <> "") {
-			$sFilterWrk = "`men_id`" . ew_SearchString("=", $this->men_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `men_id`, `men_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `menu`";
+		// usuarios_id
+		if (strval($this->usuarios_id->CurrentValue) <> "") {
+			$sFilterWrk = "`id`" . ew_SearchString("=", $this->usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
+		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `usuario` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `usuarios`";
 		$sWhereWrk = "";
 		if ($sFilterWrk <> "") {
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 		}
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `men_orden` ASC";
+		$sSqlWrk .= " ORDER BY `nombre` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->men_id->ViewValue = $rswrk->fields('DispFld');
+				$this->usuarios_id->ViewValue = $rswrk->fields('DispFld');
+				$this->usuarios_id->ViewValue .= ew_ValueSeparator(1,$this->usuarios_id) . $rswrk->fields('Disp2Fld');
 				$rswrk->Close();
 			} else {
-				$this->men_id->ViewValue = $this->men_id->CurrentValue;
+				$this->usuarios_id->ViewValue = $this->usuarios_id->CurrentValue;
 			}
 		} else {
-			$this->men_id->ViewValue = NULL;
+			$this->usuarios_id->ViewValue = NULL;
 		}
-		$this->men_id->ViewCustomAttributes = "";
+		$this->usuarios_id->ViewCustomAttributes = "";
 
-		// tipos_usuarios_id
-		if (strval($this->tipos_usuarios_id->CurrentValue) <> "") {
-			$sFilterWrk = "`id`" . ew_SearchString("=", $this->tipos_usuarios_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `id`, `tipo` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tipos_usuarios`";
+		// clientes_id
+		if (strval($this->clientes_id->CurrentValue) <> "") {
+			$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
 		$sWhereWrk = "";
 		if ($sFilterWrk <> "") {
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
 		}
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `tipo` ASC";
+		$sSqlWrk .= " ORDER BY `nombre` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->tipos_usuarios_id->ViewValue = $rswrk->fields('DispFld');
+				$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
 				$rswrk->Close();
 			} else {
-				$this->tipos_usuarios_id->ViewValue = $this->tipos_usuarios_id->CurrentValue;
+				$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
 			}
 		} else {
-			$this->tipos_usuarios_id->ViewValue = NULL;
+			$this->clientes_id->ViewValue = NULL;
 		}
-		$this->tipos_usuarios_id->ViewCustomAttributes = "";
+		$this->clientes_id->ViewCustomAttributes = "";
 
-		// pcat_id
-		$this->pcat_id->LinkCustomAttributes = "";
-		$this->pcat_id->HrefValue = "";
-		$this->pcat_id->TooltipValue = "";
+		// emu_id
+		$this->emu_id->LinkCustomAttributes = "";
+		$this->emu_id->HrefValue = "";
+		$this->emu_id->TooltipValue = "";
 
-		// men_id
-		$this->men_id->LinkCustomAttributes = "";
-		$this->men_id->HrefValue = "";
-		$this->men_id->TooltipValue = "";
+		// usuarios_id
+		$this->usuarios_id->LinkCustomAttributes = "";
+		$this->usuarios_id->HrefValue = "";
+		$this->usuarios_id->TooltipValue = "";
 
-		// tipos_usuarios_id
-		$this->tipos_usuarios_id->LinkCustomAttributes = "";
-		$this->tipos_usuarios_id->HrefValue = "";
-		$this->tipos_usuarios_id->TooltipValue = "";
+		// clientes_id
+		$this->clientes_id->LinkCustomAttributes = "";
+		$this->clientes_id->HrefValue = "";
+		$this->clientes_id->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -539,13 +540,13 @@ class cpercat extends cTable {
 		if ($Doc->Horizontal) { // Horizontal format, write header
 			$Doc->BeginExportRow();
 			if ($ExportPageType == "view") {
-				if ($this->pcat_id->Exportable) $Doc->ExportCaption($this->pcat_id);
-				if ($this->men_id->Exportable) $Doc->ExportCaption($this->men_id);
-				if ($this->tipos_usuarios_id->Exportable) $Doc->ExportCaption($this->tipos_usuarios_id);
+				if ($this->emu_id->Exportable) $Doc->ExportCaption($this->emu_id);
+				if ($this->usuarios_id->Exportable) $Doc->ExportCaption($this->usuarios_id);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 			} else {
-				if ($this->pcat_id->Exportable) $Doc->ExportCaption($this->pcat_id);
-				if ($this->men_id->Exportable) $Doc->ExportCaption($this->men_id);
-				if ($this->tipos_usuarios_id->Exportable) $Doc->ExportCaption($this->tipos_usuarios_id);
+				if ($this->emu_id->Exportable) $Doc->ExportCaption($this->emu_id);
+				if ($this->usuarios_id->Exportable) $Doc->ExportCaption($this->usuarios_id);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 			}
 			$Doc->EndExportRow();
 		}
@@ -575,13 +576,13 @@ class cpercat extends cTable {
 				$this->RenderListRow();
 				$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 				if ($ExportPageType == "view") {
-					if ($this->pcat_id->Exportable) $Doc->ExportField($this->pcat_id);
-					if ($this->men_id->Exportable) $Doc->ExportField($this->men_id);
-					if ($this->tipos_usuarios_id->Exportable) $Doc->ExportField($this->tipos_usuarios_id);
+					if ($this->emu_id->Exportable) $Doc->ExportField($this->emu_id);
+					if ($this->usuarios_id->Exportable) $Doc->ExportField($this->usuarios_id);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 				} else {
-					if ($this->pcat_id->Exportable) $Doc->ExportField($this->pcat_id);
-					if ($this->men_id->Exportable) $Doc->ExportField($this->men_id);
-					if ($this->tipos_usuarios_id->Exportable) $Doc->ExportField($this->tipos_usuarios_id);
+					if ($this->emu_id->Exportable) $Doc->ExportField($this->emu_id);
+					if ($this->usuarios_id->Exportable) $Doc->ExportField($this->usuarios_id);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 				}
 				$Doc->EndExportRow();
 			}
