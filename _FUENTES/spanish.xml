@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<ew-language date="2012/04/24" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<locale>
+	<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
+	<phrase id="use_system_locale" value="1"/>
+	<phrase id="decimal_point" value="."/>
+	<phrase id="thousands_sep" value=","/>
+	<phrase id="mon_decimal_point" value="."/>
+	<phrase id="mon_thousands_sep" value=","/>
+	<phrase id="currency_symbol" value="$"/>
+	<phrase id="positive_sign" value=""/>
+	<phrase id="negative_sign" value="-"/>
+	<phrase id="frac_digits" value="2"/>
+	<phrase id="p_cs_precedes" value="1"/>
+	<phrase id="p_sep_by_space" value="0"/>
+	<phrase id="n_cs_precedes" value="1"/>
+	<phrase id="n_sep_by_space" value="0"/>
+	<phrase id="p_sign_posn" value="3"/>
+	<phrase id="n_sign_posn" value="3"/>
+	<phrase id="time_zone" value="US/Pacific"/><!-- *** used for multi-language site only *** -->
+</locale>
+<global>
+	<phrase id="ActionDeleted" value="Eliminado"/>
+	<phrase id="ActionInserted" value="Insertado"/>
+	<phrase id="ActionInsertedGridAdd" value="Insertado (Grid)"/>
+	<phrase id="ActionUpdated" value="Actualizado"/>
+	<phrase id="ActionUpdatedGridEdit" value="Actualizado (Grid)"/>
+	<phrase id="ActionUpdatedMultiUpdate" value="Actualizado (Multiple)"/>
+	<phrase id="ActivateAccount" value="Su cuenta ha sido activada"/>
+	<phrase id="ActivateFailed" value="Activación fallida"/>
+	<phrase id="Add" value="AGREGAR"/>
+	<phrase id="AddBlankRow" value="INSERTAR renglón"/>
+	<phrase id="AddBtn" value="GUARDAR"/>
+	<phrase id="AddLink" value="AGREGAR"/>
+	<phrase id="AddSuccess" value="Insercion Exitosa"/>
+	<phrase id="AdvancedSearch" value="Búsqueda avanzada"/>
+	<phrase id="AllRecords" value="Todos"/>
+	<phrase id="AllWord" value="Todas las palabras"/>
+	<phrase id="AlwaysAsk" value="Siempre pedirme el usuario y contraseña"/>
+	<phrase id="AnyWord" value="Cualquier palabra"/>
+	<phrase id="AuditTrailAutoLogin" value="Auto-Ingreso"/>
+	<phrase id="AuditTrailFailedAttempt" value="Intento Fallido: %n"/>
+	<phrase id="AuditTrailUserLoggedIn" value="Usuario ya ha iniciado sesión"/>
+	<phrase id="AuditTrailPasswordExpired" value="Contraseña caducada"/>
+	<phrase id="AuditTrailLogin" value="Ingreso"/>
+	<phrase id="AuditTrailLogout" value="Salida"/>
+	<phrase id="AutoLogin" value="Autoconectarme hasta que haga clic en salir"/>
+	<phrase id="Average" value="Promedio"/>
+	<phrase id="BackToList" value="REGRESAR.."/>
+	<phrase id="BackToLogin" value="VOLVER A INGRESAR"/>
+	<phrase id="BackToMasterRecordPage" value="REGRESAR..."/>
+	<phrase id="BatchDeleteBegin" value="*** Eliminar iniciado ***"/>
+	<phrase id="BatchDeleteRollback" value="*** Eliminar revertido ***"/>
+	<phrase id="BatchDeleteSuccess" value="*** Eliminar completado ***"/>
+	<phrase id="BatchInsertBegin" value="*** Insertar iniciado ***"/>
+	<phrase id="BatchInsertRollback" value="*** Insertar revertido ***"/>
+	<phrase id="BatchInsertSuccess" value="*** Insertar completado ***"/>
+	<phrase id="BatchUpdateBegin" value="*** Actualizar iniciado ***"/>
+	<phrase id="BatchUpdateRollback" value="*** Actualizar revertido ***"/>
+	<phrase id="BatchUpdateSuccess" value="*** Actualizar completado ***"/>
+	<phrase id="CancelBtn" value="CANCELAR"/>
+	<phrase id="CancelLink" value="Cancelar"/>
+	<phrase id="ChangePwd" value="Cambiar contraseña"/>
+	<phrase id="ChangePwdPage" value="Página para cambiar contraseña"/>
+	<phrase id="ChangePwdBtn" value="CAMBIAR CONTRASEÑA"/>
+	<phrase id="Confirm" value="Confirmar"/>
+	<phrase id="ConfirmBtn" value="CONFIRMAR"/>
+	<phrase id="ConfirmPassword" value="Confirmar contraseña"/>
+	<phrase id="ConflictCancelLink" value="Cancelar"/>
+	<phrase id="CopyLink" value="Copiar"/>
+	<phrase id="Count" value="Conteo"/>
+	<phrase id="CustomView" value="VISTA PERSONALIZADA"/>
+	<phrase id="Delete" value="Eliminar"/>
+	<phrase id="DeleteBtn" value="CONFIRMAR BORRADO"/>
+	<phrase id="DeleteCancelled" value="Eliminar cancelado"/>
+	<phrase id="DeleteConfirmMsg" value="¿Desea eliminar el registro?" client="1"/>
+	<phrase id="DeleteLink" value="Eliminar"/>
+	<phrase id="DeleteMultiConfirmMsg" value="¿Eliminar los registros seleccionados?" client="1"/>
+	<phrase id="DeleteSelectedLink" value="Eliminar los registros seleccionados"/>
+	<phrase id="DeleteSuccess" value="Borrado completado"/>
+	<phrase id="DetailLink" value="..."/>
+	<phrase id="DetailCount" value="(%c)"/>
+	<phrase id="DupIndex" value="Valor duplicado '%v' para el campo '%f', escriba un valor diferente"/>
+	<phrase id="DupKey" value="Clave duplicada: '%f'"/>
+	<phrase id="Edit" value="Editar"/>
+	<phrase id="EditBtn" value="GUARDAR"/>
+	<phrase id="EditLink" value="Modificar"/>
+	<phrase id="EnterNewPassword" value="Ingrese nueva contraseña" client="1"/>
+	<phrase id="EnterOldPassword" value="Ingrese contraseña anterior" client="1"/>
+	<phrase id="EnterPassword" value="Ingrese su contraseña" client="1"/>
+	<phrase id="EnterPwd" value="Ingrese su contraseña" client="1"/>
+	<phrase id="EnterRequiredField" value="Ingrese el campo requerido" client="1"/>
+	<phrase id="EnterSearchCriteria" value="Ingrese el criterio de búsqueda"/>
+	<phrase id="EnterUserName" value="Ingrese el nombre de usuario" client="1"/>
+	<phrase id="EnterValidateCode" value="Ingrese el Código de Validación Mostrado" client="1"/>
+	<phrase id="EnterSenderEmail" value="Ingrese el email del Remitente" client="1"/>
+	<phrase id="EnterProperSenderEmail" value="Excede el máximo de remitentes permitidos, o la direccion ingresada es incorrecta." client="1"/>
+	<phrase id="EnterRecipientEmail" value="Ingrese el emial del Destinatario" client="1"/>
+	<phrase id="EnterProperRecipientEmail" value="Excede el máximo de destintarios permitidos, o la direccion ingresada es incorrecta." client="1"/>
+	<phrase id="EnterProperCcEmail" value="Excede el máximo de destinatarios CC permitidos, o la direccion ingresada es incorrecta." client="1"/>
+	<phrase id="EnterProperBccEmail" value="Excede el máximo de destinatarios BCC permitidos, o la direccion ingresada es incorrecta." client="1"/>
+	<phrase id="EnterSubject" value="Ingrese un título para el correo" client="1"/>
+	<phrase id="EmailFormSender" value="Remitente"/>
+	<phrase id="EmailFormRecipient" value="Para"/>
+	<phrase id="EmailFormCc" value="Cc"/>
+	<phrase id="EmailFormBcc" value="Bcc"/>
+	<phrase id="EmailFormSubject" value="Título"/>
+	<phrase id="EmailFormMessage" value="Mensaje"/>
+	<phrase id="EmailFormContentType" value="Enviar como"/>
+	<phrase id="EmailFormContentTypeUrl" value="URL"/>
+	<phrase id="EmailFormContentTypeHtml" value="HTML"/>
+	<phrase id="EnterUid" value="Ingrese su usuario" client="1"/>
+	<phrase id="EnterValidEmail" value="Ingrese un email válido!" client="1"/>
+	<phrase id="ExactPhrase" value="Frase exacta"/>
+	<phrase id="ExceedMaxRetry" value="Ha excedido el máximo de intentos. La cuenta ha sido bloqueada. Por favor intente más tarde (%t minutos)"/>
+	<phrase id="ExceedMaxEmailExport" value="Ha excedido el máximo de intentos para exportar a email. Por favor intente más tarde."/>
+	<phrase id="ExportToCsv" value="Exportar a CSV"/>
+	<phrase id="ExportToEmail" value="Email" client="1"/>
+	<phrase id="ExportToExcel" value="Exportar a Excel"/>
+	<phrase id="ExportToHtml" value="Exportar a HTML"/>
+	<phrase id="ExportToPDF" value="Exportar a PDF"/>
+	<phrase id="ExportToWord" value="Exportar a Word"/>
+	<phrase id="ExportToXml" value="Exportar a XML"/>
+	<phrase id="FailedToSendMail" value="No se pudo enviar el email"/>
+	<phrase id="FieldName" value="Nombre del campo "/>
+	<phrase id="FieldRequiredIndicator" value="&lt;span class=&quot;ewRequired&quot;&gt;&amp;nbsp;*&lt;/span&gt;"/>
+	<phrase id="OverwriteBtn" value="SOBREESCRIBIR"/>
+	<phrase id="OverwriteLink" value="Sobreescribir"/>
+	<phrase id="ForgotPwd" value="Recuperar contraseña"/>
+	<phrase id="GoBack" value="REGRESAR"/>
+	<phrase id="GridAddLink" value="AGREGAR VARIOS"/>
+	<phrase id="GridCancelLink" value="CANCELAR"/>
+	<phrase id="GridEditLink" value="MODIFICAR VARIOS"/>
+	<phrase id="GridInsertLink" value="INSERTAR"/>
+	<phrase id="GridSaveLink" value="GUARDAR"/>
+	<phrase id="HideHighlight" value="Ocultar resaltado" client="1"/>
+	<phrase id="IncorrectCreditCard" value="Número de tarjeta inválido"/>
+	<phrase id="IncorrectDateYMD" value="Fecha Incorrecta, formato = yyyy%smm%sdd"/>
+	<phrase id="IncorrectDateMDY" value="Fecha Incorrecta, formato = mm%sdd%syyyy"/>
+	<phrase id="IncorrectDateDMY" value="Fecha Incorrecta, formato = dd%smm%syyyy"/>
+	<phrase id="IncorrectShortDateYMD" value="Fecha Incorrecta, formato = yy%smm%sdd"/>
+	<phrase id="IncorrectShortDateMDY" value="Fecha Incorrecta, formato = mm%sdd%syy"/>
+	<phrase id="IncorrectShortDateDMY" value="Fecha Incorrecta, formato = dd%smm%syy"/>
+	<phrase id="IncorrectEmail" value="Email no válido" client="1"/>
+	<phrase id="IncorrectField" value="Campo incorrecto" client="1"/>
+	<phrase id="IncorrectFloat" value="Formato de número incorrecto" client="1"/>
+	<phrase id="IncorrectGUID" value="GUID Incorrecto" client="1"/>
+	<phrase id="IncorrectInteger" value="Formato de número incorrecto" client="1"/>
+	<phrase id="IncorrectPhone" value="Formato de teléfono incorrecto" client="1"/>
+	<phrase id="IncorrectRegExp" value="La expresión regular no coincide" client="1"/>
+	<phrase id="IncorrectRange" value="El número debe estar entre %1 y %2" client="1"/>
+	<phrase id="IncorrectSSN" value="Número de seguro social incorrecto" client="1"/>
+	<phrase id="IncorrectTime" value="Formato de hora Incorrecto (hh:mm:ss)" client="1"/>
+	<phrase id="IncorrectZip" value="Código Postal Incorrecto" client="1"/>
+	<phrase id="InlineAddLink" value="INSERTAR."/>
+	<phrase id="InlineCopyLink" value="Copiar en línea"/>
+	<phrase id="InlineEditLink" value="Editar en línea"/>
+	<phrase id="InsertCancelled" value="Inserción Cancelada"/>
+	<phrase id="InsertFailed" value="Inserción Fallida"/>
+	<phrase id="InsertLink" value="INSERTAR.."/>
+	<phrase id="InsertSuccess" value="Inserción Exitosa"/>
+	<phrase id="InvalidEmail" value="Email inválido"/>
+	<phrase id="InvalidField" value="Campo inválido"/>
+	<phrase id="InvalidKeyValue" value="Valor de clave inválido"/>
+	<phrase id="InvalidRecord" value="Registro inválido! la clave es nula" client="1"/>
+	<phrase id="InvalidParameter" value="Parámetro inválido"/>
+	<phrase id="InvalidPassword" value="Contraseña inválida"/>
+	<phrase id="InvalidNewPassword" value="Contraseña nueva inválida"/>
+	<phrase id="InvalidUidPwd" value="Usuario o contraseña inválidos"/>
+	<phrase id="Keep" value="Mantener"/>
+	<phrase id="Language" value="Lenguaje"/>
+	<phrase id="Loading" value="Cargando..." client="1"/>
+	<phrase id="Login" value="Ingreso al Sistema"/>
+	<phrase id="LoginCancelled" value="Ingreso cancelado"/>
+	<phrase id="LoginPage" value="Página de ingreso"/>
+	<phrase id="Logout" value="Salir"/>
+	<phrase id="MasterRecord" value="Registro maestro "/>
+	<phrase id="MaxFileSize" value="Tamaño máximo de archivo (%s bytes) excedido."/>
+	<phrase id="MessageOK" value="OK" client="1"/> 
+	<phrase id="MismatchPassword" value="Los passwords no coinciden" client="1"/>
+	<phrase id="MissingLookupTableName" value="Falta el nombre de la tabla de búsqueda"/>
+	<phrase id="MissingDisplayFieldName" value="Falta el nombre del campo de visualización"/>
+	<phrase id="MissingDisplayFieldValue" value="Falta el valor del campo de visualización"/>
+	<phrase id="MissingUserLevelID" value="Falta el ID de nivel de usuario"/>
+	<phrase id="MissingUserLevelName" value="Falta el nombre de nivel de usuario"/>
+	<phrase id="MobileMenu" value="Menu"/>
+	<phrase id="New" value="Nuevo"/>
+	<phrase id="NewPassword" value="Nueva contraseña"/>
+	<phrase id="NewValue" value="Nuevo valor"/>
+	<phrase id="Next" value="Siguiente"/>
+	<phrase id="NoAddRecord" value="No hay registros para agregar" client="1"/>
+	<phrase id="NoFieldSelected" value="No se ha seleccionado campo a actualizar" client="1"/>
+	<phrase id="NoPermission" value="No tiene permisos para ver esta página"/>
+	<phrase id="NoAddPermission" value="No tiene permisos para Agregar el registro."/>
+	<phrase id="NoDeletePermission" value="No tiene permisos para Borrar el Registro."/>
+	<phrase id="NoEditPermission" value="No tiene permisos para Modificar el Registro."/>
+	<phrase id="NoRecord" value="No se encontraron registros"/>
+	<phrase id="NoRecordForKey" value="No existe el registro de la llave ="/>
+	<phrase id="NoRecordSelected" value="No hay registros seleccionados" client="1"/>
+	<phrase id="NoTableGenerated" value="No se generaron tablas"/>
+	<phrase id="NoUserLevel" value="No user level settings."/>
+	<phrase id="Of" value="de"/>
+	<phrase id="Old" value="Anterior"/>
+	<phrase id="OldPassword" value="Contraseña anterior"/>
+	<phrase id="OptionAlreadyExist" value="Ya existe la opción"/>
+	<phrase id="Page" value="Página"/>
+	<phrase id="PagerFirst" value="Primera"/>
+	<phrase id="PagerLast" value="Última"/>
+	<phrase id="PagerNext" value="Siguiente"/>
+	<phrase id="PagerPrevious" value="Anterior"/>
+	<phrase id="Password" value="Contraseña"/>
+	<phrase id="PasswordRequest" value="Solicitar contraseña"/>
+	<phrase id="PasswordChanged" value="Contraseña cambiada"/>
+	<phrase id="PasswordExpired" value="Contraseña caducada. Por favor, cámbiela por una nueva."/>
+	<phrase id="Permission" value="Permiso"/>
+	<phrase id="PermissionAddCopy" value="Agregar/Copiar"/>
+	<phrase id="PermissionDelete" value="Eliminar"/>
+	<phrase id="PermissionEdit" value="Editar"/>
+	<phrase id="PermissionListSearchView" value="Listar/Buscar/Ver"/>
+	<phrase id="PermissionList" value="Listar"/>
+	<phrase id="PermissionSearch" value="Buscar"/>
+	<phrase id="PermissionView" value="Ver"/>
+	<phrase id="PhpUploadErr1" value="El Archivo subido excede el tamaño máximo permitido en la directiva upload_max_filesize en php.ini."/>
+	<phrase id="PhpUploadErr2" value="El Archivo subido excede la directiva MAX_FILE_SIZE especificada en la forma HTML."/>
+	<phrase id="PhpUploadErr3" value="El Archivo fué subido solamente en forma Parcial."/>
+	<phrase id="PhpUploadErr4" value="No fué subido ningún Archivo."/>
+	<phrase id="PhpUploadErr6" value="No se encontró el directorio Temporal."/>
+	<phrase id="PhpUploadErr7" value="Fallo al escribir en el Disco."/>
+	<phrase id="PhpUploadErr8" value="Subida de Archivo interrumpida por Extensión."/>
+	<phrase id="PickDate" value="Seleccione una fecha"/>
+	<phrase id="PleaseSelect" value=""/>
+	<phrase id="PleaseWait" value="Por favor espere..." client="1"/>
+	<phrase id="PrimaryKeyUnspecified" value="Clave principal no especificada"/>
+	<phrase id="PrinterFriendly" value="Ver. Impresion"/>
+	<phrase id="Prev" value="Anterior"/>
+	<phrase id="PwdEmailSent" value="Contraseña enviada a su email"/>
+	<phrase id="QuickSearch" value="Búsqueda rápida"/>
+	<phrase id="QuickSearchBtn" value="Buscar (*)"/>
+	<phrase id="Record" value="Registros"/>
+	<phrase id="RecordChangedByOtherUser" value="Datos Modificados por Otro Usuario. Elije [Recargar] (tus datos seran borrados) O [SobreEscribir] para conservar tus datos y borrar los del Otro Usuario."/>
+	<phrase id="RecordDeleted" value="Registro(s) Eliminado(s)"/>
+	<phrase id="RecordInserted" value="Registro(s) Insertado(s)"/>
+	<phrase id="RecordUpdated" value="Registro(s) Actualizado(s)"/>
+	<phrase id="RecordsPerPage" value="Registros por Página"/>
+	<phrase id="Register" value="Registrar"/>
+	<phrase id="RegisterBtn" value="REGISTRAR"/>
+	<phrase id="RegisterSuccess" value="Registro Exitoso"/>
+	<phrase id="RegisterSuccessActivate" value="Registro Exitoso. Se ha enviado un mensaje a su correo electrónico."/>
+	<phrase id="RegisterPage" value="Página de Registro"/>
+	<phrase id="ReloadBtn" value="Recargar"/>
+	<phrase id="ReloadLink" value="Recargar"/>
+	<phrase id="RememberMe" value="Recordarme"/>
+	<phrase id="Remove" value="Eliminar"/>
+	<phrase id="Replace" value="Reemplazar"/>
+	<phrase id="Report" value="Reporte"/>
+	<phrase id="RequestPwdPage" value="Página para solicitar contraseña"/>
+	<phrase id="Reset" value="Reiniciar"/>
+	<phrase id="ResetSearch" value="Reiniciar Búsqueda"/>
+	<phrase id="RptAvg" value="Promedio"/>
+	<phrase id="RptDtlRec" value="Detalle de registros "/>
+	<phrase id="RptGrandTotal" value="Gran Total"/>
+	<phrase id="RptMax" value="Máximo"/>
+	<phrase id="RptMin" value="Mínimo"/>
+	<phrase id="RptSum" value="Suma"/>
+	<phrase id="RptSumHead" value="Resumen de"/>
+	<phrase id="SaveUserName" value="Guardar mi usuario"/>
+	<phrase id="Search" value="Cuadro de Búsqueda"/>
+	<phrase id="SendEmailBtn" value="Enviar contraseña"/>
+	<phrase id="SendEmailSuccess" value="Correo enviado exitosamente" client="1"/>
+	<phrase id="SendPwd" value="Enviar contraseña"/>
+	<phrase id="ShowAll" value="Mostrar todos"/>
+	<phrase id="ShowHighlight" value="Mostrar resaltado" client="1"/>
+	<phrase id="SrchLegend" value="&amp;nbsp;(*)"/>
+	<phrase id="Table" value="Datos de "/>
+	<phrase id="TblTypeTABLE" value=". "/> 
+	<phrase id="TblTypeVIEW" value="- "/>
+	<phrase id="TblTypeCUSTOMVIEW" value="Vista personalizada:"/>
+	<phrase id="TblTypeREPORT" value="Reporte:"/>
+	<phrase id="To" value="a"/>
+	<phrase id="Total" value="Total"/>
+	<phrase id="UnauthorizedUserID" value="El usuario actual (%c) no esta autorizado para asignar el ID de usuario (%u)."/>
+	<phrase id="UnauthorizedParentUserID" value="El usuario actual (%c) no está autorizado para asignar el ID de usuario padre (%p)."/>
+	<phrase id="UnauthorizedMasterUserID" value="El usuario actual (%c) no está autorizado para insertar el registro. Filtro Maestro: %f"/>
+	<phrase id="UnmatchedValue" value="&lt;img src=&quot;%falert-small.gif&quot; alt=&quot;El Valor no existe&quot; title=&quot;Value does not exist&quot; width=&quot;16&quot; height=&quot;16&quot; border=&quot;0&quot;&gt;"/>
+	<phrase id="Update" value="Actualizar"/>
+	<phrase id="UpdateBtn" value="GUARDAR"/>
+	<phrase id="UpdateCancelled" value="Actualización Cancelada"/>
+	<phrase id="UpdateFailed" value="Actualización FALLIDA"/>
+	<phrase id="UpdateLink" value="Actualizar"/>
+	<phrase id="UpdateSelectedLink" value="MODIFICAR Seleccionados"/>
+	<phrase id="UpdateSuccess" value="Actualización Exitosa"/>
+	<phrase id="Uploading" value="Subiendo..." client="1"/> 
+	<phrase id="UpdateValue" value="¿Todos?"/>
+	<phrase id="UserEmail" value="Email del usuario"/>
+	<phrase id="UserExists" value="El usuario ya existe"/>
+	<phrase id="UserLevel" value="Nivel de usuario: "/>
+	<phrase id="UserLevelAdministratorName" value="El nombre del nivel -1 debe ser 'Administrator'" client="1"/>
+	<phrase id="UserLevelPermission" value="Permisos de Nivel de Usuario"/>
+	<phrase id="UserLevelIDInteger" value="El Nivel de Usuario debe ser un Entero" client="1"/>
+	<phrase id="UserLevelDefaultName" value="El nombre del nivel 0 debe ser 'Default'" client="1"/>
+	<phrase id="UserLevelIDIncorrect" value="El id del nivel de usuario debe ser mayor a 0" client="1"/>
+	<phrase id="UserLevelNameIncorrect" value="El nombre de nivel no puede ser 'Administrator' o 'Default'" client="1"/>
+	<phrase id="UserLoggedIn" value="Usuario '%u' ya ha iniciado sesión"/>
+	<phrase id="UserName" value="Usuario"/>
+	<phrase id="UserProfileCorrupted" value="Perfil de usuario dañado. Por favor cierre su sesión e iniciela nuevamente."/>
+	<phrase id="View" value="VER "/>
+	<phrase id="ViewLink" value="VER"/>
+	<phrase id="ViewPageAddLink" value="AGREGAR"/>
+	<phrase id="ViewPageCopyLink" value="COPIAR"/>
+	<phrase id="ViewPageDeleteLink" value="BORRAR"/>
+	<phrase id="ViewPageDetailLink" value="..."/>
+	<phrase id="ViewPageEditLink" value="MODIFICAR"/>
+	<phrase id="WrongFileType" value="El tipo de Archivo no está permitido." client="1"/>
+	<phrase id="TableOrView" value="Tablas/Vistas"/>
+	<phrase id="=" value="="/>
+	<phrase id="&lt;&gt;" value="&lt;&gt;"/>
+	<phrase id="&lt;" value="&lt;"/>
+	<phrase id="&lt;=" value="&lt;="/>
+	<phrase id="&gt;" value="&gt;"/>
+	<phrase id="&gt;=" value="&gt;="/>
+	<phrase id="LIKE" value="Contiene"/>
+	<phrase id="NOT LIKE" value="No contiene"/>
+	<phrase id="STARTS WITH" value="Comienza con"/>
+	<phrase id="IS NULL" value="is null"/>
+	<phrase id="IS NOT NULL" value="is not null"/>
+	<phrase id="BETWEEN" value=" ENTRE "/>
+	<phrase id="AND" value="Y"/>
+	<phrase id="OR" value="O"/>
+</global>
+</ew-language>

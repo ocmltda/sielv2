@@ -442,6 +442,7 @@ class cp_menu_list extends c_menu {
 		$sKeyword = ew_AdjustSql($Keyword);
 		$sWhere = "";
 		$this->BuildBasicSearchSQL($sWhere, $this->men_nombre, $Keyword);
+		$this->BuildBasicSearchSQL($sWhere, $this->men_link, $Keyword);
 		return $sWhere;
 	}
 
@@ -533,6 +534,7 @@ class cp_menu_list extends c_menu {
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->men_id); // men_id
 			$this->UpdateSort($this->men_nombre); // men_nombre
+			$this->UpdateSort($this->men_link); // men_link
 			$this->UpdateSort($this->men_orden); // men_orden
 			$this->setStartRecordNumber(1); // Reset start position
 		}
@@ -568,6 +570,7 @@ class cp_menu_list extends c_menu {
 				$this->setSessionOrderBy($sOrderBy);
 				$this->men_id->setSort("");
 				$this->men_nombre->setSort("");
+				$this->men_link->setSort("");
 				$this->men_orden->setSort("");
 			}
 
@@ -729,6 +732,7 @@ class cp_menu_list extends c_menu {
 		$this->Row_Selected($row);
 		$this->men_id->setDbValue($rs->fields('men_id'));
 		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
+		$this->men_link->setDbValue($rs->fields('men_link'));
 		$this->men_orden->setDbValue($rs->fields('men_orden'));
 	}
 
@@ -773,6 +777,7 @@ class cp_menu_list extends c_menu {
 		// Common render codes for all row types
 		// men_id
 		// men_nombre
+		// men_link
 		// men_orden
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -784,6 +789,10 @@ class cp_menu_list extends c_menu {
 			// men_nombre
 			$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
 			$this->men_nombre->ViewCustomAttributes = "";
+
+			// men_link
+			$this->men_link->ViewValue = $this->men_link->CurrentValue;
+			$this->men_link->ViewCustomAttributes = "";
 
 			// men_orden
 			$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
@@ -798,6 +807,11 @@ class cp_menu_list extends c_menu {
 			$this->men_nombre->LinkCustomAttributes = "";
 			$this->men_nombre->HrefValue = "";
 			$this->men_nombre->TooltipValue = "";
+
+			// men_link
+			$this->men_link->LinkCustomAttributes = "";
+			$this->men_link->HrefValue = "";
+			$this->men_link->TooltipValue = "";
 
 			// men_orden
 			$this->men_orden->LinkCustomAttributes = "";
@@ -1075,6 +1089,15 @@ $p_menu_list->ListOptions->Render("header", "left");
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
+<?php if ($_menu->men_link->Visible) { // men_link ?>
+	<?php if ($_menu->SortUrl($_menu->men_link) == "") { ?>
+		<td><span id="elh__menu_men_link" class="_menu_men_link"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $_menu->men_link->FldCaption() ?></td></tr></thead></table></span></td>
+	<?php } else { ?>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $_menu->SortUrl($_menu->men_link) ?>',1);"><span id="elh__menu_men_link" class="_menu_men_link">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $_menu->men_link->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></td><td class="ewTableHeaderSort"><?php if ($_menu->men_link->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($_menu->men_link->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		</span></div></td>		
+	<?php } ?>
+<?php } ?>		
 <?php if ($_menu->men_orden->Visible) { // men_orden ?>
 	<?php if ($_menu->SortUrl($_menu->men_orden) == "") { ?>
 		<td><span id="elh__menu_men_orden" class="_menu_men_orden"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $_menu->men_orden->FldCaption() ?></td></tr></thead></table></span></td>
@@ -1158,6 +1181,12 @@ $p_menu_list->ListOptions->Render("body", "left", $p_menu_list->RowCnt);
 		<td<?php echo $_menu->men_nombre->CellAttributes() ?>><span id="el<?php echo $p_menu_list->RowCnt ?>__menu_men_nombre" class="_menu_men_nombre">
 <span<?php echo $_menu->men_nombre->ViewAttributes() ?>>
 <?php echo $_menu->men_nombre->ListViewValue() ?></span>
+</span><a id="<?php echo $p_menu_list->PageObjName . "_row_" . $p_menu_list->RowCnt ?>"></a></td>
+	<?php } ?>
+	<?php if ($_menu->men_link->Visible) { // men_link ?>
+		<td<?php echo $_menu->men_link->CellAttributes() ?>><span id="el<?php echo $p_menu_list->RowCnt ?>__menu_men_link" class="_menu_men_link">
+<span<?php echo $_menu->men_link->ViewAttributes() ?>>
+<?php echo $_menu->men_link->ListViewValue() ?></span>
 </span><a id="<?php echo $p_menu_list->PageObjName . "_row_" . $p_menu_list->RowCnt ?>"></a></td>
 	<?php } ?>
 	<?php if ($_menu->men_orden->Visible) { // men_orden ?>

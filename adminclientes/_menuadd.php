@@ -318,6 +318,8 @@ class cp_menu_add extends c_menu {
 	function LoadDefaultValues() {
 		$this->men_nombre->CurrentValue = NULL;
 		$this->men_nombre->OldValue = $this->men_nombre->CurrentValue;
+		$this->men_link->CurrentValue = NULL;
+		$this->men_link->OldValue = $this->men_link->CurrentValue;
 		$this->men_orden->CurrentValue = NULL;
 		$this->men_orden->OldValue = $this->men_orden->CurrentValue;
 	}
@@ -330,6 +332,9 @@ class cp_menu_add extends c_menu {
 		if (!$this->men_nombre->FldIsDetailKey) {
 			$this->men_nombre->setFormValue($objForm->GetValue("x_men_nombre"));
 		}
+		if (!$this->men_link->FldIsDetailKey) {
+			$this->men_link->setFormValue($objForm->GetValue("x_men_link"));
+		}
 		if (!$this->men_orden->FldIsDetailKey) {
 			$this->men_orden->setFormValue($objForm->GetValue("x_men_orden"));
 		}
@@ -340,6 +345,7 @@ class cp_menu_add extends c_menu {
 		global $objForm;
 		$this->LoadOldRecord();
 		$this->men_nombre->CurrentValue = $this->men_nombre->FormValue;
+		$this->men_link->CurrentValue = $this->men_link->FormValue;
 		$this->men_orden->CurrentValue = $this->men_orden->FormValue;
 	}
 
@@ -374,6 +380,7 @@ class cp_menu_add extends c_menu {
 		$this->Row_Selected($row);
 		$this->men_id->setDbValue($rs->fields('men_id'));
 		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
+		$this->men_link->setDbValue($rs->fields('men_link'));
 		$this->men_orden->setDbValue($rs->fields('men_orden'));
 	}
 
@@ -412,6 +419,7 @@ class cp_menu_add extends c_menu {
 		// Common render codes for all row types
 		// men_id
 		// men_nombre
+		// men_link
 		// men_orden
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -424,6 +432,10 @@ class cp_menu_add extends c_menu {
 			$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
 			$this->men_nombre->ViewCustomAttributes = "";
 
+			// men_link
+			$this->men_link->ViewValue = $this->men_link->CurrentValue;
+			$this->men_link->ViewCustomAttributes = "";
+
 			// men_orden
 			$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
 			$this->men_orden->ViewCustomAttributes = "";
@@ -432,6 +444,11 @@ class cp_menu_add extends c_menu {
 			$this->men_nombre->LinkCustomAttributes = "";
 			$this->men_nombre->HrefValue = "";
 			$this->men_nombre->TooltipValue = "";
+
+			// men_link
+			$this->men_link->LinkCustomAttributes = "";
+			$this->men_link->HrefValue = "";
+			$this->men_link->TooltipValue = "";
 
 			// men_orden
 			$this->men_orden->LinkCustomAttributes = "";
@@ -443,6 +460,10 @@ class cp_menu_add extends c_menu {
 			$this->men_nombre->EditCustomAttributes = "";
 			$this->men_nombre->EditValue = ew_HtmlEncode($this->men_nombre->CurrentValue);
 
+			// men_link
+			$this->men_link->EditCustomAttributes = "";
+			$this->men_link->EditValue = ew_HtmlEncode($this->men_link->CurrentValue);
+
 			// men_orden
 			$this->men_orden->EditCustomAttributes = "";
 			$this->men_orden->EditValue = ew_HtmlEncode($this->men_orden->CurrentValue);
@@ -451,6 +472,9 @@ class cp_menu_add extends c_menu {
 			// men_nombre
 
 			$this->men_nombre->HrefValue = "";
+
+			// men_link
+			$this->men_link->HrefValue = "";
 
 			// men_orden
 			$this->men_orden->HrefValue = "";
@@ -478,6 +502,9 @@ class cp_menu_add extends c_menu {
 			return ($gsFormError == "");
 		if (!is_null($this->men_nombre->FormValue) && $this->men_nombre->FormValue == "") {
 			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->men_nombre->FldCaption());
+		}
+		if (!is_null($this->men_link->FormValue) && $this->men_link->FormValue == "") {
+			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->men_link->FldCaption());
 		}
 		if (!is_null($this->men_orden->FormValue) && $this->men_orden->FormValue == "") {
 			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->men_orden->FldCaption());
@@ -512,10 +539,24 @@ class cp_menu_add extends c_menu {
 				return FALSE;
 			}
 		}
+		if ($this->men_link->CurrentValue <> "") { // Check field with unique index
+			$sFilter = "(men_link = '" . ew_AdjustSql($this->men_link->CurrentValue) . "')";
+			$rsChk = $this->LoadRs($sFilter);
+			if ($rsChk && !$rsChk->EOF) {
+				$sIdxErrMsg = str_replace("%f", $this->men_link->FldCaption(), $Language->Phrase("DupIndex"));
+				$sIdxErrMsg = str_replace("%v", $this->men_link->CurrentValue, $sIdxErrMsg);
+				$this->setFailureMessage($sIdxErrMsg);
+				$rsChk->Close();
+				return FALSE;
+			}
+		}
 		$rsnew = array();
 
 		// men_nombre
 		$this->men_nombre->SetDbValueDef($rsnew, $this->men_nombre->CurrentValue, "", FALSE);
+
+		// men_link
+		$this->men_link->SetDbValueDef($rsnew, $this->men_link->CurrentValue, "", FALSE);
 
 		// men_orden
 		$this->men_orden->SetDbValueDef($rsnew, $this->men_orden->CurrentValue, 0, FALSE);
@@ -657,6 +698,9 @@ f_menuadd.Validate = function(fobj) {
 		elm = fobj.elements["x" + infix + "_men_nombre"];
 		if (elm && !ew_HasValue(elm))
 			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($_menu->men_nombre->FldCaption()) ?>");
+		elm = fobj.elements["x" + infix + "_men_link"];
+		if (elm && !ew_HasValue(elm))
+			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($_menu->men_link->FldCaption()) ?>");
 		elm = fobj.elements["x" + infix + "_men_orden"];
 		if (elm && !ew_HasValue(elm))
 			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($_menu->men_orden->FldCaption()) ?>");
@@ -720,6 +764,14 @@ $p_menu_add->ShowMessage();
 		<td<?php echo $_menu->men_nombre->CellAttributes() ?>><span id="el__menu_men_nombre">
 <input type="text" name="x_men_nombre" id="x_men_nombre" size="60" maxlength="64" value="<?php echo $_menu->men_nombre->EditValue ?>"<?php echo $_menu->men_nombre->EditAttributes() ?>>
 </span><?php echo $_menu->men_nombre->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($_menu->men_link->Visible) { // men_link ?>
+	<tr id="r_men_link"<?php echo $_menu->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh__menu_men_link"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_link->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
+		<td<?php echo $_menu->men_link->CellAttributes() ?>><span id="el__menu_men_link">
+<input type="text" name="x_men_link" id="x_men_link" size="30" maxlength="32" value="<?php echo $_menu->men_link->EditValue ?>"<?php echo $_menu->men_link->EditAttributes() ?>>
+</span><?php echo $_menu->men_link->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 <?php if ($_menu->men_orden->Visible) { // men_orden ?>

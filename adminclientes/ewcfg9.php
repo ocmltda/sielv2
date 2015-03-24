@@ -26,7 +26,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME . "", TRUE); // Config file name
 define("EW_PROJECT_ID", "{BCF8DC35-3764-486D-8181-0414D54343BE}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", '0g5JK2Nv4vqcijjL', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'fe7kLb0F2ok00Ml6', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/usuariosmenu_B.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "utf-8", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -125,8 +125,8 @@ define("EW_SESSION_INLINE_MODE", EW_PROJECT_NAME . "_InlineMode", TRUE); // Inli
 // Language settings
 define("EW_LANGUAGE_FOLDER", "phplang/", TRUE);
 $EW_LANGUAGE_FILE = array();
-$EW_LANGUAGE_FILE[] = array("en", "", "english.xml");
-define("EW_LANGUAGE_DEFAULT_ID", "en", TRUE);
+$EW_LANGUAGE_FILE[] = array("es", "", "spanish.xml");
+define("EW_LANGUAGE_DEFAULT_ID", "es", TRUE);
 define("EW_SESSION_LANGUAGE_ID", EW_PROJECT_NAME . "_LanguageId", TRUE); // Language ID
 
 // Data types

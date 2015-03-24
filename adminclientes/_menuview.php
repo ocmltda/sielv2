@@ -379,6 +379,7 @@ class cp_menu_view extends c_menu {
 		$this->Row_Selected($row);
 		$this->men_id->setDbValue($rs->fields('men_id'));
 		$this->men_nombre->setDbValue($rs->fields('men_nombre'));
+		$this->men_link->setDbValue($rs->fields('men_link'));
 		$this->men_orden->setDbValue($rs->fields('men_orden'));
 	}
 
@@ -400,6 +401,7 @@ class cp_menu_view extends c_menu {
 		// Common render codes for all row types
 		// men_id
 		// men_nombre
+		// men_link
 		// men_orden
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -411,6 +413,10 @@ class cp_menu_view extends c_menu {
 			// men_nombre
 			$this->men_nombre->ViewValue = $this->men_nombre->CurrentValue;
 			$this->men_nombre->ViewCustomAttributes = "";
+
+			// men_link
+			$this->men_link->ViewValue = $this->men_link->CurrentValue;
+			$this->men_link->ViewCustomAttributes = "";
 
 			// men_orden
 			$this->men_orden->ViewValue = $this->men_orden->CurrentValue;
@@ -425,6 +431,11 @@ class cp_menu_view extends c_menu {
 			$this->men_nombre->LinkCustomAttributes = "";
 			$this->men_nombre->HrefValue = "";
 			$this->men_nombre->TooltipValue = "";
+
+			// men_link
+			$this->men_link->LinkCustomAttributes = "";
+			$this->men_link->HrefValue = "";
+			$this->men_link->TooltipValue = "";
 
 			// men_orden
 			$this->men_orden->LinkCustomAttributes = "";
@@ -576,6 +587,15 @@ $p_menu_view->ShowMessage();
 		<td<?php echo $_menu->men_nombre->CellAttributes() ?>><span id="el__menu_men_nombre">
 <span<?php echo $_menu->men_nombre->ViewAttributes() ?>>
 <?php echo $_menu->men_nombre->ViewValue ?></span>
+</span></td>
+	</tr>
+<?php } ?>
+<?php if ($_menu->men_link->Visible) { // men_link ?>
+	<tr id="r_men_link"<?php echo $_menu->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh__menu_men_link"><table class="ewTableHeaderBtn"><tr><td><?php echo $_menu->men_link->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $_menu->men_link->CellAttributes() ?>><span id="el__menu_men_link">
+<span<?php echo $_menu->men_link->ViewAttributes() ?>>
+<?php echo $_menu->men_link->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>
