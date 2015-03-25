@@ -77,6 +77,24 @@ else
 		$t->newBlock("estados");
 	}
 
+	//total evaluaciones programadas
+	$db->query('SELECT Count(V.fecha_visita) AS TOTPRG FROM visitas AS V WHERE V.fecha_visita BETWEEN \'2015-03-01\' AND \'2015-03-31\' AND (V.estado_visita = 0 OR V.estado_visita = 1)');
+	$db->next_record();
+	$t->assign("_ROOT.tep", $db->Record['TOTPRG'] . '');
+
+	//total evaluaciones realizadas
+	$db->query('SELECT Count(V.fecha_visita) AS TOTREA FROM visitas AS V WHERE V.fecha_visita BETWEEN \'2015-03-01\' AND \'2015-03-31\' AND V.estado_visita = 1');
+	$db->next_record();
+	$t->assign("_ROOT.ter", $db->Record['TOTREA'] . '');
+
+	//total evaluaciones en curso
+	$db->query('SELECT Count(V.fecha_visita) AS TOTENC FROM visitas AS V WHERE V.fecha_visita BETWEEN \'2015-03-01\' AND \'2015-03-31\' AND V.estado_visita = 0');
+	$db->next_record();
+	$t->assign("_ROOT.tec", $db->Record['TOTENC'] . '');
+
+	//LAS ZONAS
+	//$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.promotor IN (\'norte\', \'sur\', \'centro\') AND (V.estado_visita = 0 OR V.estado_visita = 1) GROUP BY L.promotor ORDER BY ZONA ASC');
+
 	//print the result
 	$t->printToScreen();
 }

@@ -50,7 +50,7 @@ else
 			$estrevision = $db->Record['estado_revision'];
 
 			switch ($estvisita) {
-				case 1:
+				case 0:
 					$estvisita = 'Vigente';
 					break;
 				case 1:
