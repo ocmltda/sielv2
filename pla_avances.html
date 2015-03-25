@@ -5,7 +5,66 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
     <!-- InstanceEndEditable -->
-    <!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+    <!-- InstanceBeginEditable name="head" -->
+    <!-- START IGNORE -->
+    <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+          <!-- END IGNORE -->
+          <!-- START IGNORE -->
+        <script type="text/javascript">
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Día', 'Evaluaciones'],
+		  <!-- END IGNORE -->
+		  <!-- START BLOCK : diaevaluaciones -->
+          ['{dia}',  {valdia}]{coma}
+		  <!-- END BLOCK : diaevaluaciones -->
+		  <!-- START IGNORE -->
+        ]);
+
+        var options = {
+          title: 'EVALUACIONES REALIZADAS POR DÍA DEL MES DE MARZO',
+		  legend: 'none',
+          //legend: { position: 'bottom' },
+		  pointSize: 5,
+		  fontSize: 10,
+		  fontName: 'Verdana, Arial',
+		  width: 950,
+		  height: 350
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+		
+		var data2 = google.visualization.arrayToDataTable([
+          ['Estado', 'Total'],
+		  <!-- END IGNORE -->
+		  <!-- START BLOCK : estados -->
+          ['{estado}',  {total}]{coma2}
+		  <!-- END BLOCK : estados -->
+		  <!-- START IGNORE -->
+        ]);
+
+        var options2 = {
+          //title: 'My Daily Activities',
+          pieHole: 0.3,
+        };
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart2.draw(data2, options2);
+      }
+    </script>
+    <!-- END IGNORE -->
+	<!-- InstanceEndEditable -->
 	<style type="text/css">
         <!--
         body {
@@ -98,7 +157,7 @@
           <tr>
             <td width="550"><table width="540" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td width="270">{grafico1}</td>
+                <td width="270"><div id="donutchart" style="width: 260px; height: 200px;"></div></td>
                 <td width="270">{grafico2}</td>
               </tr>
               <tr>
@@ -156,10 +215,15 @@
       </tr>
       <tr>
         <td align="center">
-        <!-- START BLOCK : hitos -->        <!-- END BLOCK : hitos -->        </td>
+        <!-- START BLOCK : hitos -->
+        <!-- END BLOCK : hitos -->
+        </td>
       </tr>
       <tr>
-        <td align="center">{grafico4}</td>
+        <td align="center">
+    	<div id="curve_chart" style="width: 950px; height: 350px">
+        </div>
+        </td>
       </tr>
       <tr>
         <td>&nbsp;</td>
