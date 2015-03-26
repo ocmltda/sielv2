@@ -56,11 +56,40 @@
 
         var options2 = {
           //title: 'My Daily Activities',
+		  backgroundColor: '#EFEFEF',
           pieHole: 0.3,
         };
 
         var chart2 = new google.visualization.PieChart(document.getElementById('donutchart'));
         chart2.draw(data2, options2);
+		
+		var data3 = google.visualization.arrayToDataTable([
+			['Zona',          '2010', '2000'],
+			['Norte',         38,           36],
+			['Centro',             23,           28],
+			['Sur',             15,           19]
+		  ]);
+	
+		  var options3 = {
+			//title: 'Population of Largest U.S. Cities',
+			legend: 'none',
+			backgroundColor: '#EFEFEF',
+			width: 266,
+	        height: 200,
+			isStacked: true,
+			hAxis: {
+			  //title: 'Total',
+			  minValue: 0,
+			},
+			vAxis: {
+			  //title: 'City'
+			}
+		  };
+	
+		  var chart3 = new google.visualization.BarChart(
+			document.getElementById('ex4'));
+	
+		  chart3.draw(data3, options3);
       }
     </script>
     <!-- END IGNORE -->
@@ -157,8 +186,8 @@
           <tr>
             <td width="550"><table width="540" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td width="270"><div id="donutchart" style="width: 260px; height: 200px;"></div></td>
-                <td width="270"><div id="donutchart2" style="width: 260px; height: 200px;"></div></td>
+                <td width="270"><div id="donutchart" style="width: 266px; height: 200px;"></div></td>
+                <td width="270"><div id="ex4"></div></td>
               </tr>
               <tr valign="top">
                 <td><table width="266" border="0" cellspacing="0" cellpadding="0">
@@ -167,15 +196,15 @@
                     </tr>
                   <tr>
                     <td width="210">Total evaluaciones programadas</td>
-                    <td width="56" align="right">{tep}</td>
+                    <td width="56" align="center">{tep}</td>
                   </tr>
                   <tr>
                     <td>Total evaluaciones realizadas</td>
-                    <td align="right">{ter}</td>
+                    <td align="center">{ter}</td>
                   </tr>
                   <tr>
                     <td>Total evaluaciones en curso</td>
-                    <td align="right">{tec}</td>
+                    <td align="center">{tec}</td>
                   </tr>
                 </table></td>
                 <td><table width="266" border="0" cellspacing="0" cellpadding="0">

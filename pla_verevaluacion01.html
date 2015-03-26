@@ -103,89 +103,44 @@
         </table></td>
       </tr>
       <tr>
-        <td align="center" bgcolor="#DFDFDF"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="100">Tienda</td>
-            <td width="20">&nbsp;</td>
-            <td width="100">Horario</td>
-            <td width="20">&nbsp;</td>
-            <td width="110">Tipo Visita</td>
-            <td width="20">&nbsp;</td>
-            <td width="60">&nbsp;</td>
-            <td width="150">Menu</td>
-            <td width="20">&nbsp;</td>
-            <td width="110" align="center">Puntaje</td>
-            <td width="20">&nbsp;</td>
-            <td width="220" rowspan="2" align="center">{puntaje}</td>
-          </tr>
-          <tr valign="top">
-            <td>{tienda}</td>
-            <td>&nbsp;</td>
-            <td>{horario}</td>
-            <td>&nbsp;</td>
-            <td>{tipvisita}</td>
-            <td>&nbsp;</td>
-            <td>{foto}</td>
-            <td>{menu}</td>
-            <td>&nbsp;</td>
-            <td align="center">Obtenido:</td>
-            <td>&nbsp;</td>
-            </tr>
-        </table></td>
+        <td bgcolor="#DFDFDF">
+        <div style="width:315px; float:left; margin-bottom: 10px">
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">Fecha Visita</div>
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecvisita}</div>
+        </div>
+        <div style="width:315px; float:left; margin-bottom: 10px">
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Visita</div>
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">{estvisita}</div>
+        </div>
+        <div style="width:315px; float:left; margin-bottom: 10px">
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Revisión</div>
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">{estrev}</div>
+        </div>
+        <div style="width:315px; float:left; margin-bottom: 10px">
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">Boleta</div>
+            <div style="width:310px; float:left; font-weight:bold; text-align:center"><a href="{boleta}"><img src="img/camara.png" width="33" height="25" border="0"></a></div>
+        </div>
+        <div style="width:315px; float:left; margin-bottom: 10px">
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">Fechas Disponibles</div>
+            <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecdispo}</div>
+        </div>
+        </td>
       </tr>
       <tr bgcolor="#F5AA1D">
         <td><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
       </tr>
       <tr>
-        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="177">Tiempo de espera en la fila</td>
-            <td width="19">&nbsp;</td>
-            <td width="69">{tef}</td>
-            <td width="19">&nbsp;</td>
-            <td width="167">Tiempo de espera en caja</td>
-            <td width="20">&nbsp;</td>
-            <td width="70">{tec}</td>
-            <td width="20">&nbsp;</td>
-            <td width="140">N° cajas en uso</td>
-            <td width="20">&nbsp;</td>
-            <td width="229">{ncu}</td>
-          </tr>
-          <tr>
-            <td>Tiempo de la orden lista</td>
-            <td>&nbsp;</td>
-            <td>{tol}</td>
-            <td>&nbsp;</td>
-            <td>Tiempo total</td>
-            <td>&nbsp;</td>
-            <td>{tt}</td>
-            <td>&nbsp;</td>
-            <td>N° clientes en la fila</td>
-            <td>&nbsp;</td>
-            <td>{ncf}</td>
-          </tr>
-        </table></td>
+        <td align="center"></td>
+      </tr>
+      <tr>
+        <td>
+        	<!-- START BLOCK : generales -->
+        	<div style="width:475px; float:left">{pregunta}</div><div style="width:475px; float:left; font-weight:bold">{respuesta}</div>
+            <!-- END BLOCK : generales -->
+        </td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>
-      </tr>
-      <tr>
-        <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="200">Empleado que toma la orden</td>
-            <td width="20">&nbsp;</td>
-            <td width="140">{eto}</td>
-            <td width="20">&nbsp;</td>
-            <td width="570">{dateto}</td>
-          </tr>
-          <tr>
-            <td>Empleado que entrega la orden</td>
-            <td>&nbsp;</td>
-            <td>{eeo}</td>
-            <td>&nbsp;</td>
-            <td>{dateeo}</td>
-          </tr>
-        </table></td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>

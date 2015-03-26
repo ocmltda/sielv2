@@ -96,6 +96,10 @@ else
 	$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND (V.estado_visita = 0 OR V.estado_visita = 1) GROUP BY L.promotor ORDER BY ZONA ASC');
 	if ($db->nf() > 0)
 	{
+		$t->assign("_ROOT.tzn", '0');
+		$t->assign("_ROOT.tzc", '0');
+		$t->assign("_ROOT.tzs", '0');
+
 		while($db->next_record())
 		{
 			if (trim(strtolower($db->Record['ZONA'])) == 'norte')
@@ -117,6 +121,10 @@ else
 	$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 1 GROUP BY L.promotor ORDER BY ZONA ASC');
 	if ($db->nf() > 0)
 	{
+		$t->assign("_ROOT.rzn", '0');
+		$t->assign("_ROOT.rzc", '0');
+		$t->assign("_ROOT.rzs", '0');
+
 		while($db->next_record())
 		{
 			if (trim(strtolower($db->Record['ZONA'])) == 'norte')
@@ -138,6 +146,10 @@ else
 	$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 0 GROUP BY L.promotor ORDER BY ZONA ASC');
 	if ($db->nf() > 0)
 	{
+		$t->assign("_ROOT.czn", '0');
+		$t->assign("_ROOT.czc", '0');
+		$t->assign("_ROOT.czs", '0');
+
 		while($db->next_record())
 		{
 			if (trim(strtolower($db->Record['ZONA'])) == 'norte')

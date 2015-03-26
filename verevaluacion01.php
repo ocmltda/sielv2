@@ -20,33 +20,66 @@ else
 
 	$db = new DB_Sql;
 
-	$db->query('SELECT v.id,DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita,lo.nombre,p.servicio,lo.direccion FROM visitas AS v INNER JOIN locales AS lo ON lo.id = v.locales_id INNER JOIN planillas AS p ON p.id = v.planillas_id ORDER BY v.fecha_visita DESC');
+	//encabezado y detalle
+	$db->query('SELECT V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles FROM visitas AS V WHERE V.id = ' . $_REQUEST['IDE']);
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
 		{
-			$t->newBlock("evaluaciones");
-			$t->assign("id",$db->Record['id']);
-			$t->assign("fecvisita",$db->Record['fecvisita']);
-			$t->assign("local",$db->Record['nombre']);
-			$t->assign("servicio",$db->Record['servicio']);
-			$t->assign("direccion",$db->Record['direccion']);
+			$estvisita = $db->Record['estado_visita'];
+			$estrevision = $db->Record['estado_revision'];
 
-			$db2 = new DB_Sql;
-
-			$db2->query('SELECT Sum(res.puntaje_obtenido) AS puntaje FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.id = ' . $db->Record['id']);
-			if ($db2->nf() > 0)
-			{
-				$db2->next_record();
-				$t->assign("puntaje",$db2->Record['puntaje']);
+			switch ($estvisita) {
+				case 0:
+					$estvisita = 'Vigente';
+					break;
+				case 1:
+					$estvisita = 'Realizada';
+					break;
+				case 2:
+					$estvisita = 'Atrasada';
+					break;
+				default:
+				   $estvisita = 'S/I';
+			}
+			
+			switch ($estrevision) {
+				case 0:
+					$estrevision = 'En Curso';
+					break;
+				case 1:
+					$estrevision = 'Sin Revisar';
+					break;
+				case 2:
+					$estrevision = 'Revisada';
+					break;
+				default:
+				   $estrevision = 'S/I';
 			}
 
-			//$t->assign("estado",$db->Record['estado']);
+			$t->assign("fecvisita", $db->Record['fecha_visita'] . '');
+			$t->assign("estvisita", $estvisita . '');
+			$t->assign("estrev", $estrevision . '');
+			$t->assign("boleta", $db->Record['boleta'] . '');
+			$t->assign("fecdispo", $db->Record['fechas_disponibles'] . '');
+			$t->assign("detalles", $db->Record['observaciones'] . '');
+		}
+	}
+
+	//datos generales
+	$db->query('SELECT V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles, P.servicio, G.nombre  AS PREGUG, R.respuesta, R.puntaje_obtenido FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN generales AS G ON P.id = G.planillas_id INNER JOIN respuestas AS R ON G.id = R.generales_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE']);
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$t->newBlock("generales");
+			$t->assign("pregunta",$db->Record['PREGUG']);
+			$t->assign("respuesta",$db->Record['respuesta']);
 		}
 	}
 	else
 	{
-		$t->newBlock("evaluaciones");
+		$t->newBlock("generales");
 	}
 
 	//print the result
