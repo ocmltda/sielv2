@@ -38,9 +38,10 @@ else
 	$t->assign("IDE", $_REQUEST['IDE'] . '');
 
 	$db = new DB_Sql;
+	$db2 = new DB_Sql;
 
 	//encabezado y detalle
-	$db->query('SELECT V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles FROM visitas AS V WHERE V.id = ' . $_REQUEST['IDE']);
+	$db->query('SELECT V.id, V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles FROM visitas AS V WHERE V.id = ' . $_REQUEST['IDE']);
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -82,6 +83,13 @@ else
 			$t->assign("boleta", '../boletas/' . $db->Record['boleta'] . '');
 			$t->assign("fecdispo", $db->Record['fechas_disponibles'] . '');
 			$t->assign("detalles", $db->Record['observaciones'] . '');
+
+			$db2->query('SELECT Sum(res.puntaje_obtenido) AS puntaje FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.id = ' . $db->Record['id']);
+			if ($db2->nf() > 0)
+			{
+				$db2->next_record();
+				$t->assign("puntaje",$db2->Record['puntaje']);
+			}
 		}
 	}
 

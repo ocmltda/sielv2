@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/3/24" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/3/27" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -340,6 +340,8 @@
 </menu>
 <menu id="6"><phrase id="menutext" value="usuarios"/>
 </menu>
+<menu id="7"><phrase id="menutext" value="Informes"/>
+</menu>
 <table id="alertas"/>
 <table id="clientes"><phrase id="tblcaption" value="Clientes"/>
 <field id="id"><phrase id="fldcaption" value="id"/>
@@ -358,7 +360,24 @@
 </field>
 </table>
 <table id="generales"/>
-<table id="informes"/>
+<table id="informes"><phrase id="tblcaption" value="Informes"/>
+<field id="informes_id"><phrase id="fldcaption" value="ID"/>
+</field>
+<field id="nombre"><phrase id="fldcaption" value="Título"/>
+</field>
+<field id="periodo"><phrase id="fldcaption" value="Período"/>
+</field>
+<field id="fecha_publicacion"><phrase id="fldcaption" value="Fecha Publicación"/>
+</field>
+<field id="estado"><phrase id="fldcaption" value="Estado"/>
+<phrase id="fldtagvalue1" value="1"/>
+<phrase id="fldtagcaption1" value="En Proceso"/>
+<phrase id="fldtagvalue2" value="2"/>
+<phrase id="fldtagcaption2" value="Terminado"/>
+</field>
+<field id="archivo"><phrase id="fldcaption" value="Archivo"/>
+</field>
+</table>
 <table id="items"/>
 <table id="locales"/>
 <table id="_menu"><phrase id="tblcaption" value="Menú"/>
@@ -407,7 +426,11 @@
 </field>
 <field id="region"><phrase id="fldcaption" value="region"/>
 </field>
-<field id="comentario"><phrase id="fldcaption" value="comentario"/>
+<field id="comentario"><phrase id="fldcaption" value="Mostrar"/>
+<phrase id="fldtagvalue1" value="1"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="0"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 </table>
 <table id="visitas"/>

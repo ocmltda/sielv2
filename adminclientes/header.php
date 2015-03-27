@@ -33,6 +33,28 @@ jQuery(document).bind("mobileinit", function() {
 <script type="text/javascript" src="<?php echo ew_YuiHost() ?>build/container/container-min.js"></script>
 <script type="text/javascript" src="<?php echo ew_YuiHost() ?>build/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="<?php echo ew_YuiHost() ?>build/resize/resize-min.js"></script>
+<link href="calendar/calendar-win2k-cold-1.css" rel="stylesheet" type="text/css" media="all" title="win2k-1">
+<style type="text/css">.ewCalendar {cursor: pointer;}</style>
+<script type="text/javascript" src="calendar/calendar.js"></script>
+<script type="text/javascript" src="calendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="calendar/calendar-setup.js"></script>
+<script type="text/javascript">
+
+// Create calendar
+function ew_CreateCalendar(formid, id, format) {
+	if (id.indexOf("$rowindex$") > -1)
+		return;
+	Calendar.setup({
+		inputField: ew_GetElement(id, formid), // input field
+		showsTime: / %H:%M:%S$/.test(format), // shows time
+		ifFormat: format, // date format
+		button: ew_ConcatId(formid, id) // button ID
+	});
+}
+
+// Custom event
+var ewSelectDateEvent = new YAHOO.util.CustomEvent("SelectDate");
+</script>
 <script type="text/javascript">
 var EW_LANGUAGE_ID = "<?php echo $gsLanguage ?>";
 var EW_DATE_SEPARATOR = "-" || "/"; // Default date separator

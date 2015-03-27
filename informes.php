@@ -35,7 +35,7 @@ else
 	else
 		$t->assign("menutop", '<a href="index.php" style="color:white">Inicio</a> | <a href="logout.php" style="color:white">Cerrar Sesión</a>');
 
-	$db->query('SELECT i.*, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i');
+	$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -45,7 +45,21 @@ else
 			$t->assign("informe",$db->Record['nombre']);
 			$t->assign("periodo",$db->Record['periodo']);
 			$t->assign("fecpublic",$db->Record['fecpublic']);
-			$t->assign("estado",$db->Record['estado']);
+
+			$estado = $db->Record['estado'];
+
+			switch ($estado) {
+				case 1:
+					$estado = 'En Proceso';
+					break;
+				case 2:
+					$estvisita = 'Terminado';
+					break;
+				default:
+				   $estvisita = 'En Proceso';
+			}
+
+			$t->assign("estado", $estado . '');
 		}
 	}
 	else

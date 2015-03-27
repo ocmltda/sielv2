@@ -2,7 +2,7 @@
 <html data-ng-app><!-- InstanceBegin template="/Templates/tsielv2.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 	<meta charset="utf-8">
-<!-- InstanceBeginEditable name="doctitle" -->
+    <!-- InstanceBeginEditable name="doctitle" -->
 <title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
     <!-- InstanceEndEditable -->
     <!-- InstanceBeginEditable name="head" -->
@@ -15,25 +15,7 @@
 -->
     </style>
     <!-- InstanceEndEditable -->
-	<style type="text/css">
-        <!--
-        body {
-            margin-left: 0px;
-            margin-top: 0px;
-            margin-right: 0px;
-            margin-bottom: 0px;
-            background-color: #035687;
-        }
-        .menutop {
-            color: #FFFFFF;
-            font-weight: bold;
-        }
-		html, body
-		{
-		  height: 100%;
-		}
-        -->
-    </style>
+    <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
 </head>
 <head>
@@ -104,25 +86,31 @@
       </tr>
       <tr>
         <td bgcolor="#DFDFDF">
-        <div style="width:315px; float:left; margin-bottom: 10px">
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">Fecha Visita</div>
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecvisita}</div>
+        <div style="width:630px; float:left">
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Fecha Visita</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecvisita}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Visita</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{estvisita}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Boleta</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center"><a href="{boleta}"><img src="img/camara.png" width="33" height="25" border="0"></a></div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Fechas Disponibles</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecdispo}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Revisión</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{estrev}</div>
+            </div>
         </div>
-        <div style="width:315px; float:left; margin-bottom: 10px">
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Visita</div>
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">{estvisita}</div>
-        </div>
-        <div style="width:315px; float:left; margin-bottom: 10px">
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Revisión</div>
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">{estrev}</div>
-        </div>
-        <div style="width:315px; float:left; margin-bottom: 10px">
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">Boleta</div>
-            <div style="width:310px; float:left; font-weight:bold; text-align:center"><a href="{boleta}"><img src="img/camara.png" width="33" height="25" border="0"></a></div>
-        </div>
-        <div style="width:315px; float:left; margin-bottom: 10px">
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">Fechas Disponibles</div>
-            <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecdispo}</div>
+        <div style="width:300px; float:left">
+            <div style="width:160px; float:left; font-weight:bold; text-align:center; font-size:24px">Puntaje Obtenido</div>
+            <div style="width:140px; float:left; font-weight:bold; text-align:center; font-size:30px">{puntaje}</div>
         </div>
         </td>
       </tr>
@@ -203,7 +191,8 @@
         <td align="center">&nbsp;</td>
       </tr>
     </table>
-	<!-- InstanceEndEditable -->    </td>
+	<!-- InstanceEndEditable -->
+    </td>
   </tr>
 </table>
 </body>
