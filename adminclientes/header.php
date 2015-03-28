@@ -60,7 +60,7 @@ var EW_LANGUAGE_ID = "<?php echo $gsLanguage ?>";
 var EW_DATE_SEPARATOR = "-" || "/"; // Default date separator
 var EW_DECIMAL_POINT = "<?php echo $DEFAULT_DECIMAL_POINT ?>";
 var EW_THOUSANDS_SEP = "<?php echo $DEFAULT_THOUSANDS_SEP ?>";
-var EW_UPLOAD_ALLOWED_FILE_EXT = "gif,jpg,jpeg,bmp,png,doc,xls,pdf,zip"; // Allowed upload file extension
+var EW_UPLOAD_ALLOWED_FILE_EXT = ""; // Allowed upload file extension
 
 // Ajax settings
 var EW_RECORD_DELIMITER = "\r";

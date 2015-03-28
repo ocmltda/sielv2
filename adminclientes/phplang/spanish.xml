@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/3/27" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/3/28" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -369,13 +369,15 @@
 </field>
 <field id="fecha_publicacion"><phrase id="fldcaption" value="Fecha Publicación"/>
 </field>
+<field id="archivo"><phrase id="fldcaption" value="Archivo"/>
+</field>
 <field id="estado"><phrase id="fldcaption" value="Estado"/>
 <phrase id="fldtagvalue1" value="1"/>
 <phrase id="fldtagcaption1" value="En Proceso"/>
 <phrase id="fldtagvalue2" value="2"/>
 <phrase id="fldtagcaption2" value="Terminado"/>
 </field>
-<field id="archivo"><phrase id="fldcaption" value="Archivo"/>
+<field id="clientes_id"><phrase id="fldcaption" value="Empresa"/>
 </field>
 </table>
 <table id="items"/>

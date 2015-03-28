@@ -11,29 +11,31 @@ $db = new DB_Sql;
 /*Consulta de mysql con la que indicamos que necesitamos que seleccione
 **solo los campos que tenga como nombre_administrador el que el formulario
 **le ha enviado*/
-$db->query("SELECT * FROM usuarios WHERE usuario = '$usuario'");
+$db->query("SELECT U.usuario, U.nombre, U.id, U.tipos_usuarios_id, U.`password`, EU.clientes_id FROM usuarios AS U LEFT JOIN empusu AS EU ON U.id = EU.usuarios_id WHERE U.usuario = '" . $usuario . "'");
  
 //Validamos si el nombre del administrador existe en la base de datos o es correcto
 if ($db->nf() > 0)
 {
-	$db->next_record();
-
-	//Si el usuario es correcto ahora validamos su contraseña
-	if($db->Record['password'] == $password)
+	while($db->next_record())
 	{
-		//Creamos sesión
-		session_start(); 
-		//Almacenamos el nombre de usuario en una variable de sesión usuario
-		$_SESSION['ulogin'] = $usuario;
-		$_SESSION['uname'] = $db->Record['nombre'];
-		$_SESSION['uid'] = $db->Record['id'];
-		$_SESSION['utus'] = $db->Record['tipos_usuarios_id'];
-		//Redireccionamos a la pagina: index.php
-		header("Location: index.php");
-	}
-	else
-	{
-	//En caso que la contraseña sea incorrecta enviamos un msj y redireccionamos a login.php
+		//Si el usuario es correcto ahora validamos su contraseña
+		if($db->Record['password'] == $password)
+		{
+			//Creamos sesión
+			session_start(); 
+			//Almacenamos el nombre de usuario en una variable de sesión usuario
+			$_SESSION['ulogin'] = $usuario;
+			$_SESSION['uname'] = $db->Record['nombre'];
+			$_SESSION['uid'] = $db->Record['id'];
+			$_SESSION['utus'] = $db->Record['tipos_usuarios_id'];
+			if (!isset($_SESSION['empids']))
+				$_SESSION['empids'] = $db->Record['clientes_id'];
+			else
+				$_SESSION['empids'] .= ',' . $db->Record['clientes_id'];
+		}
+		else
+		{
+		//En caso que la contraseña sea incorrecta enviamos un msj y redireccionamos a login.php
 ?>
 <meta charset="utf-8">
 	<script languaje="javascript">
@@ -41,7 +43,11 @@ if ($db->nf() > 0)
 	location.href = "login.php";
 	</script>
 <?php
+		}
 	}
+
+	//Redireccionamos a la pagina: index.php
+	header("Location: index.php");
 }
 else
 {

@@ -26,7 +26,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME . "", TRUE); // Config file name
 define("EW_PROJECT_ID", "{BCF8DC35-3764-486D-8181-0414D54343BE}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", 'ShjDfS5F1tvFBGbp', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'd6rkJpCqmhkzV4rw', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/usuariosmenu_B.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "utf-8", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -241,7 +241,7 @@ define("EW_EXPORT_EMAIL_COUNTER", EW_SESSION_STATUS . "_EmailCounter", TRUE);
 
 // File upload
 define("EW_UPLOAD_DEST_PATH", "", TRUE); // Upload destination path (relative to app root)
-define("EW_UPLOAD_ALLOWED_FILE_EXT", "gif,jpg,jpeg,bmp,png,doc,xls,pdf,zip", TRUE); // Allowed file extensions
+define("EW_UPLOAD_ALLOWED_FILE_EXT", "", TRUE); // Allowed file extensions
 define("EW_IMAGE_ALLOWED_FILE_EXT", "gif,jpg,png,bmp", TRUE); // Allowed file extensions for images
 define("EW_MAX_FILE_SIZE", 2000000, TRUE); // Max file size
 define("EW_THUMBNAIL_DEFAULT_WIDTH", 0, TRUE); // Thumbnail default width

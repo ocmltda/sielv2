@@ -320,6 +320,9 @@ class cinformes_edit extends cinformes {
 		$this->GetUploadFiles(); // Get upload files
 		if (!$this->informes_id->FldIsDetailKey)
 			$this->informes_id->setFormValue($objForm->GetValue("x_informes_id"));
+		if (!$this->clientes_id->FldIsDetailKey) {
+			$this->clientes_id->setFormValue($objForm->GetValue("x_clientes_id"));
+		}
 		if (!$this->nombre->FldIsDetailKey) {
 			$this->nombre->setFormValue($objForm->GetValue("x_nombre"));
 		}
@@ -341,6 +344,7 @@ class cinformes_edit extends cinformes {
 		global $objForm;
 		$this->LoadRow();
 		$this->informes_id->CurrentValue = $this->informes_id->FormValue;
+		$this->clientes_id->CurrentValue = $this->clientes_id->FormValue;
 		$this->nombre->CurrentValue = $this->nombre->FormValue;
 		$this->periodo->CurrentValue = $this->periodo->FormValue;
 		$this->periodo->CurrentValue = ew_UnFormatDateTime($this->periodo->CurrentValue, 7);
@@ -379,10 +383,12 @@ class cinformes_edit extends cinformes {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->informes_id->setDbValue($rs->fields('informes_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 		$this->nombre->setDbValue($rs->fields('nombre'));
 		$this->periodo->setDbValue($rs->fields('periodo'));
 		$this->fecha_publicacion->setDbValue($rs->fields('fecha_publicacion'));
 		$this->archivo->Upload->DbValue = $rs->fields('archivo');
+		$this->archivo->Upload->SaveDbToSession();
 		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
@@ -398,6 +404,7 @@ class cinformes_edit extends cinformes {
 
 		// Common render codes for all row types
 		// informes_id
+		// clientes_id
 		// nombre
 		// periodo
 		// fecha_publicacion
@@ -409,6 +416,28 @@ class cinformes_edit extends cinformes {
 			// informes_id
 			$this->informes_id->ViewValue = $this->informes_id->CurrentValue;
 			$this->informes_id->ViewCustomAttributes = "";
+
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
 
 			// nombre
 			$this->nombre->ViewValue = $this->nombre->CurrentValue;
@@ -455,6 +484,11 @@ class cinformes_edit extends cinformes {
 			$this->informes_id->HrefValue = "";
 			$this->informes_id->TooltipValue = "";
 
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
+
 			// nombre
 			$this->nombre->LinkCustomAttributes = "";
 			$this->nombre->HrefValue = "";
@@ -472,7 +506,14 @@ class cinformes_edit extends cinformes {
 
 			// archivo
 			$this->archivo->LinkCustomAttributes = "";
-			$this->archivo->HrefValue = "";
+			$this->archivo->UploadPath = "../informes";
+			if (!ew_Empty($this->archivo->Upload->DbValue)) {
+				$this->archivo->HrefValue = ew_UploadPathEx(FALSE, $this->archivo->UploadPath) . $this->archivo->Upload->DbValue; // Add prefix/suffix
+				$this->archivo->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->archivo->HrefValue = ew_ConvertFullUrl($this->archivo->HrefValue);
+			} else {
+				$this->archivo->HrefValue = "";
+			}
 			$this->archivo->HrefValue2 = $this->archivo->UploadPath . $this->archivo->Upload->DbValue;
 			$this->archivo->TooltipValue = "";
 
@@ -486,6 +527,22 @@ class cinformes_edit extends cinformes {
 			$this->informes_id->EditCustomAttributes = "";
 			$this->informes_id->EditValue = $this->informes_id->CurrentValue;
 			$this->informes_id->ViewCustomAttributes = "";
+
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->clientes_id->EditValue = $arwrk;
 
 			// nombre
 			$this->nombre->EditCustomAttributes = "";
@@ -520,6 +577,9 @@ class cinformes_edit extends cinformes {
 
 			$this->informes_id->HrefValue = "";
 
+			// clientes_id
+			$this->clientes_id->HrefValue = "";
+
 			// nombre
 			$this->nombre->HrefValue = "";
 
@@ -530,7 +590,14 @@ class cinformes_edit extends cinformes {
 			$this->fecha_publicacion->HrefValue = "";
 
 			// archivo
-			$this->archivo->HrefValue = "";
+			$this->archivo->UploadPath = "../informes";
+			if (!ew_Empty($this->archivo->Upload->DbValue)) {
+				$this->archivo->HrefValue = ew_UploadPathEx(FALSE, $this->archivo->UploadPath) . $this->archivo->Upload->DbValue; // Add prefix/suffix
+				$this->archivo->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->archivo->HrefValue = ew_ConvertFullUrl($this->archivo->HrefValue);
+			} else {
+				$this->archivo->HrefValue = "";
+			}
 			$this->archivo->HrefValue2 = $this->archivo->UploadPath . $this->archivo->Upload->DbValue;
 
 			// estado
@@ -566,6 +633,9 @@ class cinformes_edit extends cinformes {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
+		if (!is_null($this->clientes_id->FormValue) && $this->clientes_id->FormValue == "") {
+			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->clientes_id->FldCaption());
+		}
 		if (!is_null($this->nombre->FormValue) && $this->nombre->FormValue == "") {
 			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->nombre->FldCaption());
 		}
@@ -615,6 +685,9 @@ class cinformes_edit extends cinformes {
 			// Save old values
 			$rsold = &$rs->fields;
 			$rsnew = array();
+
+			// clientes_id
+			$this->clientes_id->SetDbValueDef($rsnew, $this->clientes_id->CurrentValue, 0, $this->clientes_id->ReadOnly);
 
 			// nombre
 			$this->nombre->SetDbValueDef($rsnew, $this->nombre->CurrentValue, "", $this->nombre->ReadOnly);
@@ -776,6 +849,9 @@ finformesedit.Validate = function(fobj) {
 	var startcnt = (rowcnt == 0) ? 0 : 1; // rowcnt == 0 => Inline-Add
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = "";
+		elm = fobj.elements["x" + infix + "_clientes_id"];
+		if (elm && !ew_HasValue(elm))
+			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($informes->clientes_id->FldCaption()) ?>");
 		elm = fobj.elements["x" + infix + "_nombre"];
 		if (elm && !ew_HasValue(elm))
 			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($informes->nombre->FldCaption()) ?>");
@@ -828,8 +904,9 @@ finformesedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+finformesedit.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -856,6 +933,34 @@ $informes_edit->ShowMessage();
 <?php echo $informes->informes_id->EditValue ?></span>
 <input type="hidden" name="x_informes_id" id="x_informes_id" value="<?php echo ew_HtmlEncode($informes->informes_id->CurrentValue) ?>">
 </span><?php echo $informes->informes_id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($informes->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $informes->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_informes_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $informes->clientes_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
+		<td<?php echo $informes->clientes_id->CellAttributes() ?>><span id="el_informes_clientes_id">
+<select id="x_clientes_id" name="x_clientes_id"<?php echo $informes->clientes_id->EditAttributes() ?>>
+<?php
+if (is_array($informes->clientes_id->EditValue)) {
+	$arwrk = $informes->clientes_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($informes->clientes_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+finformesedit.Lists["x_clientes_id"].Options = <?php echo (is_array($informes->clientes_id->EditValue)) ? ew_ArrayToJson($informes->clientes_id->EditValue, 1) : "[]" ?>;
+</script>
+</span><?php echo $informes->clientes_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 <?php if ($informes->nombre->Visible) { // nombre ?>
@@ -901,7 +1006,7 @@ ew_CreateCalendar("finformesedit", "x_fecha_publicacion", "%d-%m-%Y");
 <div id="old_x_archivo">
 <?php if ($informes->archivo->LinkAttributes() <> "") { ?>
 <?php if (!empty($informes->archivo->Upload->DbValue)) { ?>
-<?php echo $informes->archivo->EditValue ?>
+<a<?php echo $informes->archivo->LinkAttributes() ?>><?php echo $informes->archivo->EditValue ?></a>
 <?php } elseif (!in_array($informes->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>

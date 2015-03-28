@@ -35,36 +35,71 @@ else
 	else
 		$t->assign("menutop", '<a href="index.php" style="color:white">Inicio</a> | <a href="logout.php" style="color:white">Cerrar Sesión</a>');
 
-	$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
-	if ($db->nf() > 0)
+	if (!isset($_REQUEST['mes']) && !isset($_REQUEST['anio']))
 	{
-		while($db->next_record())
+		$_REQUEST['mes'] = date('m');
+		$_REQUEST['anio'] = date('Y');
+	}
+	else
+	{
+		if (!$_REQUEST['mes'] && !$_REQUEST['anio'])
 		{
-			$t->newBlock("informes");
-			$t->assign("id",$db->Record['informes_id']);
-			$t->assign("informe",$db->Record['nombre']);
-			$t->assign("periodo",$db->Record['periodo']);
-			$t->assign("fecpublic",$db->Record['fecpublic']);
+			$_REQUEST['mes'] = date('m');
+			$_REQUEST['anio'] = date('Y');
+		}
+	}
 
-			$estado = $db->Record['estado'];
+	$db2 = new DB_Sql;
+	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+	if ($db2->nf() > 0)
+	{
+		while($db2->next_record())
+		{
+			$t->newBlock("empresas");
+			$t->assign("empresa",$db2->Record['nombre']);
+			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
 
-			switch ($estado) {
-				case 1:
-					$estado = 'En Proceso';
-					break;
-				case 2:
-					$estvisita = 'Terminado';
-					break;
-				default:
-				   $estvisita = 'En Proceso';
+			$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' and DATE_FORMAT(i.periodo,\'%Y-%m\') = \'' . $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '\' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
+			if ($db->nf() > 0)
+			{
+				while($db->next_record())
+				{
+					$t->newBlock("informes");
+					$t->assign("id",$db->Record['informes_id']);
+					$t->assign("informe",$db->Record['nombre']);
+					$t->assign("periodo",$db->Record['periodo']);
+					$t->assign("fecpublic",$db->Record['fecpublic']);
+
+					$estado = $db->Record['estado'];
+					switch ($estado) {
+						case 1:
+							$estado = 'En Proceso';
+							break;
+						case 2:
+							$estado = 'Terminado';
+							break;
+						default:
+						   $estado = 'En Proceso';
+					}
+					$t->assign("estado", $estado . '');
+
+					$archivo = trim($db->Record['archivo']);
+
+					if ($archivo)
+						$t->assign("acciones", '<a href="informes/' . $archivo . '">Descargar</a>');
+					else
+						$t->assign("acciones", '-');
+				}
 			}
-
-			$t->assign("estado", $estado . '');
+			else
+			{
+				//$t->newBlock("informes");
+			}
 		}
 	}
 	else
 	{
-		$t->newBlock("informes");
+		$t->newBlock("empresas");
 	}
 
 	//print the result

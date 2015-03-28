@@ -339,6 +339,11 @@ class cinformes_list extends cinformes {
 			// Get basic search values
 			$this->LoadBasicSearchValues();
 
+			// Get and validate search values for advanced search
+			$this->LoadSearchValues(); // Get search values
+			if (!$this->ValidateSearch())
+				$this->setFailureMessage($gsSearchError);
+
 			// Restore search parms from Session if not searching / reset
 			if ($this->Command <> "search" && $this->Command <> "reset" && $this->Command <> "resetall")
 				$this->RestoreSearchParms();
@@ -352,6 +357,10 @@ class cinformes_list extends cinformes {
 			// Get basic search criteria
 			if ($gsSearchError == "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Get search criteria for advanced search
+			if ($gsSearchError == "")
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
 		}
 
 		// Restore display records
@@ -371,6 +380,11 @@ class cinformes_list extends cinformes {
 			$this->BasicSearch->LoadDefault();
 			if ($this->BasicSearch->Keyword != "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Load advanced search from default
+			if ($this->LoadAdvancedSearchDefault()) {
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
+			}
 		}
 
 		// Build search criteria
@@ -437,6 +451,83 @@ class cinformes_list extends cinformes {
 		return TRUE;
 	}
 
+	// Advanced search WHERE clause based on QueryString
+	function AdvancedSearchWhere() {
+		global $Security;
+		$sWhere = "";
+		$this->BuildSearchSql($sWhere, $this->informes_id, FALSE); // informes_id
+		$this->BuildSearchSql($sWhere, $this->clientes_id, FALSE); // clientes_id
+		$this->BuildSearchSql($sWhere, $this->nombre, FALSE); // nombre
+		$this->BuildSearchSql($sWhere, $this->periodo, FALSE); // periodo
+		$this->BuildSearchSql($sWhere, $this->fecha_publicacion, FALSE); // fecha_publicacion
+		$this->BuildSearchSql($sWhere, $this->archivo, FALSE); // archivo
+		$this->BuildSearchSql($sWhere, $this->estado, FALSE); // estado
+
+		// Set up search parm
+		if ($sWhere <> "") {
+			$this->Command = "search";
+		}
+		if ($this->Command == "search") {
+			$this->informes_id->AdvancedSearch->Save(); // informes_id
+			$this->clientes_id->AdvancedSearch->Save(); // clientes_id
+			$this->nombre->AdvancedSearch->Save(); // nombre
+			$this->periodo->AdvancedSearch->Save(); // periodo
+			$this->fecha_publicacion->AdvancedSearch->Save(); // fecha_publicacion
+			$this->archivo->AdvancedSearch->Save(); // archivo
+			$this->estado->AdvancedSearch->Save(); // estado
+		}
+		return $sWhere;
+	}
+
+	// Build search SQL
+	function BuildSearchSql(&$Where, &$Fld, $MultiValue) {
+		$FldParm = substr($Fld->FldVar, 2);
+		$FldVal = $Fld->AdvancedSearch->SearchValue; // @$_GET["x_$FldParm"]
+		$FldOpr = $Fld->AdvancedSearch->SearchOperator; // @$_GET["z_$FldParm"]
+		$FldCond = $Fld->AdvancedSearch->SearchCondition; // @$_GET["v_$FldParm"]
+		$FldVal2 = $Fld->AdvancedSearch->SearchValue2; // @$_GET["y_$FldParm"]
+		$FldOpr2 = $Fld->AdvancedSearch->SearchOperator2; // @$_GET["w_$FldParm"]
+		$sWrk = "";
+
+		//$FldVal = ew_StripSlashes($FldVal);
+		if (is_array($FldVal)) $FldVal = implode(",", $FldVal);
+
+		//$FldVal2 = ew_StripSlashes($FldVal2);
+		if (is_array($FldVal2)) $FldVal2 = implode(",", $FldVal2);
+		$FldOpr = strtoupper(trim($FldOpr));
+		if ($FldOpr == "") $FldOpr = "=";
+		$FldOpr2 = strtoupper(trim($FldOpr2));
+		if ($FldOpr2 == "") $FldOpr2 = "=";
+		if (EW_SEARCH_MULTI_VALUE_OPTION == 1 || $FldOpr <> "LIKE" ||
+			($FldOpr2 <> "LIKE" && $FldVal2 <> ""))
+			$MultiValue = FALSE;
+		if ($MultiValue) {
+			$sWrk1 = ($FldVal <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr, $FldVal) : ""; // Field value 1
+			$sWrk2 = ($FldVal2 <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr2, $FldVal2) : ""; // Field value 2
+			$sWrk = $sWrk1; // Build final SQL
+			if ($sWrk2 <> "")
+				$sWrk = ($sWrk <> "") ? "($sWrk) $FldCond ($sWrk2)" : $sWrk2;
+		} else {
+			$FldVal = $this->ConvertSearchValue($Fld, $FldVal);
+			$FldVal2 = $this->ConvertSearchValue($Fld, $FldVal2);
+			$sWrk = ew_GetSearchSql($Fld, $FldVal, $FldOpr, $FldCond, $FldVal2, $FldOpr2);
+		}
+		ew_AddFilter($Where, $sWrk);
+	}
+
+	// Convert search value
+	function ConvertSearchValue(&$Fld, $FldVal) {
+		if ($FldVal == EW_NULL_VALUE || $FldVal == EW_NOT_NULL_VALUE)
+			return $FldVal;
+		$Value = $FldVal;
+		if ($Fld->FldDataType == EW_DATATYPE_BOOLEAN) {
+			if ($FldVal <> "") $Value = ($FldVal == "1" || strtolower(strval($FldVal)) == "y" || strtolower(strval($FldVal)) == "t") ? $Fld->TrueValue : $Fld->FalseValue;
+		} elseif ($Fld->FldDataType == EW_DATATYPE_DATE) {
+			if ($FldVal <> "") $Value = ew_UnFormatDateTime($FldVal, $Fld->FldDateTimeFormat);
+		}
+		return $Value;
+	}
+
 	// Return basic search SQL
 	function BasicSearchSQL($Keyword) {
 		$sKeyword = ew_AdjustSql($Keyword);
@@ -494,6 +585,20 @@ class cinformes_list extends cinformes {
 		// Check basic search
 		if ($this->BasicSearch->IssetSession())
 			return TRUE;
+		if ($this->informes_id->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->clientes_id->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->nombre->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->periodo->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->fecha_publicacion->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->archivo->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->estado->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -506,6 +611,9 @@ class cinformes_list extends cinformes {
 
 		// Clear basic search parameters
 		$this->ResetBasicSearchParms();
+
+		// Clear advanced search parameters
+		$this->ResetAdvancedSearchParms();
 	}
 
 	// Load advanced search default values
@@ -518,11 +626,31 @@ class cinformes_list extends cinformes {
 		$this->BasicSearch->UnsetSession();
 	}
 
+	// Clear all advanced search parameters
+	function ResetAdvancedSearchParms() {
+		$this->informes_id->AdvancedSearch->UnsetSession();
+		$this->clientes_id->AdvancedSearch->UnsetSession();
+		$this->nombre->AdvancedSearch->UnsetSession();
+		$this->periodo->AdvancedSearch->UnsetSession();
+		$this->fecha_publicacion->AdvancedSearch->UnsetSession();
+		$this->archivo->AdvancedSearch->UnsetSession();
+		$this->estado->AdvancedSearch->UnsetSession();
+	}
+
 	// Restore all search parameters
 	function RestoreSearchParms() {
 
 		// Restore basic search values
 		$this->BasicSearch->Load();
+
+		// Restore advanced search values
+		$this->informes_id->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
+		$this->nombre->AdvancedSearch->Load();
+		$this->periodo->AdvancedSearch->Load();
+		$this->fecha_publicacion->AdvancedSearch->Load();
+		$this->archivo->AdvancedSearch->Load();
+		$this->estado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -533,6 +661,7 @@ class cinformes_list extends cinformes {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->informes_id); // informes_id
+			$this->UpdateSort($this->clientes_id); // clientes_id
 			$this->UpdateSort($this->nombre); // nombre
 			$this->UpdateSort($this->periodo); // periodo
 			$this->UpdateSort($this->fecha_publicacion); // fecha_publicacion
@@ -571,6 +700,7 @@ class cinformes_list extends cinformes {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
 				$this->informes_id->setSort("");
+				$this->clientes_id->setSort("");
 				$this->nombre->setSort("");
 				$this->periodo->setSort("");
 				$this->fecha_publicacion->setSort("");
@@ -697,6 +827,48 @@ class cinformes_list extends cinformes {
 		$this->BasicSearch->Type = @$_GET[EW_TABLE_BASIC_SEARCH_TYPE];
 	}
 
+	//  Load search values for validation
+	function LoadSearchValues() {
+		global $objForm;
+
+		// Load search values
+		// informes_id
+
+		$this->informes_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_informes_id"]);
+		if ($this->informes_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->informes_id->AdvancedSearch->SearchOperator = @$_GET["z_informes_id"];
+
+		// clientes_id
+		$this->clientes_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_clientes_id"]);
+		if ($this->clientes_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->clientes_id->AdvancedSearch->SearchOperator = @$_GET["z_clientes_id"];
+
+		// nombre
+		$this->nombre->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_nombre"]);
+		if ($this->nombre->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->nombre->AdvancedSearch->SearchOperator = @$_GET["z_nombre"];
+
+		// periodo
+		$this->periodo->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_periodo"]);
+		if ($this->periodo->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->periodo->AdvancedSearch->SearchOperator = @$_GET["z_periodo"];
+
+		// fecha_publicacion
+		$this->fecha_publicacion->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fecha_publicacion"]);
+		if ($this->fecha_publicacion->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->fecha_publicacion->AdvancedSearch->SearchOperator = @$_GET["z_fecha_publicacion"];
+
+		// archivo
+		$this->archivo->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_archivo"]);
+		if ($this->archivo->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->archivo->AdvancedSearch->SearchOperator = @$_GET["z_archivo"];
+
+		// estado
+		$this->estado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_estado"]);
+		if ($this->estado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->estado->AdvancedSearch->SearchOperator = @$_GET["z_estado"];
+	}
+
 	// Load recordset
 	function LoadRecordset($offset = -1, $rowcnt = -1) {
 		global $conn;
@@ -747,6 +919,7 @@ class cinformes_list extends cinformes {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->informes_id->setDbValue($rs->fields('informes_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 		$this->nombre->setDbValue($rs->fields('nombre'));
 		$this->periodo->setDbValue($rs->fields('periodo'));
 		$this->fecha_publicacion->setDbValue($rs->fields('fecha_publicacion'));
@@ -794,6 +967,7 @@ class cinformes_list extends cinformes {
 
 		// Common render codes for all row types
 		// informes_id
+		// clientes_id
 		// nombre
 		// periodo
 		// fecha_publicacion
@@ -805,6 +979,28 @@ class cinformes_list extends cinformes {
 			// informes_id
 			$this->informes_id->ViewValue = $this->informes_id->CurrentValue;
 			$this->informes_id->ViewCustomAttributes = "";
+
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
 
 			// nombre
 			$this->nombre->ViewValue = $this->nombre->CurrentValue;
@@ -851,6 +1047,11 @@ class cinformes_list extends cinformes {
 			$this->informes_id->HrefValue = "";
 			$this->informes_id->TooltipValue = "";
 
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
+
 			// nombre
 			$this->nombre->LinkCustomAttributes = "";
 			$this->nombre->HrefValue = "";
@@ -868,7 +1069,14 @@ class cinformes_list extends cinformes {
 
 			// archivo
 			$this->archivo->LinkCustomAttributes = "";
-			$this->archivo->HrefValue = "";
+			$this->archivo->UploadPath = "../informes";
+			if (!ew_Empty($this->archivo->Upload->DbValue)) {
+				$this->archivo->HrefValue = ew_UploadPathEx(FALSE, $this->archivo->UploadPath) . $this->archivo->Upload->DbValue; // Add prefix/suffix
+				$this->archivo->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->archivo->HrefValue = ew_ConvertFullUrl($this->archivo->HrefValue);
+			} else {
+				$this->archivo->HrefValue = "";
+			}
 			$this->archivo->HrefValue2 = $this->archivo->UploadPath . $this->archivo->Upload->DbValue;
 			$this->archivo->TooltipValue = "";
 
@@ -876,11 +1084,94 @@ class cinformes_list extends cinformes {
 			$this->estado->LinkCustomAttributes = "";
 			$this->estado->HrefValue = "";
 			$this->estado->TooltipValue = "";
+		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
+
+			// informes_id
+			$this->informes_id->EditCustomAttributes = "";
+			$this->informes_id->EditValue = ew_HtmlEncode($this->informes_id->AdvancedSearch->SearchValue);
+
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->clientes_id->EditValue = $arwrk;
+
+			// nombre
+			$this->nombre->EditCustomAttributes = "";
+			$this->nombre->EditValue = ew_HtmlEncode($this->nombre->AdvancedSearch->SearchValue);
+
+			// periodo
+			$this->periodo->EditCustomAttributes = "";
+			$this->periodo->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->periodo->AdvancedSearch->SearchValue, 7), 7));
+
+			// fecha_publicacion
+			$this->fecha_publicacion->EditCustomAttributes = "";
+			$this->fecha_publicacion->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->fecha_publicacion->AdvancedSearch->SearchValue, 7), 7));
+
+			// archivo
+			$this->archivo->EditCustomAttributes = "";
+			$this->archivo->EditValue = ew_HtmlEncode($this->archivo->AdvancedSearch->SearchValue);
+
+			// estado
+			$this->estado->EditCustomAttributes = "";
+			$arwrk = array();
+			$arwrk[] = array($this->estado->FldTagValue(1), $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->FldTagValue(1));
+			$arwrk[] = array($this->estado->FldTagValue(2), $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->FldTagValue(2));
+			$this->estado->EditValue = $arwrk;
+		}
+		if ($this->RowType == EW_ROWTYPE_ADD ||
+			$this->RowType == EW_ROWTYPE_EDIT ||
+			$this->RowType == EW_ROWTYPE_SEARCH) { // Add / Edit / Search row
+			$this->SetupFieldTitles();
 		}
 
 		// Call Row Rendered event
 		if ($this->RowType <> EW_ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
+	}
+
+	// Validate search
+	function ValidateSearch() {
+		global $gsSearchError;
+
+		// Initialize
+		$gsSearchError = "";
+
+		// Check if validation required
+		if (!EW_SERVER_VALIDATE)
+			return TRUE;
+
+		// Return validate result
+		$ValidateSearch = ($gsSearchError == "");
+
+		// Call Form_CustomValidate event
+		$sFormCustomError = "";
+		$ValidateSearch = $ValidateSearch && $this->Form_CustomValidate($sFormCustomError);
+		if ($sFormCustomError <> "") {
+			ew_AddMessage($gsSearchError, $sFormCustomError);
+		}
+		return $ValidateSearch;
+	}
+
+	// Load advanced search
+	function LoadAdvancedSearch() {
+		$this->informes_id->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
+		$this->nombre->AdvancedSearch->Load();
+		$this->periodo->AdvancedSearch->Load();
+		$this->fecha_publicacion->AdvancedSearch->Load();
+		$this->archivo->AdvancedSearch->Load();
+		$this->estado->AdvancedSearch->Load();
 	}
 
 	// Page Load event
@@ -1003,9 +1294,45 @@ finformeslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+finformeslist.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var finformeslistsrch = new ew_Form("finformeslistsrch");
+
+// Validate function for search
+finformeslistsrch.Validate = function(fobj) {
+	if (!this.ValidateRequired)
+		return true; // Ignore validation
+	fobj = fobj || this.Form;
+	this.PostAutoSuggest();
+	var infix = "";
+
+	// Set up row object
+	ew_ElementsToRow(fobj, infix);
+
+	// Fire Form_CustomValidate event
+	if (!this.Form_CustomValidate(fobj))
+		return false;
+	return true;
+}
+
+// Form_CustomValidate event
+finformeslistsrch.Form_CustomValidate = 
+ function(fobj) { // DO NOT CHANGE THIS LINE!
+
+ 	// Your custom validation code here, return false if invalid. 
+ 	return true;
+ }
+
+// Use JavaScript validation or not
+<?php if (EW_CLIENT_VALIDATE) { ?>
+finformeslistsrch.ValidateRequired = true; // uses JavaScript validation
+<?php } else { ?>
+finformeslistsrch.ValidateRequired = false; // no JavaScript validation
+<?php } ?>
+
+// Dynamic selection lists
+finformeslistsrch.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1031,18 +1358,60 @@ var finformeslistsrch = new ew_Form("finformeslistsrch");
 <?php $informes_list->ExportOptions->Render("body"); ?>
 </p>
 <?php if ($informes->Export == "" && $informes->CurrentAction == "") { ?>
-<form name="finformeslistsrch" id="finformeslistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>">
+<form name="finformeslistsrch" id="finformeslistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>" onsubmit="return ewForms[this.id].Submit();">
 <a href="javascript:finformeslistsrch.ToggleSearchPanel();" style="text-decoration: none;"><img id="finformeslistsrch_SearchImage" src="phpimages/collapse.gif" alt="" width="9" height="9" style="border: 0;"></a><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("Search") ?></span><br>
 <div id="finformeslistsrch_SearchPanel">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="informes">
 <div class="ewBasicSearch">
+<?php
+if ($gsSearchError == "")
+	$informes_list->LoadAdvancedSearch(); // Load advanced search
+
+// Render for search
+$informes->RowType = EW_ROWTYPE_SEARCH;
+
+// Render row
+$informes->ResetAttrs();
+$informes_list->RenderRow();
+?>
 <div id="xsr_1" class="ewRow">
+<?php if ($informes->clientes_id->Visible) { // clientes_id ?>
+	<span id="xsc_clientes_id" class="ewCell">
+		<span class="ewSearchCaption"><?php echo $informes->clientes_id->FldCaption() ?></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_clientes_id" id="z_clientes_id" value="="></span>
+		<span class="ewSearchField">
+<select id="x_clientes_id" name="x_clientes_id"<?php echo $informes->clientes_id->EditAttributes() ?>>
+<?php
+if (is_array($informes->clientes_id->EditValue)) {
+	$arwrk = $informes->clientes_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($informes->clientes_id->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+finformeslistsrch.Lists["x_clientes_id"].Options = <?php echo (is_array($informes->clientes_id->EditValue)) ? ew_ArrayToJson($informes->clientes_id->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+	</span>
+<?php } ?>
+</div>
+<div id="xsr_2" class="ewRow">
 	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" size="20" value="<?php echo ew_HtmlEncode($informes_list->BasicSearch->getKeyword()) ?>">
 	<input type="submit" name="btnsubmit" id="btnsubmit" value="<?php echo ew_BtnCaption($Language->Phrase("QuickSearchBtn")) ?>">&nbsp;
 	<a href="<?php echo $informes_list->PageUrl() ?>cmd=reset" id="a_ShowAll" class="ewLink"><?php echo $Language->Phrase("ShowAll") ?></a>&nbsp;
 </div>
-<div id="xsr_2" class="ewRow">
+<div id="xsr_3" class="ewRow">
 	<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="="<?php if ($informes_list->BasicSearch->getType() == "=") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("ExactPhrase") ?></label>&nbsp;&nbsp;<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="AND"<?php if ($informes_list->BasicSearch->getType() == "AND") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("AllWord") ?></label>&nbsp;&nbsp;<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="OR"<?php if ($informes_list->BasicSearch->getType() == "OR") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("AnyWord") ?></label>
 </div>
 </div>
@@ -1136,6 +1505,15 @@ $informes_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<td><div onmousedown="ew_Sort(event,'<?php echo $informes->SortUrl($informes->informes_id) ?>',1);"><span id="elh_informes_informes_id" class="informes_informes_id">
 			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $informes->informes_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($informes->informes_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($informes->informes_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		</span></div></td>		
+	<?php } ?>
+<?php } ?>		
+<?php if ($informes->clientes_id->Visible) { // clientes_id ?>
+	<?php if ($informes->SortUrl($informes->clientes_id) == "") { ?>
+		<td><span id="elh_informes_clientes_id" class="informes_clientes_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $informes->clientes_id->FldCaption() ?></td></tr></thead></table></span></td>
+	<?php } else { ?>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $informes->SortUrl($informes->clientes_id) ?>',1);"><span id="elh_informes_clientes_id" class="informes_clientes_id">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $informes->clientes_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($informes->clientes_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($informes->clientes_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
@@ -1254,6 +1632,12 @@ $informes_list->ListOptions->Render("body", "left", $informes_list->RowCnt);
 <?php echo $informes->informes_id->ListViewValue() ?></span>
 </span><a id="<?php echo $informes_list->PageObjName . "_row_" . $informes_list->RowCnt ?>"></a></td>
 	<?php } ?>
+	<?php if ($informes->clientes_id->Visible) { // clientes_id ?>
+		<td<?php echo $informes->clientes_id->CellAttributes() ?>><span id="el<?php echo $informes_list->RowCnt ?>_informes_clientes_id" class="informes_clientes_id">
+<span<?php echo $informes->clientes_id->ViewAttributes() ?>>
+<?php echo $informes->clientes_id->ListViewValue() ?></span>
+</span><a id="<?php echo $informes_list->PageObjName . "_row_" . $informes_list->RowCnt ?>"></a></td>
+	<?php } ?>
 	<?php if ($informes->nombre->Visible) { // nombre ?>
 		<td<?php echo $informes->nombre->CellAttributes() ?>><span id="el<?php echo $informes_list->RowCnt ?>_informes_nombre" class="informes_nombre">
 <span<?php echo $informes->nombre->ViewAttributes() ?>>
@@ -1277,7 +1661,7 @@ $informes_list->ListOptions->Render("body", "left", $informes_list->RowCnt);
 <span<?php echo $informes->archivo->ViewAttributes() ?>>
 <?php if ($informes->archivo->LinkAttributes() <> "") { ?>
 <?php if (!empty($informes->archivo->Upload->DbValue)) { ?>
-<?php echo $informes->archivo->ListViewValue() ?>
+<a<?php echo $informes->archivo->LinkAttributes() ?>><?php echo $informes->archivo->ListViewValue() ?></a>
 <?php } elseif (!in_array($informes->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>

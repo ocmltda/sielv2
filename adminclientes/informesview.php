@@ -378,6 +378,7 @@ class cinformes_view extends cinformes {
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
 		$this->informes_id->setDbValue($rs->fields('informes_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 		$this->nombre->setDbValue($rs->fields('nombre'));
 		$this->periodo->setDbValue($rs->fields('periodo'));
 		$this->fecha_publicacion->setDbValue($rs->fields('fecha_publicacion'));
@@ -402,6 +403,7 @@ class cinformes_view extends cinformes {
 
 		// Common render codes for all row types
 		// informes_id
+		// clientes_id
 		// nombre
 		// periodo
 		// fecha_publicacion
@@ -413,6 +415,28 @@ class cinformes_view extends cinformes {
 			// informes_id
 			$this->informes_id->ViewValue = $this->informes_id->CurrentValue;
 			$this->informes_id->ViewCustomAttributes = "";
+
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
 
 			// nombre
 			$this->nombre->ViewValue = $this->nombre->CurrentValue;
@@ -459,6 +483,11 @@ class cinformes_view extends cinformes {
 			$this->informes_id->HrefValue = "";
 			$this->informes_id->TooltipValue = "";
 
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
+
 			// nombre
 			$this->nombre->LinkCustomAttributes = "";
 			$this->nombre->HrefValue = "";
@@ -476,7 +505,14 @@ class cinformes_view extends cinformes {
 
 			// archivo
 			$this->archivo->LinkCustomAttributes = "";
-			$this->archivo->HrefValue = "";
+			$this->archivo->UploadPath = "../informes";
+			if (!ew_Empty($this->archivo->Upload->DbValue)) {
+				$this->archivo->HrefValue = ew_UploadPathEx(FALSE, $this->archivo->UploadPath) . $this->archivo->Upload->DbValue; // Add prefix/suffix
+				$this->archivo->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->archivo->HrefValue = ew_ConvertFullUrl($this->archivo->HrefValue);
+			} else {
+				$this->archivo->HrefValue = "";
+			}
 			$this->archivo->HrefValue2 = $this->archivo->UploadPath . $this->archivo->Upload->DbValue;
 			$this->archivo->TooltipValue = "";
 
@@ -585,8 +621,9 @@ finformesview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+finformesview.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -627,6 +664,15 @@ $informes_view->ShowMessage();
 </span></td>
 	</tr>
 <?php } ?>
+<?php if ($informes->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $informes->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_informes_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $informes->clientes_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $informes->clientes_id->CellAttributes() ?>><span id="el_informes_clientes_id">
+<span<?php echo $informes->clientes_id->ViewAttributes() ?>>
+<?php echo $informes->clientes_id->ViewValue ?></span>
+</span></td>
+	</tr>
+<?php } ?>
 <?php if ($informes->nombre->Visible) { // nombre ?>
 	<tr id="r_nombre"<?php echo $informes->RowAttributes() ?>>
 		<td class="ewTableHeader"><span id="elh_informes_nombre"><table class="ewTableHeaderBtn"><tr><td><?php echo $informes->nombre->FldCaption() ?></td></tr></table></span></td>
@@ -661,7 +707,7 @@ $informes_view->ShowMessage();
 <span<?php echo $informes->archivo->ViewAttributes() ?>>
 <?php if ($informes->archivo->LinkAttributes() <> "") { ?>
 <?php if (!empty($informes->archivo->Upload->DbValue)) { ?>
-<?php echo $informes->archivo->ViewValue ?>
+<a<?php echo $informes->archivo->LinkAttributes() ?>><?php echo $informes->archivo->ViewValue ?></a>
 <?php } elseif (!in_array($informes->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>

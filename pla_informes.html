@@ -34,44 +34,45 @@
         <td><table width="970" border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td width="425" height="40">SISTEMA DE INFORMACI&Oacute;N EN L&Iacute;NEA</td>
-            <td width="120" height="40">&nbsp;</td>
-            <td width="425" height="40" style="outline:1px solid #CCCCCC"><form name="form1" method="post" action="">
-              <table width="420" border="0" cellspacing="0" cellpadding="0">
+            <td width="100" height="40">&nbsp;</td>
+            <td width="445" height="40" style="outline:1px solid #CCCCCC"><form name="form1" method="post" action="">
+              <table width="440" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="162">Seleccione per&iacute;odo a consultar:</td>
-                  <td width="110"><select name="select" id="select">
-                    <option value="enero" selected>Enero</option>
-                    <option value="febrero">Febrero</option>
-                    <option value="marzo">Marzo</option>
-                    <option value="abril">Abril</option>
-                    <option value="mayo">Mayo</option>
-                    <option value="junio">Junio</option>
-                    <option value="julio">Julio</option>
-                    <option value="agosto">Agosto</option>
-                    <option value="septiembre">Septiempre</option>
-                    <option value="octubre">Octubre</option>
-                    <option value="noviembre">Noviembre</option>
-                    <option value="diciembre">Diciembre</option>
-                  </select>                  </td>
-                  <td width="80"><select name="select2" id="select2">
-                    <option value="2014" selected>2014</option>
-                    <option value="2015">2015</option>
-                  </select>                  </td>
-                  <td width="68"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
+                  <td width="190">Seleccione per&iacute;odo a consultar:</td>
+                  <td width="115"><select name="mes" id="mes">
+                      <option value="01" selected>Enero</option>
+                      <option value="02">Febrero</option>
+                      <option value="03">Marzo</option>
+                      <option value="04">Abril</option>
+                      <option value="05">Mayo</option>
+                      <option value="06">Junio</option>
+                      <option value="07">Julio</option>
+                      <option value="08">Agosto</option>
+                      <option value="09">Septiempre</option>
+                      <option value="10">Octubre</option>
+                      <option value="11">Noviembre</option>
+                      <option value="12">Diciembre</option>
+                    </select>                  </td>
+                  <td width="75"><select name="anio" id="anio">
+                      <option value="2014" selected>2014</option>
+                      <option value="2015">2015</option>
+                    </select>                  </td>
+                  <td width="60"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
                 </tr>
               </table>
-                </form>            </td>
+            </form></td>
           </tr>
           <tr>
             <td colspan="3" align="right">Bienvenido: {usrlogin}</td>
           </tr>
         </table></td>
       </tr>
+      <!-- START BLOCK : empresas -->
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
           <tr bgcolor="#8bbd44">
-            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="menutop">INFORMES FINALES</span></td>
-            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">INFORMES FINALES {periodosel}</span></td>
+            <td width="385" height="40" align="right"><span class="titempresa"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">{empresa}</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table></td>
       </tr>
@@ -82,7 +83,7 @@
             <td width="130" align="center">Período</td>
             <td width="130" align="center">Fecha Publicación</td>
             <td width="150">Estado</td>
-            <td width="130">Acciones</td>
+            <td width="130" align="center">Acciones</td>
             </tr>
           <!-- START BLOCK : informes -->
           <tr valign="top" bgcolor="#FFFFFF">
@@ -90,10 +91,20 @@
             <td align="center">{periodo}</td>
             <td align="center">{fecpublic}</td>
             <td>{estado}</td>
-            <td>{acciones}</td>
+            <td align="center">{acciones}</td>
             </tr>
 		  <!-- END BLOCK : informes -->
         </table></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <!-- END BLOCK : empresas -->
+      <tr>
+        <td>&nbsp;</td>
       </tr>
     </table>
 	<!-- InstanceEndEditable -->

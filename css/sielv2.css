@@ -23,3 +23,15 @@ html, body
 .menutop a:hover {
 	text-decoration: underline;
 }
+.titenc
+{
+	font-size: 12pt;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.titempresa
+{
+	font-size: 12pt;
+	font-weight: bold;
+	color: #FFFFFF;
+}

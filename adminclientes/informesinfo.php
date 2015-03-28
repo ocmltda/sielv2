@@ -8,6 +8,7 @@ $informes = NULL;
 //
 class cinformes extends cTable {
 	var $informes_id;
+	var $clientes_id;
 	var $nombre;
 	var $periodo;
 	var $fecha_publicacion;
@@ -40,6 +41,11 @@ class cinformes extends cTable {
 		$this->informes_id = new cField('informes', 'informes', 'x_informes_id', 'informes_id', '`informes_id`', '`informes_id`', 3, -1, FALSE, '`informes_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->informes_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['informes_id'] = &$this->informes_id;
+
+		// clientes_id
+		$this->clientes_id = new cField('informes', 'informes', 'x_clientes_id', 'clientes_id', '`clientes_id`', '`clientes_id`', 2, -1, FALSE, '`clientes_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->clientes_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['clientes_id'] = &$this->clientes_id;
 
 		// nombre
 		$this->nombre = new cField('informes', 'informes', 'x_nombre', 'nombre', '`nombre`', '`nombre`', 200, -1, FALSE, '`nombre`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
@@ -454,6 +460,7 @@ class cinformes extends cTable {
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
 		$this->informes_id->setDbValue($rs->fields('informes_id'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 		$this->nombre->setDbValue($rs->fields('nombre'));
 		$this->periodo->setDbValue($rs->fields('periodo'));
 		$this->fecha_publicacion->setDbValue($rs->fields('fecha_publicacion'));
@@ -470,6 +477,7 @@ class cinformes extends cTable {
 
    // Common render codes
 		// informes_id
+		// clientes_id
 		// nombre
 		// periodo
 		// fecha_publicacion
@@ -479,6 +487,28 @@ class cinformes extends cTable {
 
 		$this->informes_id->ViewValue = $this->informes_id->CurrentValue;
 		$this->informes_id->ViewCustomAttributes = "";
+
+		// clientes_id
+		if (strval($this->clientes_id->CurrentValue) <> "") {
+			$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+		$sWhereWrk = "";
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+			}
+		} else {
+			$this->clientes_id->ViewValue = NULL;
+		}
+		$this->clientes_id->ViewCustomAttributes = "";
 
 		// nombre
 		$this->nombre->ViewValue = $this->nombre->CurrentValue;
@@ -525,6 +555,11 @@ class cinformes extends cTable {
 		$this->informes_id->HrefValue = "";
 		$this->informes_id->TooltipValue = "";
 
+		// clientes_id
+		$this->clientes_id->LinkCustomAttributes = "";
+		$this->clientes_id->HrefValue = "";
+		$this->clientes_id->TooltipValue = "";
+
 		// nombre
 		$this->nombre->LinkCustomAttributes = "";
 		$this->nombre->HrefValue = "";
@@ -542,7 +577,14 @@ class cinformes extends cTable {
 
 		// archivo
 		$this->archivo->LinkCustomAttributes = "";
-		$this->archivo->HrefValue = "";
+		$this->archivo->UploadPath = "../informes";
+		if (!ew_Empty($this->archivo->Upload->DbValue)) {
+			$this->archivo->HrefValue = ew_UploadPathEx(FALSE, $this->archivo->UploadPath) . $this->archivo->Upload->DbValue; // Add prefix/suffix
+			$this->archivo->LinkAttrs["target"] = ""; // Add target
+			if ($this->Export <> "") $this->archivo->HrefValue = ew_ConvertFullUrl($this->archivo->HrefValue);
+		} else {
+			$this->archivo->HrefValue = "";
+		}
 		$this->archivo->HrefValue2 = $this->archivo->UploadPath . $this->archivo->Upload->DbValue;
 		$this->archivo->TooltipValue = "";
 
@@ -574,6 +616,7 @@ class cinformes extends cTable {
 			$Doc->BeginExportRow();
 			if ($ExportPageType == "view") {
 				if ($this->informes_id->Exportable) $Doc->ExportCaption($this->informes_id);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 				if ($this->nombre->Exportable) $Doc->ExportCaption($this->nombre);
 				if ($this->periodo->Exportable) $Doc->ExportCaption($this->periodo);
 				if ($this->fecha_publicacion->Exportable) $Doc->ExportCaption($this->fecha_publicacion);
@@ -581,6 +624,7 @@ class cinformes extends cTable {
 				if ($this->estado->Exportable) $Doc->ExportCaption($this->estado);
 			} else {
 				if ($this->informes_id->Exportable) $Doc->ExportCaption($this->informes_id);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 				if ($this->nombre->Exportable) $Doc->ExportCaption($this->nombre);
 				if ($this->periodo->Exportable) $Doc->ExportCaption($this->periodo);
 				if ($this->fecha_publicacion->Exportable) $Doc->ExportCaption($this->fecha_publicacion);
@@ -616,6 +660,7 @@ class cinformes extends cTable {
 				$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 				if ($ExportPageType == "view") {
 					if ($this->informes_id->Exportable) $Doc->ExportField($this->informes_id);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 					if ($this->nombre->Exportable) $Doc->ExportField($this->nombre);
 					if ($this->periodo->Exportable) $Doc->ExportField($this->periodo);
 					if ($this->fecha_publicacion->Exportable) $Doc->ExportField($this->fecha_publicacion);
@@ -623,6 +668,7 @@ class cinformes extends cTable {
 					if ($this->estado->Exportable) $Doc->ExportField($this->estado);
 				} else {
 					if ($this->informes_id->Exportable) $Doc->ExportField($this->informes_id);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 					if ($this->nombre->Exportable) $Doc->ExportField($this->nombre);
 					if ($this->periodo->Exportable) $Doc->ExportField($this->periodo);
 					if ($this->fecha_publicacion->Exportable) $Doc->ExportField($this->fecha_publicacion);
