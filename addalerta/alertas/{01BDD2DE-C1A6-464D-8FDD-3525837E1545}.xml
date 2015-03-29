@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<configuration date="2015/03/29" author="e.World Technology Ltd.">
+<project id="{01BDD2DE-C1A6-464D-8FDD-3525837E1545}" file="C:\wamp\www\tack\sielv2\_FUENTES\alertas.pmp" name="alertas" product="PHPMaker" version="9.2" datetime="2015/03/29 12:07:46" languagefolder="phplang" userlevel="">
+<table id="alertas" name="alertas" caption="Alertas" userlevel="" priv="1"/>
+<table id="clientes" name="clientes" caption="clientes" userlevel="" priv="1"/>
+<table id="locales" name="locales" caption="locales" userlevel="" priv="1"/>
+<table id="tipos_acciones" name="tipos_acciones" caption="tipos acciones" userlevel="" priv="1"/>
+<table id="tiposincidencias" name="tiposincidencias" caption="tiposincidencias" userlevel="" priv="1"/>
+</project></configuration>

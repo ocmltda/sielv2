@@ -22,7 +22,7 @@ if ($db->nf() > 0)
 		if($db->Record['password'] == $password)
 		{
 			//Creamos sesión
-			session_start(); 
+			@session_start(); 
 			//Almacenamos el nombre de usuario en una variable de sesión usuario
 			$_SESSION['ulogin'] = $usuario;
 			$_SESSION['uname'] = $db->Record['nombre'];
@@ -47,7 +47,12 @@ if ($db->nf() > 0)
 	}
 
 	//Redireccionamos a la pagina: index.php
-	header("Location: index.php");
+	//header("Location: index.php");
+?>
+<script languaje="javascript">
+  location.href = "index.php";
+ </script>
+<?php
 }
 else
 {

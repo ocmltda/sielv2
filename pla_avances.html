@@ -6,93 +6,7 @@
 <title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
     <!-- InstanceEndEditable -->
     <!-- InstanceBeginEditable name="head" -->
-    <!-- START IGNORE -->
-    <script type="text/javascript"
-          src="https://www.google.com/jsapi?autoload={
-            'modules':[{
-              'name':'visualization',
-              'version':'1',
-              'packages':['corechart']
-            }]
-          }"></script>
-          <!-- END IGNORE -->
-          <!-- START IGNORE -->
-        <script type="text/javascript">
-      google.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Día', 'Evaluaciones'],
-		  <!-- END IGNORE -->
-		  <!-- START BLOCK : diaevaluaciones -->
-          ['{dia}',  {valdia}]{coma}
-		  <!-- END BLOCK : diaevaluaciones -->
-		  <!-- START IGNORE -->
-        ]);
-
-        var options = {
-          title: 'EVALUACIONES REALIZADAS POR DÍA DEL MES DE MARZO',
-		  legend: 'none',
-          //legend: { position: 'bottom' },
-		  pointSize: 5,
-		  fontSize: 10,
-		  fontName: 'Verdana, Arial',
-		  width: 950,
-		  height: 350
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
-		
-		var data2 = google.visualization.arrayToDataTable([
-          ['Estado', 'Total'],
-		  <!-- END IGNORE -->
-		  <!-- START BLOCK : estados -->
-          ['{estado}',  {total}]{coma2}
-		  <!-- END BLOCK : estados -->
-		  <!-- START IGNORE -->
-        ]);
-
-        var options2 = {
-          //title: 'My Daily Activities',
-		  backgroundColor: '#EFEFEF',
-          pieHole: 0.3,
-        };
-
-        var chart2 = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart2.draw(data2, options2);
-		
-		var data3 = google.visualization.arrayToDataTable([
-			['Zona',          '2010', '2000'],
-			['Norte',         38,           36],
-			['Centro',             23,           28],
-			['Sur',             15,           19]
-		  ]);
-	
-		  var options3 = {
-			//title: 'Population of Largest U.S. Cities',
-			legend: 'none',
-			backgroundColor: '#EFEFEF',
-			width: 266,
-	        height: 200,
-			isStacked: true,
-			hAxis: {
-			  //title: 'Total',
-			  minValue: 0,
-			},
-			vAxis: {
-			  //title: 'City'
-			}
-		  };
-	
-		  var chart3 = new google.visualization.BarChart(
-			document.getElementById('ex4'));
-	
-		  chart3.draw(data3, options3);
-      }
-    </script>
-    <!-- END IGNORE -->
+    
 	<!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -143,8 +57,8 @@
                     </select>
                   </td>
                   <td width="75"><select name="anio" id="anio">
-                      <option value="2014" selected>2014</option>
-                      <option value="2015">2015</option>
+                      <option value="2014">2014</option>
+                      <option value="2015" selected>2015</option>
                     </select>
                   </td>
                   <td width="60"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
@@ -157,11 +71,90 @@
           </tr>
         </table></td>
       </tr>
+      <!-- START BLOCK : empresas -->
+    <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+        <script type="text/javascript">
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data{G1} = google.visualization.arrayToDataTable([
+          ['Día', 'Evaluaciones'],
+		  <!-- START BLOCK : diaevaluaciones -->
+          ['{dia}',  {valdia}]{coma}
+		  <!-- END BLOCK : diaevaluaciones -->
+        ]);
+
+        var options{G1} = {
+          title: 'EVALUACIONES REALIZADAS POR DÍA DEL MES',
+		  legend: 'none',
+          //legend: { position: 'bottom' },
+		  pointSize: 5,
+		  fontSize: 10,
+		  fontName: 'Verdana, Arial',
+		  width: 950,
+		  height: 350
+        };
+
+        var chart{G1} = new google.visualization.LineChart(document.getElementById('curve_chart{G1}'));
+
+        chart{G1}.draw(data{G1}, options{G1});
+		
+		var data{G2} = google.visualization.arrayToDataTable([
+          ['Estado', 'Total'],
+		  <!-- START BLOCK : estados -->
+          ['{estado}',  {total}]{coma2}
+		  <!-- END BLOCK : estados -->
+        ]);
+
+        var options{G2} = {
+          //title: 'My Daily Activities',
+		  backgroundColor: '#EFEFEF',
+          pieHole: 0.3,
+        };
+
+        var chart{G2} = new google.visualization.PieChart(document.getElementById('donutchart{G2}'));
+        chart{G2}.draw(data{G2}, options{G2});
+		
+		var data{G3} = google.visualization.arrayToDataTable([
+			['Zona',          '2010', '2000'],
+			['Norte',         38,           36],
+			['Centro',             23,           28],
+			['Sur',             15,           19]
+		  ]);
+	
+		  var options{G3} = {
+			//title: 'Population of Largest U.S. Cities',
+			legend: 'none',
+			backgroundColor: '#EFEFEF',
+			width: 266,
+	        height: 200,
+			isStacked: true,
+			hAxis: {
+			  //title: 'Total',
+			  minValue: 0,
+			},
+			vAxis: {
+			  //title: 'City'
+			}
+		  };
+	
+		  var chart{G3} = new google.visualization.BarChart(document.getElementById('ex4{G3}'));
+	
+		  chart{G3}.draw(data{G3}, options{G3});
+      }
+    </script>
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
           <tr bgcolor="#5EA5D9">
-            <td width="585" height="40" bgcolor="#5EA5D9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">ESTADOS DE AVANCE</span></td>
-            <td width="385" height="40" align="right" bgcolor="#5EA5D9"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="585" height="40" bgcolor="#5EA5D9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">ESTADOS DE AVANCE {periodosel}</span></td>
+            <td width="385" height="40" align="right" bgcolor="#5EA5D9"><span class="titempresa"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">{empresa}</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table></td>
       </tr>
@@ -170,8 +163,8 @@
           <tr>
             <td width="550"><table width="540" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td width="270"><div id="donutchart" style="width: 266px; height: 200px;"></div></td>
-                <td width="270"><div id="ex4"></div></td>
+                <td width="270"><div id="donutchart{G2}" style="width: 266px; height: 200px;"></div></td>
+                <td width="270"><div id="ex4{G3}"></div></td>
               </tr>
               <tr valign="top">
                 <td><table width="266" border="0" cellspacing="0" cellpadding="0">
@@ -234,7 +227,7 @@
       </tr>
       <tr>
         <td align="center">
-    	<div id="curve_chart" style="width: 950px; height: 350px">
+    	<div id="curve_chart{G1}" style="width: 950px; height: 350px">
         </div>
         </td>
       </tr>
@@ -244,6 +237,7 @@
       <tr>
         <td align="center">&nbsp;</td>
       </tr>
+      <!-- END BLOCK : empresas -->
     </table>
 	<!-- InstanceEndEditable -->
     </td>
