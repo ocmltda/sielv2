@@ -7,6 +7,11 @@
     <!-- InstanceEndEditable -->
     <!-- InstanceBeginEditable name="head" -->
     
+	<style type="text/css">
+<!--
+.Estilo1 {color: #FFFFFF}
+-->
+    </style>
 	<!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -92,7 +97,7 @@
         ]);
 
         var options{G1} = {
-          title: 'EVALUACIONES REALIZADAS POR DÍA DEL MES',
+          title: 'EVALUACIONES REALIZADAS POR DÍA',
 		  legend: 'none',
           //legend: { position: 'bottom' },
 		  pointSize: 5,
@@ -148,6 +153,32 @@
 		  var chart{G3} = new google.visualization.BarChart(document.getElementById('ex4{G3}'));
 	
 		  chart{G3}.draw(data{G3}, options{G3});
+		  
+		  var data{G4} = google.visualization.arrayToDataTable([
+          ['Franquicia', 'Total'],
+		  <!-- START BLOCK : franquicias -->
+          ['{franquicia}',  {total4}]{coma4}
+		  <!-- END BLOCK : franquicias -->
+        ]);
+
+        var options{G4} = {
+            title: 'Avances por franquicia',
+			legend: 'none',
+			backgroundColor: '#EFEFEF',
+			width: 394,
+	        height: 240,
+			isStacked: true,
+			hAxis: {
+			  //title: 'Total',
+			  minValue: 0,
+			},
+			vAxis: {
+			  //title: 'City'
+			}
+        };
+
+        var chart{G4} = new google.visualization.BarChart(document.getElementById('retail{G4}'));
+        chart{G4}.draw(data{G4}, options{G4});
       }
     </script>
       <tr>
@@ -169,7 +200,7 @@
               <tr valign="top">
                 <td><table width="266" border="0" cellspacing="0" cellpadding="0">
                   <tr>
-                    <td colspan="2" bgcolor="#5EA5D9">TOTAL EVALUACIONES</td>
+                    <td colspan="2" bgcolor="#5EA5D9"><span class="Estilo1"><strong>TOTAL EVALUACIONES</strong></span></td>
                     </tr>
                   <tr>
                     <td width="210">Total evaluaciones programadas</td>
@@ -186,10 +217,10 @@
                 </table></td>
                 <td><table width="266" border="0" cellspacing="0" cellpadding="0">
                   <tr bgcolor="#5EA5D9">
-                    <td width="82">Zonas</td>
-                    <td width="50" align="center">Total</td>
-                    <td width="70" align="center">Realizadas</td>
-                    <td width="64" align="center">En curso</td>
+                    <td width="82"><span class="Estilo1"><strong>Zonas</strong></span></td>
+                    <td width="50" align="center"><span class="Estilo1"><strong>Total</strong></span></td>
+                    <td width="70" align="center"><span class="Estilo1"><strong>Realizadas</strong></span></td>
+                    <td width="64" align="center"><span class="Estilo1"><strong>En curso</strong></span></td>
                   </tr>
                   <tr>
                     <td>Zona Norte</td>
@@ -212,7 +243,7 @@
                 </table></td>
               </tr>
             </table></td>
-            <td width="400">{grafico3}</td>
+            <td width="400" valign="top" style="text-align:right"><div id="retail{G4}"></div>ver más</td>
           </tr>
         </table></td>
       </tr>

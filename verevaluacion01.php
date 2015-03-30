@@ -80,7 +80,7 @@ else
 			$t->assign("fecvisita", $db->Record['fecha_visita'] . '');
 			$t->assign("estvisita", $estvisita . '');
 			$t->assign("estrev", $estrevision . '');
-			$t->assign("boleta", '../boletas/' . $db->Record['boleta'] . '');
+			$t->assign("boleta", '../siel/webroot/boletas/' . $db->Record['boleta'] . '');
 			$t->assign("fecdispo", $db->Record['fechas_disponibles'] . '');
 			$t->assign("detalles", $db->Record['observaciones'] . '');
 
@@ -109,7 +109,7 @@ else
 		$t->newBlock("generales");
 	}
 
-	$db->query('SELECT I.item, Sum(IF(PR.puntaje = 0 and PR.tipos_id = 3,7,PR.puntaje)) AS TOTMOM, Sum(R.respuesta) AS TOTRESP, PR.tipos_id, I.id FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id INNER JOIN preguntas AS PR ON I.id = PR.items_id INNER JOIN respuestas AS R ON PR.id = R.preguntas_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE'] . ' GROUP BY I.item, PR.tipos_id, I.id ORDER BY I.id ASC');
+	$db->query('SELECT I.item, Sum(IF(PR.puntaje = 0 and PR.tipos_id = 3,7,PR.puntaje)) AS TOTMOM, Sum(R.puntaje_obtenido) AS TOTRESP, I.id FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id INNER JOIN preguntas AS PR ON I.id = PR.items_id INNER JOIN respuestas AS R ON PR.id = R.preguntas_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE'] . ' GROUP BY I.item, I.id ORDER BY I.id ASC');
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -136,6 +136,9 @@ else
 			}
 			else
 			{
+				$t->assign("perd", '');
+				$t->assign("ancho", 0);
+				$t->assign("margen", 0);
 			}
 		}
 	}

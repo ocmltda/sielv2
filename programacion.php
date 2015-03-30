@@ -74,13 +74,13 @@ else
 					$estrevision = $db->Record['estado_revision'];
 
 					switch ($estvisita) {
-						case 0:
+						case 1:
 							$estvisita = 'Vigente';
 							break;
-						case 1:
+						case 2:
 							$estvisita = 'Realizada';
 							break;
-						case 2:
+						case 3:
 							$estvisita = 'Atrasada';
 							break;
 						default:
