@@ -81,7 +81,7 @@ else
 			$t->assign("tec", $db->Record['TOTENC'] . '');
 
 			//LAS ZONAS TOTAL
-			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND (V.estado_visita = 0 OR V.estado_visita = 1) GROUP BY L.promotor ORDER BY ZONA ASC');
+			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND (V.estado_visita = 1 OR V.estado_visita = 2) GROUP BY L.promotor ORDER BY ZONA ASC');
 			if ($db->nf() > 0)
 			{
 				$t->assign("tzn", '0');
@@ -106,7 +106,7 @@ else
 			}
 
 			//LAS ZONAS REALIZADAS
-			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 1 GROUP BY L.promotor ORDER BY ZONA ASC');
+			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 2 GROUP BY L.promotor ORDER BY ZONA ASC');
 			if ($db->nf() > 0)
 			{
 				$t->assign("rzn", '0');
@@ -131,7 +131,7 @@ else
 			}
 
 			//LAS ZONAS EN CURSO
-			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 0 GROUP BY L.promotor ORDER BY ZONA ASC');
+			$db->query('SELECT L.promotor AS ZONA, Count(L.promotor) AS TOTZONA FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND LOWER(L.promotor) IN (\'norte\', \'sur\', \'centro\') AND V.estado_visita = 1 GROUP BY L.promotor ORDER BY ZONA ASC');
 			if ($db->nf() > 0)
 			{
 				$t->assign("czn", '0');

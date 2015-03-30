@@ -109,6 +109,42 @@ else
 		$t->newBlock("generales");
 	}
 
+	$db->query('SELECT I.item, Sum(IF(PR.puntaje = 0 and PR.tipos_id = 3,7,PR.puntaje)) AS TOTMOM, Sum(R.respuesta) AS TOTRESP, PR.tipos_id, I.id FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id INNER JOIN preguntas AS PR ON I.id = PR.items_id INNER JOIN respuestas AS R ON PR.id = R.preguntas_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE'] . ' GROUP BY I.item, PR.tipos_id, I.id ORDER BY I.id ASC');
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$t->newBlock("items");
+			$t->assign("item", $db->Record['item'] . '');
+			$perdidos = $db->Record['TOTMOM'] - $db->Record['TOTRESP'];
+
+			if ($perdidos > 0)
+			{
+				$minmargen = 64;
+
+				$t->assign("perd", 'Perdidos: ' . $perdidos . '');
+				/*if ($perdidos > 100 && $perdidos < 170)
+					$perdidos = $perdidos * 2;
+				if ($perdidos > 50 && $perdidos <= 100)
+					$perdidos = $perdidos * 4;
+				if ($perdidos > 0 && $perdidos <= 50)
+					$perdidos = $perdidos * 5;*/
+				$perdidos = $minmargen + $perdidos;
+				$sobra = 350 - $perdidos;
+				$t->assign("ancho", $perdidos . '');
+				$t->assign("margen", $sobra . '');
+			}
+			else
+			{
+			}
+		}
+	}
+	else
+	{
+		$t->newBlock("items");
+	}
+
+
 	//print the result
 	$t->printToScreen();
 }
