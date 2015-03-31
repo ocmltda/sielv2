@@ -96,9 +96,9 @@
 
       function drawChart() {
         var data{G1} = google.visualization.arrayToDataTable([
-          ['Día', 'Evaluaciones'],
+          ['Día', 'Evaluaciones', { role: 'annotation' }],
 		  <!-- START BLOCK : diaevaluaciones -->
-          ['{dia}',  {valdia}]{coma}
+          ['{dia}',  {valdia}, '{valdia}']{coma}
 		  <!-- END BLOCK : diaevaluaciones -->
         ]);
 
@@ -106,6 +106,7 @@
           title: 'EVALUACIONES REALIZADAS POR DÍA',
 		  legend: 'none',
           //legend: { position: 'bottom' },
+		  colors: ['#5B9CD6','#D3CECB'],
 		  pointSize: 5,
 		  fontSize: 10,
 		  fontName: 'Verdana, Arial',
@@ -127,6 +128,7 @@
         var options{G2} = {
           //title: 'My Daily Activities',
 		  backgroundColor: '#EFEFEF',
+		  colors: ['#D3CECB', '#5B9CD6'],
           pieHole: 0.3,
         };
 
@@ -134,9 +136,9 @@
         chart{G2}.draw(data{G2}, options{G2});
 		
 		var data{G3} = google.visualization.arrayToDataTable([
-			['Zona',          'Realizadas', 'En Curso'],
+			['Zona',          'Realizadas', 'En Curso', { role: 'style' }, { role: 'style' }],
 			<!-- START BLOCK : zonas -->
-          ['{zona7}', {totreal}, {totcurso}]{coma7}
+          ['{zona7}', {totreal}, {totcurso}, '#D3CECB,#5B9CD6', '#5B9CD6']{coma7}
 		  <!-- END BLOCK : zonas -->
 		  ]);
 	
@@ -144,6 +146,7 @@
 			//title: 'Population of Largest U.S. Cities',
 			legend: 'none',
 			backgroundColor: '#EFEFEF',
+			colors: ['#5B9CD6','#D3CECB'],
 			width: 266,
 	        height: 200,
 			isStacked: true,
@@ -171,6 +174,7 @@
             title: 'Avances por franquicia',
 			legend: 'none',
 			backgroundColor: '#EFEFEF',
+			colors: ['#5B9CD6','#D3CECB'],
 			width: 394,
 	        height: 240,
 			isStacked: true,
