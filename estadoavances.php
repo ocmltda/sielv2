@@ -66,6 +66,9 @@ else
 			$t->assign('G4', $G4 . '');
 			$t->assign("empresa",$db2->Record['nombre']);
 			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+			$t->assign('CLI', $db2->Record['id'] . '');
+			$t->assign('MES', $_REQUEST['mes'] . '');
+			$t->assign('ANIO', $_REQUEST['anio'] . '');
 
 			//total evaluaciones programadas
 			$db->query('SELECT Count(V.fecha_visita) AS TOTPRG FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND (V.estado_visita = 1 OR V.estado_visita = 2 OR V.estado_visita = 3)');
@@ -157,6 +160,30 @@ else
 				$t->assign("czs", '0');
 			}
 
+			//LAS ZONAS REALIZADAS Y EN CURSO PARA EL GRAFICO
+			$db->query('SELECT L.promotor AS ZONA, COUNT(IF(V.estado_visita = 2,1,NULL))AS TOTREAL, COUNT(IF(V.estado_visita = 1 or V.estado_visita = 3,1,NULL))AS TOTCURSO FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND LOWER(L.promotor)IN(\'norte\', \'sur\', \'centro\') GROUP BY L.promotor ORDER BY ZONA ASC');
+			if ($db->nf() > 0)
+			{
+				$tf = 1;
+				while($db->next_record())
+				{
+					$t->newBlock("zonas");
+					$t->assign("zona7",$db->Record['ZONA']);
+					$t->assign("totreal",$db->Record['TOTREAL']);
+					$t->assign("totcurso",$db->Record['TOTCURSO']);
+					if ($tf < $db->nf())
+						$t->assign("coma7", ',');
+					$tf++;
+				}
+			}
+			else
+			{
+				$t->newBlock("zonas");
+				$t->assign("zona7",'-');
+				$t->assign("totreal",0);
+				$t->assign("totcurso",0);
+			}
+
 			//$db->query('SELECT DAY(V.fecha_visita) AS DIA, Count(V.fecha_visita) AS TOTDIA FROM visitas AS V WHERE V.fecha_visita BETWEEN \'2015-03-01\' AND \'2015-03-31\' GROUP BY V.fecha_visita ORDER BY V.fecha_visita ASC');
 			$db->query('SELECT DAY(V.fecha_visita) AS DIA, Count(V.fecha_visita) AS TOTDIA FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' and V.estado_visita = 2 GROUP BY V.fecha_visita ORDER BY V.fecha_visita ASC');
 			if ($db->nf() > 0)
@@ -206,7 +233,7 @@ else
 			}
 
 			//franquicias
-			$db->query('SELECT L.retail, Count(L.retail) AS TOTRET FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND V.estado_visita = 2 GROUP BY L.retail ORDER BY L.retail ASC LIMIT 0,5');
+			$db->query('SELECT L.retail, COUNT(IF(V.estado_visita = 2,1,NULL)) AS TOTREAL, COUNT(IF(V.estado_visita = 1 or V.estado_visita = 3,1,NULL)) AS TOTCURSO FROM locales AS L INNER JOIN visitas AS V ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' GROUP BY L.retail ORDER BY L.retail ASC LIMIT 0,5');
 			if ($db->nf() > 0)
 			{
 				$tf = 1;
@@ -214,7 +241,8 @@ else
 				{
 					$t->newBlock("franquicias");
 					$t->assign("franquicia",$db->Record['retail']);
-					$t->assign("total4",$db->Record['TOTRET']);
+					$t->assign("totreal4",$db->Record['TOTREAL']);
+					$t->assign("totcurso4",$db->Record['TOTCURSO']);
 					if ($tf < $db->nf())
 						$t->assign("coma4", ',');
 					$tf++;
@@ -224,7 +252,8 @@ else
 			{
 				$t->newBlock("franquicias");
 				$t->assign("franquicia",0);
-				$t->assign("total4",0);
+				$t->assign("totreal4",0);
+				$t->assign("totcurso4",0);
 			}
 
 			$G1 = $G4 + 1;

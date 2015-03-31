@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html data-ng-app>
+<head>
+<meta charset="utf-8">
+<title>Franquicia</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+-->
+</style></head>
+
+<body>
+<div id="retail"></div>
+<script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }">
+          </script>
+        <script type="text/javascript">
+      google.setOnLoadCallback(drawChart2);
+
+      function drawChart2() {
+        
+		  var data = google.visualization.arrayToDataTable([
+          ['Franquicia', 'Realizadas', 'En Curso'],
+		  <!-- START BLOCK : franquicias -->
+          ['{franquicia}',  {totreal4}, {totcurso4}]{coma4}
+		  <!-- END BLOCK : franquicias -->
+        ]);
+
+        var options = {
+            title: 'Avances por franquicia',
+			legend: 'none',
+			backgroundColor: '#EFEFEF',
+			width: 594,
+	        height: 400,
+			isStacked: true,
+			hAxis: {
+			  //title: 'Total',
+			  minValue: 0,
+			},
+			vAxis: {
+			  //title: 'City'
+			}
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('retail'));
+        chart.draw(data, options);
+      }
+    </script>
+</body>
+</html>

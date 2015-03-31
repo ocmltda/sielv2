@@ -12,6 +12,12 @@
 .Estilo1 {color: #FFFFFF}
 -->
     </style>
+    
+    <link rel="stylesheet" href="css/normalizze.css" />
+    <link rel="stylesheet" href="css/popelt.css" />
+    <link rel="stylesheet" href="css/demoz.css" />
+    <script src="scripts/jquery-1.11.2.min.js"></script>
+    <script src="scripts/popelt-v1.0.min.js"></script>
 	<!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -128,10 +134,10 @@
         chart{G2}.draw(data{G2}, options{G2});
 		
 		var data{G3} = google.visualization.arrayToDataTable([
-			['Zona',          '2010', '2000'],
-			['Norte',         38,           36],
-			['Centro',             23,           28],
-			['Sur',             15,           19]
+			['Zona',          'Realizadas', 'En Curso'],
+			<!-- START BLOCK : zonas -->
+          ['{zona7}', {totreal}, {totcurso}]{coma7}
+		  <!-- END BLOCK : zonas -->
 		  ]);
 	
 		  var options{G3} = {
@@ -155,9 +161,9 @@
 		  chart{G3}.draw(data{G3}, options{G3});
 		  
 		  var data{G4} = google.visualization.arrayToDataTable([
-          ['Franquicia', 'Total'],
+          ['Franquicia', 'Realizadas', 'En Curso'],
 		  <!-- START BLOCK : franquicias -->
-          ['{franquicia}',  {total4}]{coma4}
+          ['{franquicia}',  {totreal4}, {totcurso4}]{coma4}
 		  <!-- END BLOCK : franquicias -->
         ]);
 
@@ -243,9 +249,30 @@
                 </table></td>
               </tr>
             </table></td>
-            <td width="400" valign="top" style="text-align:right"><div id="retail{G4}"></div>ver más</td>
+            <td width="400" valign="top" style="text-align:right"><div id="retail{G4}"></div>
+              <img src="img/lapizedit.jpg" width="18" height="18" border="0" style="cursor:hand" class="link_popup{CLI}">
+              
+              <script type="text/javascript">
+		$('.link_popup{CLI}').click(function(){
+			//alert($(this).attr('myid'));
+			var p{CLI} = new Popelt({
+				contentType: 'iframe',
+				loadUrl: 'franquicias.php?CLI={CLI}&MES={MES}&ANIO={ANIO}',
+				//loadUrl: "//www.youtube.com/embed/tRVC4BKWaP8",
+    			iframeWidth: '750px',
+    			iframeHeight: '450px',
+				focus: true
+			});
+			//p.addCloseButton();
+			p{CLI}.addButton('Cerrar');
+			p{CLI}.show();
+		});
+		</script>
+              
+              </td>
           </tr>
-        </table></td>
+        </table>
+        </td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>
