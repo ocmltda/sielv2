@@ -20,6 +20,8 @@ else
 
 	$t->assign("usrlogin", $_SESSION['uname']);
 
+	$t->assign("empresa", $_REQUEST['EMP']);
+
 	$db = new DB_Sql;
 	$db->query('SELECT MN.men_id, MN.men_link, MN.men_nombre FROM percat AS PC INNER JOIN menu AS MN ON MN.men_id = PC.men_id WHERE PC.tipos_usuarios_id = ' .$_SESSION['utus']. ' ORDER BY MN.men_orden ASC');
 	$menutop = '';
@@ -50,13 +52,13 @@ else
 			$estrevision = $db->Record['estado_revision'];
 
 			switch ($estvisita) {
-				case 0:
+				case 1:
 					$estvisita = 'Vigente';
 					break;
-				case 1:
+				case 2:
 					$estvisita = 'Realizada';
 					break;
-				case 2:
+				case 3:
 					$estvisita = 'Atrasada';
 					break;
 				default:

@@ -5,14 +5,17 @@
 <title>Franquicia</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
 <!--
+@import url("css/sielv2.css");
 body {
 	margin-left: 0px;
 	margin-top: 0px;
 	margin-right: 0px;
 	margin-bottom: 0px;
+	background-color: #FFFFFF;
 }
 -->
-</style></head>
+</style>
+</head>
 
 <body>
 <div id="retail"></div>
@@ -25,7 +28,7 @@ body {
             }]
           }">
           </script>
-        <script type="text/javascript">
+<script type="text/javascript">
       google.setOnLoadCallback(drawChart2);
 
       function drawChart2() {
@@ -41,8 +44,10 @@ body {
             title: 'Avances por franquicia',
 			legend: 'none',
 			backgroundColor: '#EFEFEF',
-			width: 594,
-	        height: 400,
+			colors: ['#5B9CD6', '#D3CECB'],
+			width: 700,
+	        height: 450,
+			'chartArea': {'width': '80%', 'height': '90%'},
 			isStacked: true,
 			hAxis: {
 			  //title: 'Total',
@@ -57,5 +62,13 @@ body {
         chart.draw(data, options);
       }
     </script>
+<table width="700" border="0" cellpadding="10" cellspacing="1" bgcolor="#CCCCCC" style="margin-top:10px">
+  <tr>
+    <td width="154">Total Realizadas</td>
+    <td width="154" bgcolor="#FFFFFF">{realizadas}</td>
+    <td width="154">Total en Curso</td>
+    <td width="153" bgcolor="#FFFFFF">{encurso}</td>
+  </tr>
+</table>
 </body>
 </html>

@@ -30,6 +30,8 @@
 //
 // $Id: Version 3.0.2$
 
+date_default_timezone_set('America/Argentina/Buenos_Aires');
+
 define("T_BYFILE",              0);
 define("T_BYVAR",               1);
 

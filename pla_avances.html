@@ -110,6 +110,7 @@
 		  pointSize: 5,
 		  fontSize: 10,
 		  fontName: 'Verdana, Arial',
+		  'chartArea': {'width': '95%', 'height': '85%'},
 		  width: 950,
 		  height: 350
         };
@@ -128,7 +129,9 @@
         var options{G2} = {
           //title: 'My Daily Activities',
 		  backgroundColor: '#EFEFEF',
-		  colors: ['#D3CECB', '#5B9CD6'],
+		  colors: ['#5B9CD6','#D3CECB'],
+		  'chartArea': {'width': '95%', 'height': '85%'},
+		  //'legend': {'position': 'bottom'},
           pieHole: 0.3,
         };
 
@@ -149,6 +152,7 @@
 			colors: ['#5B9CD6','#D3CECB'],
 			width: 266,
 	        height: 200,
+			'chartArea': {'width': '70%', 'height': '80%'},
 			isStacked: true,
 			hAxis: {
 			  //title: 'Total',
@@ -177,6 +181,7 @@
 			colors: ['#5B9CD6','#D3CECB'],
 			width: 394,
 	        height: 240,
+			'chartArea': {'width': '55%', 'height': '80%'},
 			isStacked: true,
 			hAxis: {
 			  //title: 'Total',
@@ -194,8 +199,8 @@
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
           <tr bgcolor="#5EA5D9">
-            <td width="585" height="40" bgcolor="#5EA5D9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">ESTADOS DE AVANCE {periodosel}</span></td>
-            <td width="385" height="40" align="right" bgcolor="#5EA5D9"><span class="titempresa"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">{empresa}</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="585" height="40" bgcolor="#5EA5D9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc"><span class="titempresa"><img src="img/ico.png" width="15" height="16" hspace="4" align="absmiddle"></span> ESTADOS DE AVANCE | <span class="titempresa">{empresa}</span></span></td>
+            <td width="385" height="40" align="right" bgcolor="#5EA5D9"><span class="titempresa"><span class="titenc" style="display:none">{periodosel}</span></span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table></td>
       </tr>
@@ -254,7 +259,8 @@
               </tr>
             </table></td>
             <td width="400" valign="top" style="text-align:right"><div id="retail{G4}"></div>
-              <img src="img/lapizedit.jpg" width="18" height="18" border="0" style="cursor:hand" class="link_popup{CLI}">
+              <!--<img src="img/lapizedit.jpg" width="18" height="18" border="0" style="cursor:hand" class="link_popup{CLI}"> -->
+              <a href="" onClick="javascript:void(0)" class="vermas link_popup{CLI}">Ver Más</a>
               
               <script type="text/javascript">
 		$('.link_popup{CLI}').click(function(){
@@ -263,8 +269,10 @@
 				contentType: 'iframe',
 				loadUrl: 'franquicias.php?CLI={CLI}&MES={MES}&ANIO={ANIO}',
 				//loadUrl: "//www.youtube.com/embed/tRVC4BKWaP8",
-    			iframeWidth: '750px',
-    			iframeHeight: '450px',
+    			iframeWidth: '710px',
+    			iframeHeight: '510px',
+				width: 750,
+				height: 500,
 				focus: true
 			});
 			//p.addCloseButton();

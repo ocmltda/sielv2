@@ -6,6 +6,11 @@
 <title>.: Tack Chile | Sistema de Informaci�n en Linea :.</title>
     <!-- InstanceEndEditable -->
     <!-- InstanceBeginEditable name="head" -->
+    <link rel="stylesheet" href="css/normalizze.css" />
+    <link rel="stylesheet" href="css/popelt.css" />
+    <link rel="stylesheet" href="css/demoz.css" />
+    <script src="scripts/jquery-1.11.2.min.js"></script>
+    <script src="scripts/popelt-v1.0.min.js"></script>
     <!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -78,8 +83,8 @@
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
           <tr bgcolor="#F5AA1D">
-            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">EVALUACIONES PARCIALES</span></td>
-            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/ico.png" width="15" height="16" hspace="4" align="absmiddle"><span class="titenc">EVALUACIONES PARCIALES | </span><span class="titempresa">{empresa}</span></td>
+            <td width="385" height="40" align="right">&nbsp;</td>
           </tr>
         </table></td>
       </tr>
@@ -96,7 +101,25 @@
             </div>
             <div style="width:315px; float:left; margin-bottom: 10px">
                 <div style="width:310px; float:left; font-weight:bold; text-align:center">Boleta</div>
-                <div style="width:310px; float:left; font-weight:bold; text-align:center"><a href="{boleta}"><img src="img/camara.png" width="33" height="25" border="0"></a></div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center"><img src="img/camara.png" width="33" height="25" border="0" style="cursor:hand" class="link_popup" id="foto">
+                <script type="text/javascript">
+				$('.link_popup').click(function(){
+					//alert($(this).attr('myid'));
+					var p = new Popelt({
+						title: 'Boleta',
+						content: '<img src="{boleta}" border="0" style="cursor:hand" class="link_popup" id="foto">',
+						//contentType: 'ajax',
+						//loadUrl: '{boleta}',
+						width: 950,
+						height: 500,
+						focus: true
+					});
+					//p.addCloseButton();
+					p.addButton('Cerrar');
+					p.show();
+				});
+				</script>
+                </div>
             </div>
             <div style="width:315px; float:left; margin-bottom: 10px">
                 <div style="width:310px; float:left; font-weight:bold; text-align:center">Fechas Disponibles</div>
@@ -196,7 +219,7 @@
         <td align="center">&nbsp;</td>
       </tr>
       <tr>
-        <td align="right"><a href="verevaluacion02.php?IDE={IDE}">Ver detalle de la Evaluación</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td align="right"><a href="verevaluacion02.php?IDE={IDE}&EMP={empresa}">Ver detalle de la Evaluación</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>

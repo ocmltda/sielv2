@@ -20,6 +20,8 @@ else
 
 	$t->assign("usrlogin", $_SESSION['uname']);
 
+	$t->assign("empresa", $_REQUEST['EMP']);
+
 	$db = new DB_Sql;
 	$db->query('SELECT MN.men_id, MN.men_link, MN.men_nombre FROM percat AS PC INNER JOIN menu AS MN ON MN.men_id = PC.men_id WHERE PC.tipos_usuarios_id = ' .$_SESSION['utus']. ' ORDER BY MN.men_orden ASC');
 	$menutop = '';
@@ -39,6 +41,22 @@ else
 
 	$db = new DB_Sql;
 	$db2 = new DB_Sql;
+
+	//datos generales
+	$db->query('SELECT V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles, P.servicio, G.nombre  AS PREGUG, R.respuesta, R.puntaje_obtenido FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN generales AS G ON P.id = G.planillas_id INNER JOIN respuestas AS R ON G.id = R.generales_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE']);
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$t->newBlock("generales");
+			$t->assign("pregunta1",$db->Record['PREGUG']);
+			$t->assign("respuesta1",$db->Record['respuesta']);
+		}
+	}
+	else
+	{
+		$t->newBlock("generales");
+	}
 
 	//hitos o momentos
 	$db->query('SELECT I.id, I.item FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id WHERE V.id = ' . $_REQUEST['IDE']);

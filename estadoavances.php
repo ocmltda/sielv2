@@ -64,7 +64,7 @@ else
 			$t->assign('G2', $G2 . '');
 			$t->assign('G3', $G3 . '');
 			$t->assign('G4', $G4 . '');
-			$t->assign("empresa",$db2->Record['nombre']);
+			$t->assign("empresa", strtoupper($db2->Record['nombre']) . '');
 			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
 			$t->assign('CLI', $db2->Record['id'] . '');
 			$t->assign('MES', $_REQUEST['mes'] . '');
@@ -207,10 +207,11 @@ else
 			}
 
 			//$db->query('SELECT V.estado_visita AS ESTADO, Count(V.estado_visita) AS TOTESTADO FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' GROUP BY V.estado_visita ORDER BY ESTADO ASC');
-			$db->query('SELECT IF(V.estado_visita = 3,1,V.estado_visita) AS ESTADO,Count(IF(V.estado_visita = 3,1,V.estado_visita))AS TOTESTADO FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' GROUP BY IF(V.estado_visita = 3,1,V.estado_visita) ORDER BY ESTADO ASC');
+			$db->query('SELECT IF(V.estado_visita = 3,1,V.estado_visita) AS ESTADO,Count(IF(V.estado_visita = 3,1,V.estado_visita))AS TOTESTADO FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' GROUP BY IF(V.estado_visita = 3,1,V.estado_visita) ORDER BY ESTADO DESC');
 			if ($db->nf() > 0)
 			{
 				$tf = 1;
+				$estvisita = '';
 				while($db->next_record())
 				{
 					$t->newBlock("estados");
