@@ -65,13 +65,11 @@
                       <option value="10">Octubre</option>
                       <option value="11">Noviembre</option>
                       <option value="12">Diciembre</option>
-                    </select>
-                  </td>
+                    </select>                  </td>
                   <td width="75"><select name="anio" id="anio">
                       <option value="2014">2014</option>
                       <option value="2015" selected>2015</option>
-                    </select>
-                  </td>
+                    </select>                  </td>
                   <td width="60"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
                 </tr>
               </table>
@@ -129,7 +127,7 @@
         var options{G2} = {
           //title: 'My Daily Activities',
 		  backgroundColor: '#EFEFEF',
-		  colors: ['#5B9CD6','#D3CECB'],
+		  colors: [{ordencolor}],
 		  'chartArea': {'width': '95%', 'height': '85%'},
 		  //'legend': {'position': 'bottom'},
           pieHole: 0.3,
@@ -279,12 +277,9 @@
 			p{CLI}.addButton('Cerrar');
 			p{CLI}.show();
 		});
-		</script>
-              
-              </td>
+		</script>              </td>
           </tr>
-        </table>
-        </td>
+        </table>        </td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>
@@ -292,17 +287,17 @@
       <tr>
         <td align="center">
         <!-- START BLOCK : hitos -->
-        <!-- END BLOCK : hitos -->
-        </td>
+        <!-- END BLOCK : hitos -->        </td>
       </tr>
       <tr>
         <td align="center">
-    	<div id="curve_chart{G1}" style="width: 950px; height: 350px">
-        </div>
-        </td>
+    	<div id="curve_chart{G1}" style="width: 950px; height: 350px">        </div>        </td>
       </tr>
       <tr>
         <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>

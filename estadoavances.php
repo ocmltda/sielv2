@@ -57,6 +57,8 @@ else
 		$G2 = 2;
 		$G3 = 3;
 		$G4 = 4;
+
+		$ordencolor = '\'#5B9CD6\',\'#D3CECB\'';
 		while($db2->next_record())
 		{
 			$t->newBlock("empresas");
@@ -212,6 +214,7 @@ else
 			{
 				$tf = 1;
 				$estvisita = '';
+				$primerestado = '';
 				while($db->next_record())
 				{
 					$t->newBlock("estados");
@@ -219,6 +222,14 @@ else
 						$estvisita = 'Realizada';
 					if ($db->Record['ESTADO'] == 1 || $db->Record['ESTADO'] == 3)
 						$estvisita = 'En Curso';
+					if ($tf == 1)
+					{
+						if ($estvisita == 'Realizada')
+							$ordencolor = '\'#5B9CD6\',\'#D3CECB\'';
+						else
+							$ordencolor = '\'#D3CECB\',\'#5B9CD6\'';
+					}
+					
 					$t->assign("estado",$estvisita . '');
 					$t->assign("total",$db->Record['TOTESTADO']);
 					if ($tf < $db->nf())
@@ -256,6 +267,9 @@ else
 				$t->assign("totreal4",0);
 				$t->assign("totcurso4",0);
 			}
+
+			$t->gotoBlock("empresas");
+			$t->assign("ordencolor", $ordencolor);
 
 			$G1 = $G4 + 1;
 			$G2 = $G4 + 2;
