@@ -100,7 +100,7 @@ var EW_IMAGE_FOLDER = "phpimages/"; // Image folder
 <div class="ewLayout">
 <?php if (!ew_IsMobile()) { ?>
 	<!-- header (begin) --><!-- *** Note: Only licensed users are allowed to change the logo *** -->
-  <div class="ewHeaderRow"><img src="phpimages/phpmkrlogo9.png" alt="" style="border: 0;"></div>
+  <div class="ewHeaderRow"><img src="phpimages/alertas.png" alt="" style="border: 0;"></div>
 	<!-- header (end) -->
 <?php } ?>
 <?php if (ew_IsMobile()) { ?>

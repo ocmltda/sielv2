@@ -3,30 +3,47 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Incidencia</title>
+<style type="text/css">
+<!--
+@import url("css/sielv2.css");
+body {
+background-color:#FFFFFF;
+}
+-->
+</style>
 </head>
 
 <body>
 <form name="form1" method="post" action="">
-  <table width="580" border="0" cellspacing="0" cellpadding="5">
+  <table width="580" border="0" cellpadding="5" cellspacing="0" class="incidencia">
     <tr valign="top">
-      <td width="320"><table width="320" border="0" cellspacing="0" cellpadding="0">
+      <td width="320"><table width="300" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td>{local}</td>
+          <td align="right" class="titincidencia">{local}</td>
         </tr>
         <tr>
-          <td>{fecha} {hora}</td>
+          <td align="right">{fecha} {hora}</td>
         </tr>
         <tr>
-          <td>Ubicación: {gps}</td>
+          <td align="right">Ubicación: {gps}</td>
         </tr>
         <tr>
-          <td>{incidencia}</td>
+          <td align="center" class="textincidencia">&nbsp;</td>
         </tr>
         <tr>
-          <td align="right">Comentarios</td>
+          <td align="center" class="textincidencia">{incidencia}</td>
         </tr>
         <tr>
-          <td align="right"><textarea name="comentario" id="comentario" cols="45" rows="5" style="width:320px" readonly>{comentario}</textarea></td>
+          <td align="right">&nbsp;</td>
+        </tr>
+        <tr>
+          <td align="right"><strong>Comentarios</strong></td>
+        </tr>
+        <tr>
+          <td align="right"><textarea name="comentario" id="comentario" cols="45" rows="5" style="width:300px" readonly>{comentario}</textarea></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
         </tr>
         <tr>
           <td>Próxima acción: 
@@ -34,13 +51,15 @@
               <!-- START BLOCK : tipos_acciones -->
               <option value="{idta}" {selected}>{tipoaccion}</option>
               <!-- END BLOCK : tipos_acciones -->
-            </select>
-            </td>
+            </select>            </td>
         </tr>
       </table></td>
       <td width="240"><table width="240" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td align="right">Registro Fotográfico</td>
+          <td align="right"><strong>Registro Fotográfico</strong></td>
+        </tr>
+        <tr>
+          <td align="right">&nbsp;</td>
         </tr>
         <tr>
           <td align="right">{foto}</td>

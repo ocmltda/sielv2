@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/3/28" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/4/1" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -342,6 +342,8 @@
 </menu>
 <menu id="7"><phrase id="menutext" value="Informes"/>
 </menu>
+<menu id="8"><phrase id="menutext" value="Tipos Incidencias"/>
+</menu>
 <table id="alertas"/>
 <table id="clientes"><phrase id="tblcaption" value="Clientes"/>
 <field id="id"><phrase id="fldcaption" value="id"/>
@@ -363,6 +365,8 @@
 <table id="informes"><phrase id="tblcaption" value="Informes"/>
 <field id="informes_id"><phrase id="fldcaption" value="ID"/>
 </field>
+<field id="clientes_id"><phrase id="fldcaption" value="Empresa"/>
+</field>
 <field id="nombre"><phrase id="fldcaption" value="Título"/>
 </field>
 <field id="periodo"><phrase id="fldcaption" value="Período"/>
@@ -376,8 +380,6 @@
 <phrase id="fldtagcaption1" value="En Proceso"/>
 <phrase id="fldtagvalue2" value="2"/>
 <phrase id="fldtagcaption2" value="Terminado"/>
-</field>
-<field id="clientes_id"><phrase id="fldcaption" value="Empresa"/>
 </field>
 </table>
 <table id="items"/>
@@ -436,5 +438,11 @@
 </field>
 </table>
 <table id="visitas"/>
+<table id="tiposincidencias"><phrase id="tblcaption" value="Tipos Incidencias"/>
+<field id="tipi_id"><phrase id="fldcaption" value="ID"/>
+</field>
+<field id="tipi_nombre"><phrase id="fldcaption" value="Nombre"/>
+</field>
+</table>
 </project>
 </ew-language>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
-<configuration date="2015/03/28" author="e.World Technology Ltd.">
-<project id="{BCF8DC35-3764-486D-8181-0414D54343BE}" file="C:\wamp\www\tack\sielv2\_FUENTES\usuariosmenu_B.pmp" name="usuariosmenu_B" product="PHPMaker" version="9.2" datetime="2015/03/28 12:28:25" languagefolder="phplang" userlevel="">
+<configuration date="2015/04/01" author="e.World Technology Ltd.">
+<project id="{BCF8DC35-3764-486D-8181-0414D54343BE}" file="C:\wamp\www\tack\sielv2\_FUENTES\usuariosmenu_B.pmp" name="usuariosmenu_B" product="PHPMaker" version="9.2" datetime="2015/04/01 23:21:47" languagefolder="phplang" userlevel="">
 <table id="clientes" name="clientes" caption="Clientes" userlevel="" priv="1"/>
 <table id="empusu" name="empusu" caption="Empresas Usuarios" userlevel="" priv="1"/>
 <table id="informes" name="informes" caption="Informes" userlevel="" priv="1"/>
@@ -8,4 +8,5 @@
 <table id="percat" name="percat" caption="Perfiles Menú" userlevel="" priv="1"/>
 <table id="tipos_usuarios" name="tipos_usuarios" caption="Tipos Usuarios" userlevel="" priv="1"/>
 <table id="usuarios" name="usuarios" caption="Usuarios" userlevel="" priv="1"/>
+<table id="tiposincidencias" name="tiposincidencias" caption="Tipos Incidencias" userlevel="" priv="1"/>
 </project></configuration>

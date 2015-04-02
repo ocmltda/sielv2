@@ -35,24 +35,54 @@ else
 	else
 		$t->assign("menutop", '<a href="index.php" style="color:white">Inicio</a> | <a href="logout.php" style="color:white">Cerrar Sesión</a>');
 
-	$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita FROM alertas a, locales l WHERE a.locales_id = l.id');
-	if ($db->nf() > 0)
+	if (!isset($_REQUEST['mes']) && !isset($_REQUEST['anio']))
 	{
-		while($db->next_record())
+		$_REQUEST['mes'] = date('m');
+		$_REQUEST['anio'] = date('Y');
+	}
+	else
+	{
+		if (!$_REQUEST['mes'] && !$_REQUEST['anio'])
 		{
-			$t->newBlock("alertas");
-			$t->assign("id",$db->Record['id']);
-			$t->assign("fecha",$db->Record['fecvisita']);
-			$t->assign("hora",$db->Record['hora']);
-			$t->assign("tienda",$db->Record['nombre']);
-			$t->assign("gps",$db->Record['coordenadas']);
-			$t->assign("incidencia",$db->Record['incidencia']);
-			$t->assign("comentario",$db->Record['comentarios']);
+			$_REQUEST['mes'] = date('m');
+			$_REQUEST['anio'] = date('Y');
+		}
+	}
+
+	$db2 = new DB_Sql;
+	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+	if ($db2->nf() > 0)
+	{
+		while($db2->next_record())
+		{
+			$t->newBlock("empresas");
+			$t->assign("empresa",$db2->Record['nombre']);
+			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+			$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . '');
+			if ($db->nf() > 0)
+			{
+				while($db->next_record())
+				{
+					$t->newBlock("alertas");
+					$t->assign("id",$db->Record['id']);
+					$t->assign("fecha",$db->Record['fecvisita']);
+					$t->assign("hora",$db->Record['hora']);
+					$t->assign("tienda",$db->Record['nombre']);
+					$t->assign("gps",$db->Record['coordenadas']);
+					$t->assign("incidencia",$db->Record['tipi_nombre']);
+					$t->assign("comentario",$db->Record['comentarios']);
+				}
+			}
+			else
+			{
+				//$t->newBlock("alertas");
+			}
 		}
 	}
 	else
 	{
-		$t->newBlock("alertas");
+		$t->newBlock("empresas");
 	}
 
 	//print the result

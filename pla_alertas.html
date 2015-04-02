@@ -67,8 +67,7 @@
                   <td width="75"><select name="anio" id="anio">
                       <option value="2014">2014</option>
                       <option value="2015" selected>2015</option>
-                    </select>
-                  </td>
+                    </select>                  </td>
                   <td width="60"><input type="submit" name="filtrar" id="filtrar" value="Filtrar"></td>
                 </tr>
               </table>
@@ -79,11 +78,12 @@
           </tr>
         </table></td>
       </tr>
+      <!-- START BLOCK : empresas -->
       <tr>
         <td><table width="970" border="0" cellspacing="0" cellpadding="0">
           <tr bgcolor="#DF0000">
-            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">ALERTAS DE INCIDENCIAS</span></td>
-            <td width="385" height="40" align="right"><span class="menutop"><img src="img/icowin.gif" width="15" height="16" hspace="4" align="absmiddle">Gastronomia y Negocios</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="585" height="40">&nbsp;&nbsp;&nbsp;&nbsp;<span class="titenc">ALERTAS DE INCIDENCIAS | </span><span class="titempresa">{empresa}</span></td>
+            <td width="385" height="40" align="right">&nbsp;</td>
           </tr>
         </table></td>
       </tr>
@@ -110,7 +110,20 @@
           </tr>
 		  <!-- END BLOCK : alertas -->
         </table>
-        <script type="text/javascript">
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <!-- END BLOCK : empresas -->
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    <script type="text/javascript">
 		$('.link_popup').click(function(){
 			//alert($(this).attr('myid'));
 			var p = new Popelt({
@@ -123,9 +136,6 @@
 			p.show();
 		});
 		</script>
-        </td>
-      </tr>
-    </table>
 	<!-- InstanceEndEditable -->
     </td>
   </tr>

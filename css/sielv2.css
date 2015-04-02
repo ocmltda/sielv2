@@ -49,3 +49,22 @@ html, body
 .vermas a:hover {
 	text-decoration: underline;
 }
+.titincidencia
+{
+	color:#999999;
+	font-size: 14pt;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+.incidencia
+{
+	color:#999999;
+	font-size: 10pt;
+}
+.textincidencia
+{
+	color:#FF0000;
+	font-weight:bold;
+	font-size: 13pt;
+	text-transform:uppercase;
+}

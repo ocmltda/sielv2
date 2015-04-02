@@ -42,8 +42,8 @@ if (!isset($ADODB_OUTP)) $ADODB_OUTP = 'ew_SetDebugMsg';
 // Database connection info
 define("EW_CONN_HOST", 'localhost', TRUE);
 define("EW_CONN_PORT", 3306, TRUE);
-define("EW_CONN_USER", 'root', TRUE);
-define("EW_CONN_PASS", '', TRUE);
+define("EW_CONN_USER", 'tackcl_root', TRUE);
+define("EW_CONN_PASS", 'Lota2257', TRUE);
 define("EW_CONN_DB", 'tackcl_sielv2', TRUE);
 
 // ADODB (Access/SQL Server)
