@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
 <?php include_once "alertasinfo.php" ?>
+<?php include_once "usuariosinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -209,6 +210,9 @@ class calertas_list extends calertas {
 		$this->MultiDeleteUrl = "alertasdelete.php";
 		$this->MultiUpdateUrl = "alertasupdate.php";
 
+		// Table object (usuarios)
+		if (!isset($GLOBALS['usuarios'])) $GLOBALS['usuarios'] = new cusuarios();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'list', TRUE);
@@ -238,6 +242,14 @@ class calertas_list extends calertas {
 	//
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
+
+		// Security
+		$Security = new cAdvancedSecurity();
+		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
+		if (!$Security->IsLoggedIn()) {
+			$Security->SaveLastUrl();
+			$this->Page_Terminate("login.php");
+		}
 
 		// Get grid add count
 		$gridaddcnt = @$_GET[EW_TABLE_GRID_ADD_ROW_COUNT];
@@ -595,19 +607,19 @@ class calertas_list extends calertas {
 		// "view"
 		$item = &$this->ListOptions->Add("view");
 		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = TRUE;
+		$item->Visible = $Security->IsLoggedIn();
 		$item->OnLeft = TRUE;
 
 		// "edit"
 		$item = &$this->ListOptions->Add("edit");
 		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = TRUE;
+		$item->Visible = $Security->IsLoggedIn();
 		$item->OnLeft = TRUE;
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
 		$item->CssStyle = "white-space: nowrap; text-align: center; vertical-align: middle; margin: 0px;";
-		$item->Visible = TRUE;
+		$item->Visible = $Security->IsLoggedIn();
 		$item->OnLeft = TRUE;
 		$item->Header = "<input type=\"checkbox\" name=\"key\" id=\"key\" class=\"phpmaker\" onclick=\"ew_SelectAllKey(this);\">";
 		$item->MoveTo(0);
@@ -623,18 +635,18 @@ class calertas_list extends calertas {
 
 		// "view"
 		$oListOpt = &$this->ListOptions->Items["view"];
-		if (TRUE)
+		if ($Security->IsLoggedIn())
 			$oListOpt->Body = "<a class=\"ewRowLink\" href=\"" . $this->ViewUrl . "\">" . $Language->Phrase("ViewLink") . "</a>";
 
 		// "edit"
 		$oListOpt = &$this->ListOptions->Items["edit"];
-		if (TRUE) {
+		if ($Security->IsLoggedIn()) {
 			$oListOpt->Body = "<a class=\"ewRowLink\" href=\"" . $this->EditUrl . "\">" . $Language->Phrase("EditLink") . "</a>";
 		}
 
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
-		if (TRUE)
+		if ($Security->IsLoggedIn())
 			$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->id->CurrentValue) . "\" class=\"phpmaker\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
@@ -957,7 +969,14 @@ class calertas_list extends calertas {
 
 			// fotografia
 			$this->fotografia->LinkCustomAttributes = "";
-			$this->fotografia->HrefValue = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
 		}
@@ -1118,6 +1137,7 @@ var falertaslistsrch = new ew_Form("falertaslistsrch");
 <p style="white-space: nowrap;"><span id="ewPageCaption" class="ewTitle ewTableTitle"><?php echo $Language->Phrase("TblTypeTABLE") ?><?php echo $alertas->TableCaption() ?>&nbsp;&nbsp;</span>
 <?php $alertas_list->ExportOptions->Render("body"); ?>
 </p>
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas->Export == "" && $alertas->CurrentAction == "") { ?>
 <form name="falertaslistsrch" id="falertaslistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>">
 <a href="javascript:falertaslistsrch.ToggleSearchPanel();" style="text-decoration: none;"><img id="falertaslistsrch_SearchImage" src="phpimages/collapse.gif" alt="" width="9" height="9" style="border: 0;"></a><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("Search") ?></span><br>
@@ -1136,6 +1156,7 @@ var falertaslistsrch = new ew_Form("falertaslistsrch");
 </div>
 </div>
 </form>
+<?php } ?>
 <?php } ?>
 <?php $alertas_list->ShowPageHeader(); ?>
 <?php
@@ -1194,11 +1215,15 @@ $alertas_list->ShowMessage();
 </form>
 <?php } ?>
 <span class="phpmaker">
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_list->AddUrl <> "") { ?>
 <a class="ewGridLink" href="<?php echo $alertas_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
+<?php } ?>
 <?php if ($alertas_list->TotalRecs > 0) { ?>
+<?php if ($Security->IsLoggedIn()) { ?>
 <a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.falertaslist, '<?php echo $alertas_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
+<?php } ?>
 <?php } ?>
 </span>
 </div>
@@ -1401,7 +1426,7 @@ $alertas_list->ListOptions->Render("body", "left", $alertas_list->RowCnt);
 <span<?php echo $alertas->fotografia->ViewAttributes() ?>>
 <?php if ($alertas->fotografia->LinkAttributes() <> "") { ?>
 <?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<?php echo $alertas->fotografia->ListViewValue() ?>
+<a<?php echo $alertas->fotografia->LinkAttributes() ?>><?php echo $alertas->fotografia->ListViewValue() ?></a>
 <?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>
@@ -1493,11 +1518,15 @@ if ($alertas_list->Recordset)
 </form>
 <?php } ?>
 <span class="phpmaker">
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_list->AddUrl <> "") { ?>
 <a class="ewGridLink" href="<?php echo $alertas_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
 <?php } ?>
+<?php } ?>
 <?php if ($alertas_list->TotalRecs > 0) { ?>
+<?php if ($Security->IsLoggedIn()) { ?>
 <a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.falertaslist, '<?php echo $alertas_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
+<?php } ?>
 <?php } ?>
 </span>
 </div>

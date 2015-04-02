@@ -1,23 +1,21 @@
 <?php
 
 // Global variable for table object
-$alertas = NULL;
+$usuarios = NULL;
 
 //
-// Table class for alertas
+// Table class for usuarios
 //
-class calertas extends cTable {
+class cusuarios extends cTable {
 	var $id;
-	var $clientes_id;
-	var $locales_id;
-	var $tiposincidencias_id;
-	var $fecha;
-	var $hora;
-	var $coordenadas;
-	var $incidencia;
-	var $comentarios;
-	var $tiposacciones_id;
-	var $fotografia;
+	var $tipos_usuarios_id;
+	var $usuario;
+	var $nombre;
+	var $password;
+	var $correo;
+	var $telefono;
+	var $region;
+	var $comentario;
 
 	//
 	// Table class constructor
@@ -27,8 +25,8 @@ class calertas extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'alertas';
-		$this->TableName = 'alertas';
+		$this->TableVar = 'usuarios';
+		$this->TableName = 'usuarios';
 		$this->TableType = 'TABLE';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -42,55 +40,43 @@ class calertas extends cTable {
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
 		// id
-		$this->id = new cField('alertas', 'alertas', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->id = new cField('usuarios', 'usuarios', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
 
-		// clientes_id
-		$this->clientes_id = new cField('alertas', 'alertas', 'x_clientes_id', 'clientes_id', '`clientes_id`', '`clientes_id`', 2, -1, FALSE, '`clientes_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->clientes_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['clientes_id'] = &$this->clientes_id;
+		// tipos_usuarios_id
+		$this->tipos_usuarios_id = new cField('usuarios', 'usuarios', 'x_tipos_usuarios_id', 'tipos_usuarios_id', '`tipos_usuarios_id`', '`tipos_usuarios_id`', 3, -1, FALSE, '`tipos_usuarios_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->tipos_usuarios_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['tipos_usuarios_id'] = &$this->tipos_usuarios_id;
 
-		// locales_id
-		$this->locales_id = new cField('alertas', 'alertas', 'x_locales_id', 'locales_id', '`locales_id`', '`locales_id`', 3, -1, FALSE, '`locales_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->locales_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['locales_id'] = &$this->locales_id;
+		// usuario
+		$this->usuario = new cField('usuarios', 'usuarios', 'x_usuario', 'usuario', '`usuario`', '`usuario`', 200, -1, FALSE, '`usuario`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['usuario'] = &$this->usuario;
 
-		// tiposincidencias_id
-		$this->tiposincidencias_id = new cField('alertas', 'alertas', 'x_tiposincidencias_id', 'tiposincidencias_id', '`tiposincidencias_id`', '`tiposincidencias_id`', 2, -1, FALSE, '`tiposincidencias_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->tiposincidencias_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['tiposincidencias_id'] = &$this->tiposincidencias_id;
+		// nombre
+		$this->nombre = new cField('usuarios', 'usuarios', 'x_nombre', 'nombre', '`nombre`', '`nombre`', 200, -1, FALSE, '`nombre`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['nombre'] = &$this->nombre;
 
-		// fecha
-		$this->fecha = new cField('alertas', 'alertas', 'x_fecha', 'fecha', '`fecha`', 'DATE_FORMAT(`fecha`, \'%d/%m/%Y %H:%i:%s\')', 133, 7, FALSE, '`fecha`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fecha->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateDMY"));
-		$this->fields['fecha'] = &$this->fecha;
+		// password
+		$this->password = new cField('usuarios', 'usuarios', 'x_password', 'password', '`password`', '`password`', 200, -1, FALSE, '`password`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['password'] = &$this->password;
 
-		// hora
-		$this->hora = new cField('alertas', 'alertas', 'x_hora', 'hora', '`hora`', 'DATE_FORMAT(`hora`, \'%d/%m/%Y %H:%i:%s\')', 134, -1, FALSE, '`hora`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->hora->FldDefaultErrMsg = $Language->Phrase("IncorrectTime");
-		$this->fields['hora'] = &$this->hora;
+		// correo
+		$this->correo = new cField('usuarios', 'usuarios', 'x_correo', 'correo', '`correo`', '`correo`', 200, -1, FALSE, '`correo`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['correo'] = &$this->correo;
 
-		// coordenadas
-		$this->coordenadas = new cField('alertas', 'alertas', 'x_coordenadas', 'coordenadas', '`coordenadas`', '`coordenadas`', 200, -1, FALSE, '`coordenadas`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['coordenadas'] = &$this->coordenadas;
+		// telefono
+		$this->telefono = new cField('usuarios', 'usuarios', 'x_telefono', 'telefono', '`telefono`', '`telefono`', 200, -1, FALSE, '`telefono`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['telefono'] = &$this->telefono;
 
-		// incidencia
-		$this->incidencia = new cField('alertas', 'alertas', 'x_incidencia', 'incidencia', '`incidencia`', '`incidencia`', 200, -1, FALSE, '`incidencia`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['incidencia'] = &$this->incidencia;
+		// region
+		$this->region = new cField('usuarios', 'usuarios', 'x_region', 'region', '`region`', '`region`', 3, -1, FALSE, '`region`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->region->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['region'] = &$this->region;
 
-		// comentarios
-		$this->comentarios = new cField('alertas', 'alertas', 'x_comentarios', 'comentarios', '`comentarios`', '`comentarios`', 201, -1, FALSE, '`comentarios`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['comentarios'] = &$this->comentarios;
-
-		// tiposacciones_id
-		$this->tiposacciones_id = new cField('alertas', 'alertas', 'x_tiposacciones_id', 'tiposacciones_id', '`tiposacciones_id`', '`tiposacciones_id`', 2, -1, FALSE, '`tiposacciones_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->tiposacciones_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['tiposacciones_id'] = &$this->tiposacciones_id;
-
-		// fotografia
-		$this->fotografia = new cField('alertas', 'alertas', 'x_fotografia', 'fotografia', '`fotografia`', '`fotografia`', 200, -1, TRUE, '`fotografia`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['fotografia'] = &$this->fotografia;
+		// comentario
+		$this->comentario = new cField('usuarios', 'usuarios', 'x_comentario', 'comentario', '`comentario`', '`comentario`', 201, -1, FALSE, '`comentario`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['comentario'] = &$this->comentario;
 	}
 
 	// Single column sort
@@ -112,7 +98,7 @@ class calertas extends cTable {
 
 	// Table level SQL
 	function SqlFrom() { // From
-		return "`alertas`";
+		return "`usuarios`";
 	}
 
 	function SqlSelect() { // Select
@@ -121,7 +107,7 @@ class calertas extends cTable {
 
 	function SqlWhere() { // Where
 		$sWhere = "";
-		$this->TableFilter = "clientes_id in (SELECT EU.clientes_id FROM alertas AS A INNER JOIN empusu AS EU ON A.clientes_id = EU.clientes_id INNER JOIN usuarios AS U ON U.id = EU.usuarios_id WHERE U.usuario = '" . CurrentUserName() . "')";
+		$this->TableFilter = "";
 		ew_AddFilter($sWhere, $this->TableFilter);
 		return $sWhere;
 	}
@@ -262,7 +248,7 @@ class calertas extends cTable {
 	}
 
 	// Update Table
-	var $UpdateTable = "`alertas`";
+	var $UpdateTable = "`usuarios`";
 
 	// INSERT statement
 	function InsertSQL(&$rs) {
@@ -272,6 +258,8 @@ class calertas extends cTable {
 		foreach ($rs as $name => $value) {
 			if (!isset($this->fields[$name]))
 				continue;
+			if (EW_ENCRYPTED_PASSWORD && $name == 'password')
+				$value = (EW_CASE_SENSITIVE_PASSWORD) ? ew_EncryptPassword($value) : ew_EncryptPassword(strtolower($value));
 			$names .= $this->fields[$name]->FldExpression . ",";
 			$values .= ew_QuotedValue($value, $this->fields[$name]->FldDataType) . ",";
 		}
@@ -294,6 +282,9 @@ class calertas extends cTable {
 		foreach ($rs as $name => $value) {
 			if (!isset($this->fields[$name]))
 				continue;
+			if (EW_ENCRYPTED_PASSWORD && $name == 'password') {
+				$value = (EW_CASE_SENSITIVE_PASSWORD) ? ew_EncryptPassword($value) : ew_EncryptPassword(strtolower($value));
+			}
 			$sql .= $this->fields[$name]->FldExpression . "=";
 			$sql .= ew_QuotedValue($value, $this->fields[$name]->FldDataType) . ",";
 		}
@@ -354,7 +345,7 @@ class calertas extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "alertaslist.php";
+			return "usuarioslist.php";
 		}
 	}
 
@@ -364,22 +355,22 @@ class calertas extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "alertaslist.php";
+		return "usuarioslist.php";
 	}
 
 	// View URL
 	function GetViewUrl() {
-		return $this->KeyUrl("alertasview.php", $this->UrlParm());
+		return $this->KeyUrl("usuariosview.php", $this->UrlParm());
 	}
 
 	// Add URL
 	function GetAddUrl() {
-		return "alertasadd.php";
+		return "usuariosadd.php";
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		return $this->KeyUrl("alertasedit.php", $this->UrlParm($parm));
+		return $this->KeyUrl("usuariosedit.php", $this->UrlParm($parm));
 	}
 
 	// Inline edit URL
@@ -389,7 +380,7 @@ class calertas extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		return $this->KeyUrl("alertasadd.php", $this->UrlParm($parm));
+		return $this->KeyUrl("usuariosadd.php", $this->UrlParm($parm));
 	}
 
 	// Inline copy URL
@@ -399,7 +390,7 @@ class calertas extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("alertasdelete.php", $this->UrlParm());
+		return $this->KeyUrl("usuariosdelete.php", $this->UrlParm());
 	}
 
 	// Add key value to URL
@@ -482,16 +473,14 @@ class calertas extends cTable {
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
 		$this->id->setDbValue($rs->fields('id'));
-		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
-		$this->locales_id->setDbValue($rs->fields('locales_id'));
-		$this->tiposincidencias_id->setDbValue($rs->fields('tiposincidencias_id'));
-		$this->fecha->setDbValue($rs->fields('fecha'));
-		$this->hora->setDbValue($rs->fields('hora'));
-		$this->coordenadas->setDbValue($rs->fields('coordenadas'));
-		$this->incidencia->setDbValue($rs->fields('incidencia'));
-		$this->comentarios->setDbValue($rs->fields('comentarios'));
-		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
-		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->tipos_usuarios_id->setDbValue($rs->fields('tipos_usuarios_id'));
+		$this->usuario->setDbValue($rs->fields('usuario'));
+		$this->nombre->setDbValue($rs->fields('nombre'));
+		$this->password->setDbValue($rs->fields('password'));
+		$this->correo->setDbValue($rs->fields('correo'));
+		$this->telefono->setDbValue($rs->fields('telefono'));
+		$this->region->setDbValue($rs->fields('region'));
+		$this->comentario->setDbValue($rs->fields('comentario'));
 	}
 
 	// Render list row values
@@ -503,207 +492,95 @@ class calertas extends cTable {
 
    // Common render codes
 		// id
-		// clientes_id
-		// locales_id
-		// tiposincidencias_id
-		// fecha
-		// hora
-		// coordenadas
-
-		$this->coordenadas->CellCssStyle = "white-space: nowrap;";
-
-		// incidencia
-		$this->incidencia->CellCssStyle = "white-space: nowrap;";
-
-		// comentarios
-		// tiposacciones_id
-		// fotografia
+		// tipos_usuarios_id
+		// usuario
+		// nombre
+		// password
+		// correo
+		// telefono
+		// region
+		// comentario
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// clientes_id
-		if (strval($this->clientes_id->CurrentValue) <> "") {
-			$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
-		$sWhereWrk = "";
-		if ($sFilterWrk <> "") {
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-		}
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
-				$rswrk->Close();
-			} else {
-				$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
-			}
-		} else {
-			$this->clientes_id->ViewValue = NULL;
-		}
-		$this->clientes_id->ViewCustomAttributes = "";
+		// tipos_usuarios_id
+		$this->tipos_usuarios_id->ViewValue = $this->tipos_usuarios_id->CurrentValue;
+		$this->tipos_usuarios_id->ViewCustomAttributes = "";
 
-		// locales_id
-		if (strval($this->locales_id->CurrentValue) <> "") {
-			$sFilterWrk = "`id`" . ew_SearchString("=", $this->locales_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `direccion` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `locales`";
-		$sWhereWrk = "";
-		if ($sFilterWrk <> "") {
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-		}
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->locales_id->ViewValue = $rswrk->fields('DispFld');
-				$this->locales_id->ViewValue .= ew_ValueSeparator(1,$this->locales_id) . $rswrk->fields('Disp2Fld');
-				$rswrk->Close();
-			} else {
-				$this->locales_id->ViewValue = $this->locales_id->CurrentValue;
-			}
-		} else {
-			$this->locales_id->ViewValue = NULL;
-		}
-		$this->locales_id->ViewCustomAttributes = "";
+		// usuario
+		$this->usuario->ViewValue = $this->usuario->CurrentValue;
+		$this->usuario->ViewCustomAttributes = "";
 
-		// tiposincidencias_id
-		if (strval($this->tiposincidencias_id->CurrentValue) <> "") {
-			$sFilterWrk = "`tipi_id`" . ew_SearchString("=", $this->tiposincidencias_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `tipi_id`, `tipi_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tiposincidencias`";
-		$sWhereWrk = "";
-		if ($sFilterWrk <> "") {
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-		}
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `tipi_nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->tiposincidencias_id->ViewValue = $rswrk->fields('DispFld');
-				$rswrk->Close();
-			} else {
-				$this->tiposincidencias_id->ViewValue = $this->tiposincidencias_id->CurrentValue;
-			}
-		} else {
-			$this->tiposincidencias_id->ViewValue = NULL;
-		}
-		$this->tiposincidencias_id->ViewCustomAttributes = "";
+		// nombre
+		$this->nombre->ViewValue = $this->nombre->CurrentValue;
+		$this->nombre->ViewCustomAttributes = "";
 
-		// fecha
-		$this->fecha->ViewValue = $this->fecha->CurrentValue;
-		$this->fecha->ViewValue = ew_FormatDateTime($this->fecha->ViewValue, 7);
-		$this->fecha->ViewCustomAttributes = "";
+		// password
+		$this->password->ViewValue = $this->password->CurrentValue;
+		$this->password->ViewCustomAttributes = "";
 
-		// hora
-		$this->hora->ViewValue = $this->hora->CurrentValue;
-		$this->hora->ViewCustomAttributes = "";
+		// correo
+		$this->correo->ViewValue = $this->correo->CurrentValue;
+		$this->correo->ViewCustomAttributes = "";
 
-		// coordenadas
-		$this->coordenadas->ViewValue = $this->coordenadas->CurrentValue;
-		$this->coordenadas->ViewCustomAttributes = "";
+		// telefono
+		$this->telefono->ViewValue = $this->telefono->CurrentValue;
+		$this->telefono->ViewCustomAttributes = "";
 
-		// incidencia
-		$this->incidencia->ViewValue = $this->incidencia->CurrentValue;
-		$this->incidencia->ViewCustomAttributes = "";
+		// region
+		$this->region->ViewValue = $this->region->CurrentValue;
+		$this->region->ViewCustomAttributes = "";
 
-		// comentarios
-		$this->comentarios->ViewValue = $this->comentarios->CurrentValue;
-		$this->comentarios->ViewCustomAttributes = "";
-
-		// tiposacciones_id
-		if (strval($this->tiposacciones_id->CurrentValue) <> "") {
-			$sFilterWrk = "`tipos_acciones_id`" . ew_SearchString("=", $this->tiposacciones_id->CurrentValue, EW_DATATYPE_NUMBER);
-		$sSqlWrk = "SELECT `tipos_acciones_id`, `accion` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tipos_acciones`";
-		$sWhereWrk = "";
-		if ($sFilterWrk <> "") {
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-		}
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `accion` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->tiposacciones_id->ViewValue = $rswrk->fields('DispFld');
-				$rswrk->Close();
-			} else {
-				$this->tiposacciones_id->ViewValue = $this->tiposacciones_id->CurrentValue;
-			}
-		} else {
-			$this->tiposacciones_id->ViewValue = NULL;
-		}
-		$this->tiposacciones_id->ViewCustomAttributes = "";
-
-		// fotografia
-		$this->fotografia->UploadPath = '../imgalerta';
-		if (!ew_Empty($this->fotografia->Upload->DbValue)) {
-			$this->fotografia->ViewValue = $this->fotografia->Upload->DbValue;
-		} else {
-			$this->fotografia->ViewValue = "";
-		}
-		$this->fotografia->ViewCustomAttributes = "";
+		// comentario
+		$this->comentario->ViewValue = $this->comentario->CurrentValue;
+		$this->comentario->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
 		$this->id->TooltipValue = "";
 
-		// clientes_id
-		$this->clientes_id->LinkCustomAttributes = "";
-		$this->clientes_id->HrefValue = "";
-		$this->clientes_id->TooltipValue = "";
+		// tipos_usuarios_id
+		$this->tipos_usuarios_id->LinkCustomAttributes = "";
+		$this->tipos_usuarios_id->HrefValue = "";
+		$this->tipos_usuarios_id->TooltipValue = "";
 
-		// locales_id
-		$this->locales_id->LinkCustomAttributes = "";
-		$this->locales_id->HrefValue = "";
-		$this->locales_id->TooltipValue = "";
+		// usuario
+		$this->usuario->LinkCustomAttributes = "";
+		$this->usuario->HrefValue = "";
+		$this->usuario->TooltipValue = "";
 
-		// tiposincidencias_id
-		$this->tiposincidencias_id->LinkCustomAttributes = "";
-		$this->tiposincidencias_id->HrefValue = "";
-		$this->tiposincidencias_id->TooltipValue = "";
+		// nombre
+		$this->nombre->LinkCustomAttributes = "";
+		$this->nombre->HrefValue = "";
+		$this->nombre->TooltipValue = "";
 
-		// fecha
-		$this->fecha->LinkCustomAttributes = "";
-		$this->fecha->HrefValue = "";
-		$this->fecha->TooltipValue = "";
+		// password
+		$this->password->LinkCustomAttributes = "";
+		$this->password->HrefValue = "";
+		$this->password->TooltipValue = "";
 
-		// hora
-		$this->hora->LinkCustomAttributes = "";
-		$this->hora->HrefValue = "";
-		$this->hora->TooltipValue = "";
+		// correo
+		$this->correo->LinkCustomAttributes = "";
+		$this->correo->HrefValue = "";
+		$this->correo->TooltipValue = "";
 
-		// coordenadas
-		$this->coordenadas->LinkCustomAttributes = "";
-		$this->coordenadas->HrefValue = "";
-		$this->coordenadas->TooltipValue = "";
+		// telefono
+		$this->telefono->LinkCustomAttributes = "";
+		$this->telefono->HrefValue = "";
+		$this->telefono->TooltipValue = "";
 
-		// incidencia
-		$this->incidencia->LinkCustomAttributes = "";
-		$this->incidencia->HrefValue = "";
-		$this->incidencia->TooltipValue = "";
+		// region
+		$this->region->LinkCustomAttributes = "";
+		$this->region->HrefValue = "";
+		$this->region->TooltipValue = "";
 
-		// comentarios
-		$this->comentarios->LinkCustomAttributes = "";
-		$this->comentarios->HrefValue = "";
-		$this->comentarios->TooltipValue = "";
-
-		// tiposacciones_id
-		$this->tiposacciones_id->LinkCustomAttributes = "";
-		$this->tiposacciones_id->HrefValue = "";
-		$this->tiposacciones_id->TooltipValue = "";
-
-		// fotografia
-		$this->fotografia->LinkCustomAttributes = "";
-		$this->fotografia->UploadPath = '../imgalerta';
-		if (!ew_Empty($this->fotografia->Upload->DbValue)) {
-			$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
-			$this->fotografia->LinkAttrs["target"] = ""; // Add target
-			if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
-		} else {
-			$this->fotografia->HrefValue = "";
-		}
-		$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
-		$this->fotografia->TooltipValue = "";
+		// comentario
+		$this->comentario->LinkCustomAttributes = "";
+		$this->comentario->HrefValue = "";
+		$this->comentario->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -728,23 +605,23 @@ class calertas extends cTable {
 			$Doc->BeginExportRow();
 			if ($ExportPageType == "view") {
 				if ($this->id->Exportable) $Doc->ExportCaption($this->id);
-				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
-				if ($this->locales_id->Exportable) $Doc->ExportCaption($this->locales_id);
-				if ($this->tiposincidencias_id->Exportable) $Doc->ExportCaption($this->tiposincidencias_id);
-				if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
-				if ($this->hora->Exportable) $Doc->ExportCaption($this->hora);
-				if ($this->comentarios->Exportable) $Doc->ExportCaption($this->comentarios);
-				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
-				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
+				if ($this->tipos_usuarios_id->Exportable) $Doc->ExportCaption($this->tipos_usuarios_id);
+				if ($this->usuario->Exportable) $Doc->ExportCaption($this->usuario);
+				if ($this->nombre->Exportable) $Doc->ExportCaption($this->nombre);
+				if ($this->password->Exportable) $Doc->ExportCaption($this->password);
+				if ($this->correo->Exportable) $Doc->ExportCaption($this->correo);
+				if ($this->telefono->Exportable) $Doc->ExportCaption($this->telefono);
+				if ($this->region->Exportable) $Doc->ExportCaption($this->region);
+				if ($this->comentario->Exportable) $Doc->ExportCaption($this->comentario);
 			} else {
 				if ($this->id->Exportable) $Doc->ExportCaption($this->id);
-				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
-				if ($this->locales_id->Exportable) $Doc->ExportCaption($this->locales_id);
-				if ($this->tiposincidencias_id->Exportable) $Doc->ExportCaption($this->tiposincidencias_id);
-				if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
-				if ($this->hora->Exportable) $Doc->ExportCaption($this->hora);
-				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
-				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
+				if ($this->tipos_usuarios_id->Exportable) $Doc->ExportCaption($this->tipos_usuarios_id);
+				if ($this->usuario->Exportable) $Doc->ExportCaption($this->usuario);
+				if ($this->nombre->Exportable) $Doc->ExportCaption($this->nombre);
+				if ($this->password->Exportable) $Doc->ExportCaption($this->password);
+				if ($this->correo->Exportable) $Doc->ExportCaption($this->correo);
+				if ($this->telefono->Exportable) $Doc->ExportCaption($this->telefono);
+				if ($this->region->Exportable) $Doc->ExportCaption($this->region);
 			}
 			$Doc->EndExportRow();
 		}
@@ -775,23 +652,23 @@ class calertas extends cTable {
 				$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 				if ($ExportPageType == "view") {
 					if ($this->id->Exportable) $Doc->ExportField($this->id);
-					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
-					if ($this->locales_id->Exportable) $Doc->ExportField($this->locales_id);
-					if ($this->tiposincidencias_id->Exportable) $Doc->ExportField($this->tiposincidencias_id);
-					if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
-					if ($this->hora->Exportable) $Doc->ExportField($this->hora);
-					if ($this->comentarios->Exportable) $Doc->ExportField($this->comentarios);
-					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
-					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
+					if ($this->tipos_usuarios_id->Exportable) $Doc->ExportField($this->tipos_usuarios_id);
+					if ($this->usuario->Exportable) $Doc->ExportField($this->usuario);
+					if ($this->nombre->Exportable) $Doc->ExportField($this->nombre);
+					if ($this->password->Exportable) $Doc->ExportField($this->password);
+					if ($this->correo->Exportable) $Doc->ExportField($this->correo);
+					if ($this->telefono->Exportable) $Doc->ExportField($this->telefono);
+					if ($this->region->Exportable) $Doc->ExportField($this->region);
+					if ($this->comentario->Exportable) $Doc->ExportField($this->comentario);
 				} else {
 					if ($this->id->Exportable) $Doc->ExportField($this->id);
-					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
-					if ($this->locales_id->Exportable) $Doc->ExportField($this->locales_id);
-					if ($this->tiposincidencias_id->Exportable) $Doc->ExportField($this->tiposincidencias_id);
-					if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
-					if ($this->hora->Exportable) $Doc->ExportField($this->hora);
-					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
-					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
+					if ($this->tipos_usuarios_id->Exportable) $Doc->ExportField($this->tipos_usuarios_id);
+					if ($this->usuario->Exportable) $Doc->ExportField($this->usuario);
+					if ($this->nombre->Exportable) $Doc->ExportField($this->nombre);
+					if ($this->password->Exportable) $Doc->ExportField($this->password);
+					if ($this->correo->Exportable) $Doc->ExportField($this->correo);
+					if ($this->telefono->Exportable) $Doc->ExportField($this->telefono);
+					if ($this->region->Exportable) $Doc->ExportField($this->region);
 				}
 				$Doc->EndExportRow();
 			}
@@ -852,10 +729,7 @@ class calertas extends cTable {
 	function Row_Inserted($rsold, &$rsnew) {
 
 		//echo "Row Inserted"
-		$Email->Recipient = 'ocmchile@gmail.com'; // Change recipient to a field value in the new record 
-		$Email->Subject = "prueba correo"; // Change subject
-		$Email->Content .= "\nAdded by " . CurrentUserName();
-	}                                      
+	}
 
 	// Row Updating event
 	function Row_Updating($rsold, &$rsnew) {

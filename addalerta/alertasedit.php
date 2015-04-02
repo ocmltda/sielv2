@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
 <?php include_once "alertasinfo.php" ?>
+<?php include_once "usuariosinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -168,6 +169,9 @@ class calertas_edit extends calertas {
 			$GLOBALS["Table"] = &$GLOBALS["alertas"];
 		}
 
+		// Table object (usuarios)
+		if (!isset($GLOBALS['usuarios'])) $GLOBALS['usuarios'] = new cusuarios();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'edit', TRUE);
@@ -188,6 +192,14 @@ class calertas_edit extends calertas {
 	//
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
+
+		// Security
+		$Security = new cAdvancedSecurity();
+		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
+		if (!$Security->IsLoggedIn()) {
+			$Security->SaveLastUrl();
+			$this->Page_Terminate("login.php");
+		}
 
 		// Create form object
 		$objForm = new cFormObj();
@@ -399,6 +411,7 @@ class calertas_edit extends calertas {
 		$this->comentarios->setDbValue($rs->fields('comentarios'));
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->fotografia->Upload->SaveDbToSession();
 	}
 
 	// Render row values based on field settings
@@ -583,7 +596,14 @@ class calertas_edit extends calertas {
 
 			// fotografia
 			$this->fotografia->LinkCustomAttributes = "";
-			$this->fotografia->HrefValue = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
@@ -705,7 +725,14 @@ class calertas_edit extends calertas {
 			$this->tiposacciones_id->HrefValue = "";
 
 			// fotografia
-			$this->fotografia->HrefValue = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
@@ -1216,7 +1243,7 @@ falertasedit.Lists["x_tiposacciones_id"].Options = <?php echo (is_array($alertas
 <div id="old_x_fotografia">
 <?php if ($alertas->fotografia->LinkAttributes() <> "") { ?>
 <?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<?php echo $alertas->fotografia->EditValue ?>
+<a<?php echo $alertas->fotografia->LinkAttributes() ?>><?php echo $alertas->fotografia->EditValue ?></a>
 <?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>

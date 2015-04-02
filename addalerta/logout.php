@@ -13,18 +13,18 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$default = NULL; // Initialize page object first
+$logout = NULL; // Initialize page object first
 
-class cdefault {
+class clogout {
 
 	// Page ID
-	var $PageID = 'default';
+	var $PageID = 'logout';
 
 	// Project ID
 	var $ProjectID = "{01BDD2DE-C1A6-464D-8FDD-3525837E1545}";
 
 	// Page object name
-	var $PageObjName = 'default';
+	var $PageObjName = 'logout';
 
 	// Page name
 	function PageName() {
@@ -108,6 +108,31 @@ class cdefault {
 		}
 		echo "<div class=\"ewMessageDialog\"" . (($hidden) ? " style=\"display: none;\"" : "") . ">" . $html . "</div>";
 	}
+	var $PageHeader;
+	var $PageFooter;
+
+	// Show Page Header
+	function ShowPageHeader() {
+		$sHeader = $this->PageHeader;
+		$this->Page_DataRendering($sHeader);
+		if ($sHeader <> "") { // Header exists, display
+			echo "<p class=\"phpmaker\">" . $sHeader . "</p>";
+		}
+	}
+
+	// Show Page Footer
+	function ShowPageFooter() {
+		$sFooter = $this->PageFooter;
+		$this->Page_DataRendered($sFooter);
+		if ($sFooter <> "") { // Fotoer exists, display
+			echo "<p class=\"phpmaker\">" . $sFooter . "</p>";
+		}
+	}
+
+	// Validate page request
+	function IsPageRequest() {
+		return TRUE;
+	}
 
 	//
 	// Page class constructor
@@ -121,13 +146,11 @@ class cdefault {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-
-		// User table object (usuarios)
-		if (!isset($GLOBALS["usuarios"])) $GLOBALS["usuarios"] = new cusuarios;
+		if (!isset($GLOBALS["usuarios"])) $GLOBALS["usuarios"] = new cusuarios();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
-			define("EW_PAGE_ID", 'default', TRUE);
+			define("EW_PAGE_ID", 'logout', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -181,14 +204,36 @@ class cdefault {
 	// Page main
 	//
 	function Page_Main() {
-		global $Security, $Language;
-		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
-		if ($Security->IsLoggedIn())
-		$this->Page_Terminate("alertaslist.php"); // Exit and go to default page
-		if ($Security->IsLoggedIn()) {
-			$this->setFailureMessage($Language->Phrase("NoPermission") . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
+		global $Security, $Language, $UserProfile;
+		$bValidate = TRUE;
+		$sUsername = $Security->CurrentUserName();
+
+		// Call User LoggingOut event
+		$bValidate = $this->User_LoggingOut($sUsername);
+		if (!$bValidate) {
+			$sLastUrl = $Security->LastUrl();
+			if ($sLastUrl == "")
+				$sLastUrl = "index.php";
+			$this->Page_Terminate($sLastUrl); // Go to last accessed URL
 		} else {
-			$this->Page_Terminate("login.php"); // Exit and go to login page
+			if (@$_COOKIE[EW_PROJECT_NAME]['AutoLogin'] == "") // Not autologin
+				setcookie(EW_PROJECT_NAME . '[Username]', ""); // clear user name cookie
+			setcookie(EW_PROJECT_NAME . '[Password]', ""); // clear password cookie
+			setcookie(EW_PROJECT_NAME . '[LastUrl]', ""); // clear last URL
+
+			// Call User LoggedOut event
+			$this->User_LoggedOut($sUsername);
+
+			// Unset all of the Session variables
+			$_SESSION = array();
+
+			// Delete the Session cookie and kill the Session
+			if (isset($_COOKIE[session_name()]))
+				setcookie(session_name(), '', time()-42000, '/');
+
+			// Finally, destroy the Session
+			@session_destroy();
+			$this->Page_Terminate("login.php"); // Go to login page
 		}
 	}
 
@@ -220,25 +265,51 @@ class cdefault {
 		//if ($type == 'success') $msg = "your success message";
 
 	}
+
+	// Page Data Rendering event
+	function Page_DataRendering(&$header) {
+
+		// Example:
+		//$header = "your header";
+
+	}
+
+	// Page Data Rendered event
+	function Page_DataRendered(&$footer) {
+
+		// Example:
+		//$footer = "your footer";
+
+	}
+
+	// User Logging Out event
+	function User_LoggingOut($usr) {
+
+		// Enter your code here
+		// To cancel, set return value to FALSE;
+
+		return TRUE;
+	}
+
+	// User Logged Out event
+	function User_LoggedOut($usr) {
+
+		//echo "User Logged Out";
+	}
 }
 ?>
 <?php ew_Header(FALSE) ?>
 <?php
 
 // Create page object
-if (!isset($default)) $default = new cdefault();
+if (!isset($logout)) $logout = new clogout();
 
 // Page init
-$default->Page_Init();
+$logout->Page_Init();
 
 // Page main
-$default->Page_Main();
+$logout->Page_Main();
 ?>
-<?php include_once "header.php" ?>
 <?php
-$default->ShowMessage();
-?>
-<?php include_once "footer.php" ?>
-<?php
-$default->Page_Terminate();
+$logout->Page_Terminate();
 ?>

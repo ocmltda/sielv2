@@ -26,7 +26,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME . "", TRUE); // Config file name
 define("EW_PROJECT_ID", "{01BDD2DE-C1A6-464D-8FDD-3525837E1545}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", 'VM0xmuHVecsyXPVI', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 'g95fr91HHcGAcUzp', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/alertas.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "utf-8", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -213,8 +213,13 @@ if (defined("EW_USER_LEVEL_COMPAT")) {
 define("EW_USE_SUBQUERY_FOR_MASTER_USER_ID", FALSE, TRUE);
 
 // User table filters
-// User Profile Constants
+define("EW_USER_TABLE", "`usuarios`",  TRUE);
+define("EW_USER_NAME_FILTER", "(`usuario` = '%u')",  TRUE);
+define("EW_USER_ID_FILTER", "",  TRUE);
+define("EW_USER_EMAIL_FILTER", "",  TRUE);
+define("EW_USER_ACTIVATE_FILTER", "",  TRUE);
 
+// User Profile Constants
 define("EW_USER_PROFILE_KEY_SEPARATOR", "", TRUE);
 define("EW_USER_PROFILE_FIELD_SEPARATOR", "", TRUE);
 define("EW_USER_PROFILE_SESSION_ID", "SessionID", TRUE);

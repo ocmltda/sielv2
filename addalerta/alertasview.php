@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
 <?php include_once "alertasinfo.php" ?>
+<?php include_once "usuariosinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -206,6 +207,9 @@ class calertas_view extends calertas {
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv" . $KeyUrl;
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf" . $KeyUrl;
 
+		// Table object (usuarios)
+		if (!isset($GLOBALS['usuarios'])) $GLOBALS['usuarios'] = new cusuarios();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'view', TRUE);
@@ -231,6 +235,14 @@ class calertas_view extends calertas {
 	//
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
+
+		// Security
+		$Security = new cAdvancedSecurity();
+		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
+		if (!$Security->IsLoggedIn()) {
+			$Security->SaveLastUrl();
+			$this->Page_Terminate("login.php");
+		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
 		$this->id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
@@ -577,7 +589,14 @@ class calertas_view extends calertas {
 
 			// fotografia
 			$this->fotografia->LinkCustomAttributes = "";
-			$this->fotografia->HrefValue = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
 		}
@@ -696,14 +715,20 @@ falertasview.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","A
 </p>
 <p class="phpmaker">
 <a href="<?php echo $alertas_view->ListUrl ?>" id="a_BackToList" class="ewLink"><?php echo $Language->Phrase("BackToList") ?></a>&nbsp;
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_view->AddUrl <> "") { ?>
 <a href="<?php echo $alertas_view->AddUrl ?>" id="a_AddLink" class="ewLink"><?php echo $Language->Phrase("ViewPageAddLink") ?></a>&nbsp;
 <?php } ?>
+<?php } ?>
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_view->EditUrl <> "") { ?>
 <a href="<?php echo $alertas_view->EditUrl ?>" id="a_EditLink" class="ewLink"><?php echo $Language->Phrase("ViewPageEditLink") ?></a>&nbsp;
 <?php } ?>
+<?php } ?>
+<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_view->DeleteUrl <> "") { ?>
 <a href="<?php echo $alertas_view->DeleteUrl ?>" id="a_DeleteLink" class="ewLink"><?php echo $Language->Phrase("ViewPageDeleteLink") ?></a>&nbsp;
+<?php } ?>
 <?php } ?>
 </p>
 <?php $alertas_view->ShowPageHeader(); ?>
@@ -794,7 +819,7 @@ $alertas_view->ShowMessage();
 <span<?php echo $alertas->fotografia->ViewAttributes() ?>>
 <?php if ($alertas->fotografia->LinkAttributes() <> "") { ?>
 <?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<?php echo $alertas->fotografia->ViewValue ?>
+<a<?php echo $alertas->fotografia->LinkAttributes() ?>><?php echo $alertas->fotografia->ViewValue ?></a>
 <?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
 &nbsp;
 <?php } ?>

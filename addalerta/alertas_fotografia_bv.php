@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewmysql9.php" ?>
 <?php include_once "phpfn9.php" ?>
 <?php include_once "alertasinfo.php" ?>
+<?php include_once "usuariosinfo.php" ?>
 <?php include_once "userfn9.php" ?>
 <?php
 
@@ -131,6 +132,9 @@ class calertas_fotografia_blobview extends calertas {
 			$GLOBALS["Table"] = &$GLOBALS["alertas"];
 		}
 
+		// Table object (usuarios)
+		if (!isset($GLOBALS['usuarios'])) $GLOBALS['usuarios'] = new cusuarios();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'blobview', TRUE);
@@ -151,6 +155,14 @@ class calertas_fotografia_blobview extends calertas {
 	//
 	function Page_Init() {
 		global $gsExport, $gsExportFile, $UserProfile, $Language, $Security, $objForm;
+
+		// Security
+		$Security = new cAdvancedSecurity();
+		if (!$Security->IsLoggedIn()) $Security->AutoLogin();
+		if (!$Security->IsLoggedIn()) {
+			$Security->SaveLastUrl();
+			$this->Page_Terminate("login.php");
+		}
 
 		// Page Load event
 		$this->Page_Load();

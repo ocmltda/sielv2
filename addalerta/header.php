@@ -94,6 +94,11 @@ var EW_IMAGE_FOLDER = "phpimages/"; // Image folder
 	<div data-role="header">
 		<a href="mobilemenu.php"><?php echo $Language->Phrase("MobileMenu") ?></a>
 		<h1 id="ewPageTitle"></h1>
+	<?php if (IsLoggedIn()) { ?>
+		<a href="logout.php"><?php echo $Language->Phrase("Logout") ?></a>
+	<?php } elseif (substr(ew_ScriptName(), 0 - strlen("login.php")) <> "login.php") { ?>
+		<a href="login.php"><?php echo $Language->Phrase("Login") ?></a>
+	<?php } ?>
 	</div>
 <?php } ?>
 <?php if (@!$gbSkipHeaderFooter) { ?>

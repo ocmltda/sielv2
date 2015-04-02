@@ -2381,6 +2381,7 @@ class cAdvancedSecurity {
 	// Validate user
 	function ValidateUser($usr, $pwd, $autologin) {
 		global $conn, $Language;
+		global $usuarios;
 		$ValidateUser = FALSE;
 		$CustomValidateUser = FALSE;
 
@@ -2390,6 +2391,31 @@ class cAdvancedSecurity {
 			if ($CustomValidateUser) {
 				$_SESSION[EW_SESSION_STATUS] = "login";
 				$this->setCurrentUserName($usr); // Load user name
+			}
+		}
+
+		// Check other users
+		if (!$ValidateUser) {
+			$sFilter = str_replace("%u", ew_AdjustSql($usr), EW_USER_NAME_FILTER);
+
+			// Set up filter (SQL WHERE clause) and get return SQL
+			// SQL constructor in <UseTable> class, <UserTable>info.php
+
+			$sSql = $usuarios->GetSQL($sFilter, "");
+			if ($rs = $conn->Execute($sSql)) {
+				if (!$rs->EOF) {
+					$ValidateUser = $CustomValidateUser || ew_ComparePassword($rs->fields('password'), $pwd);
+					if ($ValidateUser) {
+						$_SESSION[EW_SESSION_STATUS] = "login";
+						$_SESSION[EW_SESSION_SYS_ADMIN] = 0; // Non System Administrator
+						$this->setCurrentUserName($rs->fields('usuario')); // Load user name
+
+						// Call User Validated event
+						$row = $rs->fields;
+						$this->User_Validated($row);
+					}
+				}
+				$rs->Close();
 			}
 		}
 		if ($CustomValidateUser)

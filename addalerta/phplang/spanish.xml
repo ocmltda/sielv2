@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/4/1" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/4/2" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -329,6 +329,8 @@
 	</global>
 	<project><menu id="5"><phrase id="menutext" value="tiposincidencias"/>
 </menu>
+<menu id="6"><phrase id="menutext" value="usuarios"/>
+</menu>
 <menu id="1"><phrase id="menutext" value="Alertas"/>
 </menu>
 <menu id="2"><phrase id="menutext" value="clientes"/>
@@ -408,7 +410,26 @@
 </field>
 </table>
 <table id="tipos_usuarios"/>
-<table id="usuarios"/>
+<table id="usuarios"><phrase id="tblcaption" value="usuarios"/>
+<field id="id"><phrase id="fldcaption" value="id"/>
+</field>
+<field id="tipos_usuarios_id"><phrase id="fldcaption" value="tipos usuarios id"/>
+</field>
+<field id="usuario"><phrase id="fldcaption" value="usuario"/>
+</field>
+<field id="nombre"><phrase id="fldcaption" value="nombre"/>
+</field>
+<field id="password"><phrase id="fldcaption" value="password"/>
+</field>
+<field id="correo"><phrase id="fldcaption" value="correo"/>
+</field>
+<field id="telefono"><phrase id="fldcaption" value="telefono"/>
+</field>
+<field id="region"><phrase id="fldcaption" value="region"/>
+</field>
+<field id="comentario"><phrase id="fldcaption" value="comentario"/>
+</field>
+</table>
 <table id="visitas"/>
 <table id="tiposincidencias"><phrase id="tblcaption" value="tiposincidencias"/>
 <field id="tipi_id"><phrase id="fldcaption" value="tipi id"/>
