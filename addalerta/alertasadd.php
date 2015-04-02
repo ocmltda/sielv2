@@ -356,8 +356,6 @@ class calertas_add extends calertas {
 		$this->hora->OldValue = $this->hora->CurrentValue;
 		$this->comentarios->CurrentValue = NULL;
 		$this->comentarios->OldValue = $this->comentarios->CurrentValue;
-		$this->tiposacciones_id->CurrentValue = NULL;
-		$this->tiposacciones_id->OldValue = $this->tiposacciones_id->CurrentValue;
 		$this->fotografia->Upload->DbValue = NULL;
 		$this->fotografia->OldValue = $this->fotografia->Upload->DbValue;
 		$this->fotografia->CurrentValue = NULL; // Clear file related field
@@ -388,9 +386,6 @@ class calertas_add extends calertas {
 		if (!$this->comentarios->FldIsDetailKey) {
 			$this->comentarios->setFormValue($objForm->GetValue("x_comentarios"));
 		}
-		if (!$this->tiposacciones_id->FldIsDetailKey) {
-			$this->tiposacciones_id->setFormValue($objForm->GetValue("x_tiposacciones_id"));
-		}
 	}
 
 	// Restore form values
@@ -404,7 +399,6 @@ class calertas_add extends calertas {
 		$this->fecha->CurrentValue = ew_UnFormatDateTime($this->fecha->CurrentValue, 7);
 		$this->hora->CurrentValue = $this->hora->FormValue;
 		$this->comentarios->CurrentValue = $this->comentarios->FormValue;
-		$this->tiposacciones_id->CurrentValue = $this->tiposacciones_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -642,11 +636,6 @@ class calertas_add extends calertas {
 			$this->comentarios->HrefValue = "";
 			$this->comentarios->TooltipValue = "";
 
-			// tiposacciones_id
-			$this->tiposacciones_id->LinkCustomAttributes = "";
-			$this->tiposacciones_id->HrefValue = "";
-			$this->tiposacciones_id->TooltipValue = "";
-
 			// fotografia
 			$this->fotografia->LinkCustomAttributes = "";
 			$this->fotografia->UploadPath = '../imgalerta';
@@ -721,22 +710,6 @@ class calertas_add extends calertas {
 			$this->comentarios->EditCustomAttributes = "";
 			$this->comentarios->EditValue = ew_HtmlEncode($this->comentarios->CurrentValue);
 
-			// tiposacciones_id
-			$this->tiposacciones_id->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `tipos_acciones_id`, `accion` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `tipos_acciones`";
-			$sWhereWrk = "";
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `accion` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->tiposacciones_id->EditValue = $arwrk;
-
 			// fotografia
 			$this->fotografia->EditCustomAttributes = "";
 			$this->fotografia->UploadPath = '../imgalerta';
@@ -765,9 +738,6 @@ class calertas_add extends calertas {
 
 			// comentarios
 			$this->comentarios->HrefValue = "";
-
-			// tiposacciones_id
-			$this->tiposacciones_id->HrefValue = "";
 
 			// fotografia
 			$this->fotografia->UploadPath = '../imgalerta';
@@ -831,9 +801,6 @@ class calertas_add extends calertas {
 		if (!ew_CheckTime($this->hora->FormValue)) {
 			ew_AddMessage($gsFormError, $this->hora->FldErrMsg());
 		}
-		if (!is_null($this->tiposacciones_id->FormValue) && $this->tiposacciones_id->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->tiposacciones_id->FldCaption());
-		}
 		if ($this->fotografia->Upload->Action == "3" && is_null($this->fotografia->Upload->Value)) {
 			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->fotografia->FldCaption());
 		}
@@ -872,9 +839,6 @@ class calertas_add extends calertas {
 
 		// comentarios
 		$this->comentarios->SetDbValueDef($rsnew, $this->comentarios->CurrentValue, NULL, FALSE);
-
-		// tiposacciones_id
-		$this->tiposacciones_id->SetDbValueDef($rsnew, $this->tiposacciones_id->CurrentValue, NULL, FALSE);
 
 		// fotografia
 		$this->fotografia->UploadPath = '../imgalerta';
@@ -1051,9 +1015,6 @@ falertasadd.Validate = function(fobj) {
 		elm = fobj.elements["x" + infix + "_hora"];
 		if (elm && !ew_CheckTime(elm.value))
 			return ew_OnError(this, elm, "<?php echo ew_JsEncode2($alertas->hora->FldErrMsg()) ?>");
-		elm = fobj.elements["x" + infix + "_tiposacciones_id"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->tiposacciones_id->FldCaption()) ?>");
 		elm = fobj.elements["x" + infix + "_fotografia"];
 		aelm = fobj.elements["a" + infix + "_fotografia"];
 		var chk_fotografia = (aelm && aelm[0])?(aelm[2].checked):true;
@@ -1096,7 +1057,6 @@ falertasadd.ValidateRequired = false;
 falertasadd.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 falertasadd.Lists["x_locales_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_direccion","",""],"ParentFields":["x_clientes_id"],"FilterFields":["x_clientes_id"],"Options":[]};
 falertasadd.Lists["x_tiposincidencias_id"] = {"LinkField":"x_tipi_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipi_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-falertasadd.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_accion","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
 </script>
@@ -1233,34 +1193,6 @@ ew_CreateCalendar("falertasadd", "x_fecha", "%d/%m/%Y");
 		<td<?php echo $alertas->comentarios->CellAttributes() ?>><span id="el_alertas_comentarios">
 <textarea name="x_comentarios" id="x_comentarios" cols="35" rows="4"<?php echo $alertas->comentarios->EditAttributes() ?>><?php echo $alertas->comentarios->EditValue ?></textarea>
 </span><?php echo $alertas->comentarios->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->tiposacciones_id->Visible) { // tiposacciones_id ?>
-	<tr id="r_tiposacciones_id"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_tiposacciones_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposacciones_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->tiposacciones_id->CellAttributes() ?>><span id="el_alertas_tiposacciones_id">
-<select id="x_tiposacciones_id" name="x_tiposacciones_id"<?php echo $alertas->tiposacciones_id->EditAttributes() ?>>
-<?php
-if (is_array($alertas->tiposacciones_id->EditValue)) {
-	$arwrk = $alertas->tiposacciones_id->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($alertas->tiposacciones_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-<script type="text/javascript">
-falertasadd.Lists["x_tiposacciones_id"].Options = <?php echo (is_array($alertas->tiposacciones_id->EditValue)) ? ew_ArrayToJson($alertas->tiposacciones_id->EditValue, 1) : "[]" ?>;
-</script>
-</span><?php echo $alertas->tiposacciones_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 <?php if ($alertas->fotografia->Visible) { // fotografia ?>
