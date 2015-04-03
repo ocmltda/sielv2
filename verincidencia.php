@@ -20,7 +20,8 @@ else
 
 	$db = new DB_Sql;
 
-	$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.*, ti.tipi_nombre FROM alertas a, tipos_acciones t, locales l, tiposincidencias ti WHERE a.id = ' . $_REQUEST['IA'] . ' and a.locales_id = l.id and a.tiposacciones_id = t.tipos_acciones_id and a.tiposincidencias_id = ti.tipi_id');
+	$IDTA = 0;
+	$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.*, ti.tipi_nombre FROM alertas a left join tipos_acciones t ON a.tiposacciones_id = t.tipos_acciones_id, locales l, tiposincidencias ti WHERE a.id = ' . $_REQUEST['IA'] . ' and a.locales_id = l.id and a.tiposincidencias_id = ti.tipi_id');
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -34,7 +35,7 @@ else
 			$t->assign("comentario",$db->Record['comentarios']);
 			//echo '<pre>' . htmlspecialchars('<img src="imgincidencias/' . $db->Record['fotografia'] . '">') . '</pre>';
 
-			$t->assign("foto", '<img src="imgincidencias/' . $db->Record['fotografia'] . '" width="240">');
+			$t->assign("foto", '<img src="imgalerta/' . $db->Record['fotografia'] . '" width="240">');
 			$IDTA = $db->Record['tipos_acciones_id'];
 		}
 	}

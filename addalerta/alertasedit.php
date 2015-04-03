@@ -204,7 +204,6 @@ class calertas_edit extends calertas {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
-		$this->id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -306,22 +305,6 @@ class calertas_edit extends calertas {
 		$objForm->Index = -1;
 		$confirmPage = (strval($objForm->GetValue("a_confirm")) <> "");
 		$objForm->Index = $index; // Restore form index
-		$this->fotografia->Upload->Index = $objForm->Index;
-		$this->fotografia->Upload->RestoreDbFromSession();
-		if ($confirmPage) { // Post from confirm page
-			$this->fotografia->Upload->RestoreFromSession();
-		} else {
-			if ($this->fotografia->Upload->UploadFile()) {
-
-				// No action required
-			} else {
-				echo $this->fotografia->Upload->Message;
-				$this->Page_Terminate();
-				exit();
-			}
-			$this->fotografia->Upload->SaveToSession();
-			$this->fotografia->CurrentValue = $this->fotografia->Upload->FileName;
-		}
 	}
 
 	// Load form values
@@ -329,28 +312,11 @@ class calertas_edit extends calertas {
 
 		// Load from form
 		global $objForm;
-		$this->GetUploadFiles(); // Get upload files
+		if (!$this->tiposacciones_id->FldIsDetailKey) {
+			$this->tiposacciones_id->setFormValue($objForm->GetValue("x_tiposacciones_id"));
+		}
 		if (!$this->id->FldIsDetailKey)
 			$this->id->setFormValue($objForm->GetValue("x_id"));
-		if (!$this->clientes_id->FldIsDetailKey) {
-			$this->clientes_id->setFormValue($objForm->GetValue("x_clientes_id"));
-		}
-		if (!$this->locales_id->FldIsDetailKey) {
-			$this->locales_id->setFormValue($objForm->GetValue("x_locales_id"));
-		}
-		if (!$this->tiposincidencias_id->FldIsDetailKey) {
-			$this->tiposincidencias_id->setFormValue($objForm->GetValue("x_tiposincidencias_id"));
-		}
-		if (!$this->fecha->FldIsDetailKey) {
-			$this->fecha->setFormValue($objForm->GetValue("x_fecha"));
-			$this->fecha->CurrentValue = ew_UnFormatDateTime($this->fecha->CurrentValue, 7);
-		}
-		if (!$this->hora->FldIsDetailKey) {
-			$this->hora->setFormValue($objForm->GetValue("x_hora"));
-		}
-		if (!$this->comentarios->FldIsDetailKey) {
-			$this->comentarios->setFormValue($objForm->GetValue("x_comentarios"));
-		}
 	}
 
 	// Restore form values
@@ -358,13 +324,7 @@ class calertas_edit extends calertas {
 		global $objForm;
 		$this->LoadRow();
 		$this->id->CurrentValue = $this->id->FormValue;
-		$this->clientes_id->CurrentValue = $this->clientes_id->FormValue;
-		$this->locales_id->CurrentValue = $this->locales_id->FormValue;
-		$this->tiposincidencias_id->CurrentValue = $this->tiposincidencias_id->FormValue;
-		$this->fecha->CurrentValue = $this->fecha->FormValue;
-		$this->fecha->CurrentValue = ew_UnFormatDateTime($this->fecha->CurrentValue, 7);
-		$this->hora->CurrentValue = $this->hora->FormValue;
-		$this->comentarios->CurrentValue = $this->comentarios->FormValue;
+		$this->tiposacciones_id->CurrentValue = $this->tiposacciones_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -515,10 +475,6 @@ class calertas_edit extends calertas {
 			$this->hora->ViewValue = $this->hora->CurrentValue;
 			$this->hora->ViewCustomAttributes = "";
 
-			// comentarios
-			$this->comentarios->ViewValue = $this->comentarios->CurrentValue;
-			$this->comentarios->ViewCustomAttributes = "";
-
 			// tiposacciones_id
 			if (strval($this->tiposacciones_id->CurrentValue) <> "") {
 				$sFilterWrk = "`tipos_acciones_id`" . ew_SearchString("=", $this->tiposacciones_id->CurrentValue, EW_DATATYPE_NUMBER);
@@ -550,162 +506,32 @@ class calertas_edit extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
-			// id
-			$this->id->LinkCustomAttributes = "";
-			$this->id->HrefValue = "";
-			$this->id->TooltipValue = "";
-
-			// clientes_id
-			$this->clientes_id->LinkCustomAttributes = "";
-			$this->clientes_id->HrefValue = "";
-			$this->clientes_id->TooltipValue = "";
-
-			// locales_id
-			$this->locales_id->LinkCustomAttributes = "";
-			$this->locales_id->HrefValue = "";
-			$this->locales_id->TooltipValue = "";
-
-			// tiposincidencias_id
-			$this->tiposincidencias_id->LinkCustomAttributes = "";
-			$this->tiposincidencias_id->HrefValue = "";
-			$this->tiposincidencias_id->TooltipValue = "";
-
-			// fecha
-			$this->fecha->LinkCustomAttributes = "";
-			$this->fecha->HrefValue = "";
-			$this->fecha->TooltipValue = "";
-
-			// hora
-			$this->hora->LinkCustomAttributes = "";
-			$this->hora->HrefValue = "";
-			$this->hora->TooltipValue = "";
-
-			// comentarios
-			$this->comentarios->LinkCustomAttributes = "";
-			$this->comentarios->HrefValue = "";
-			$this->comentarios->TooltipValue = "";
-
-			// fotografia
-			$this->fotografia->LinkCustomAttributes = "";
-			$this->fotografia->UploadPath = '../imgalerta';
-			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
-				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
-				$this->fotografia->LinkAttrs["target"] = ""; // Add target
-				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
-			} else {
-				$this->fotografia->HrefValue = "";
-			}
-			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
-			$this->fotografia->TooltipValue = "";
+			// tiposacciones_id
+			$this->tiposacciones_id->LinkCustomAttributes = "";
+			$this->tiposacciones_id->HrefValue = "";
+			$this->tiposacciones_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
-			// id
-			$this->id->EditCustomAttributes = "";
-			$this->id->EditValue = $this->id->CurrentValue;
-			$this->id->ViewCustomAttributes = "";
-
-			// clientes_id
-			$this->clientes_id->EditCustomAttributes = "";
+			// tiposacciones_id
+			$this->tiposacciones_id->EditCustomAttributes = "";
 			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sSqlWrk = "SELECT `tipos_acciones_id`, `accion` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `tipos_acciones`";
 			$sWhereWrk = "";
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
 			}
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$sSqlWrk .= " ORDER BY `accion` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->clientes_id->EditValue = $arwrk;
-
-			// locales_id
-			$this->locales_id->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `direccion` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, `clientes_id` AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `locales`";
-			$sWhereWrk = "";
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->locales_id->EditValue = $arwrk;
-
-			// tiposincidencias_id
-			$this->tiposincidencias_id->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			$sSqlWrk = "SELECT `tipi_id`, `tipi_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `tiposincidencias`";
-			$sWhereWrk = "";
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `tipi_nombre` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->tiposincidencias_id->EditValue = $arwrk;
-
-			// fecha
-			$this->fecha->EditCustomAttributes = "";
-			$this->fecha->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->fecha->CurrentValue, 7));
-
-			// hora
-			$this->hora->EditCustomAttributes = "";
-			$this->hora->EditValue = ew_HtmlEncode($this->hora->CurrentValue);
-
-			// comentarios
-			$this->comentarios->EditCustomAttributes = "";
-			$this->comentarios->EditValue = ew_HtmlEncode($this->comentarios->CurrentValue);
-
-			// fotografia
-			$this->fotografia->EditCustomAttributes = "";
-			$this->fotografia->UploadPath = '../imgalerta';
-			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
-				$this->fotografia->EditValue = $this->fotografia->Upload->DbValue;
-			} else {
-				$this->fotografia->EditValue = "";
-			}
+			$this->tiposacciones_id->EditValue = $arwrk;
 
 			// Edit refer script
-			// id
+			// tiposacciones_id
 
-			$this->id->HrefValue = "";
-
-			// clientes_id
-			$this->clientes_id->HrefValue = "";
-
-			// locales_id
-			$this->locales_id->HrefValue = "";
-
-			// tiposincidencias_id
-			$this->tiposincidencias_id->HrefValue = "";
-
-			// fecha
-			$this->fecha->HrefValue = "";
-
-			// hora
-			$this->hora->HrefValue = "";
-
-			// comentarios
-			$this->comentarios->HrefValue = "";
-
-			// fotografia
-			$this->fotografia->UploadPath = '../imgalerta';
-			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
-				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
-				$this->fotografia->LinkAttrs["target"] = ""; // Add target
-				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
-			} else {
-				$this->fotografia->HrefValue = "";
-			}
-			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
+			$this->tiposacciones_id->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -724,43 +550,10 @@ class calertas_edit extends calertas {
 
 		// Initialize form error message
 		$gsFormError = "";
-		if (!ew_CheckFileType($this->fotografia->Upload->FileName)) {
-			ew_AddMessage($gsFormError, $Language->Phrase("WrongFileType"));
-		}
-		if ($this->fotografia->Upload->FileSize > 0 && EW_MAX_FILE_SIZE > 0 && $this->fotografia->Upload->FileSize > EW_MAX_FILE_SIZE) {
-			ew_AddMessage($gsFormError, str_replace("%s", EW_MAX_FILE_SIZE, $Language->Phrase("MaxFileSize")));
-		}
-		if (in_array($this->fotografia->Upload->Error, array(1, 2, 3, 6, 7, 8))) {
-			ew_AddMessage($gsFormError, $Language->Phrase("PhpUploadErr" . $this->fotografia->Upload->Error));
-		}
 
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!is_null($this->clientes_id->FormValue) && $this->clientes_id->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->clientes_id->FldCaption());
-		}
-		if (!is_null($this->locales_id->FormValue) && $this->locales_id->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->locales_id->FldCaption());
-		}
-		if (!is_null($this->tiposincidencias_id->FormValue) && $this->tiposincidencias_id->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->tiposincidencias_id->FldCaption());
-		}
-		if (!is_null($this->fecha->FormValue) && $this->fecha->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->fecha->FldCaption());
-		}
-		if (!ew_CheckEuroDate($this->fecha->FormValue)) {
-			ew_AddMessage($gsFormError, $this->fecha->FldErrMsg());
-		}
-		if (!is_null($this->hora->FormValue) && $this->hora->FormValue == "") {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->hora->FldCaption());
-		}
-		if (!ew_CheckTime($this->hora->FormValue)) {
-			ew_AddMessage($gsFormError, $this->hora->FldErrMsg());
-		}
-		if ($this->fotografia->Upload->Action == "3" && is_null($this->fotografia->Upload->Value)) {
-			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->fotografia->FldCaption());
-		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -793,44 +586,12 @@ class calertas_edit extends calertas {
 			$rsold = &$rs->fields;
 			$rsnew = array();
 
-			// clientes_id
-			$this->clientes_id->SetDbValueDef($rsnew, $this->clientes_id->CurrentValue, 0, $this->clientes_id->ReadOnly);
-
-			// locales_id
-			$this->locales_id->SetDbValueDef($rsnew, $this->locales_id->CurrentValue, 0, $this->locales_id->ReadOnly);
-
-			// tiposincidencias_id
-			$this->tiposincidencias_id->SetDbValueDef($rsnew, $this->tiposincidencias_id->CurrentValue, 0, $this->tiposincidencias_id->ReadOnly);
-
-			// fecha
-			$this->fecha->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->fecha->CurrentValue, 7), ew_CurrentDate(), $this->fecha->ReadOnly);
-
-			// hora
-			$this->hora->SetDbValueDef($rsnew, $this->hora->CurrentValue, ew_CurrentTime(), $this->hora->ReadOnly);
-
-			// comentarios
-			$this->comentarios->SetDbValueDef($rsnew, $this->comentarios->CurrentValue, NULL, $this->comentarios->ReadOnly);
-
-			// fotografia
-			if (!($this->fotografia->ReadOnly)) {
-			$this->fotografia->UploadPath = '../imgalerta';
-			if ($this->fotografia->Upload->Action == "1") { // Keep
-			} elseif ($this->fotografia->Upload->Action == "2" || $this->fotografia->Upload->Action == "3") { // Update/Remove
-			$this->fotografia->Upload->DbValue = $rs->fields('fotografia'); // Get original value
-			if (is_null($this->fotografia->Upload->Value)) {
-				$rsnew['fotografia'] = NULL;
-			} else {
-				$rsnew['fotografia'] = ew_UploadFileNameEx(ew_UploadPathEx(TRUE, $this->fotografia->UploadPath), $this->fotografia->Upload->FileName);
-			}
-			}
-			}
+			// tiposacciones_id
+			$this->tiposacciones_id->SetDbValueDef($rsnew, $this->tiposacciones_id->CurrentValue, NULL, $this->tiposacciones_id->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
 			if ($bUpdateRow) {
-				if (!ew_Empty($this->fotografia->Upload->Value)) {
-					$this->fotografia->Upload->SaveToFile($this->fotografia->UploadPath, $rsnew['fotografia'], FALSE);
-				}
 				$conn->raiseErrorFn = 'ew_ErrorFn';
 				if (count($rsnew) > 0)
 					$EditRow = $this->Update($rsnew);
@@ -855,9 +616,6 @@ class calertas_edit extends calertas {
 		if ($EditRow)
 			$this->Row_Updated($rsold, $rsnew);
 		$rs->Close();
-
-		// fotografia
-		$this->fotografia->Upload->RemoveFromSession(); // Remove file value from Session
 		return $EditRow;
 	}
 
@@ -959,35 +717,6 @@ falertasedit.Validate = function(fobj) {
 	var startcnt = (rowcnt == 0) ? 0 : 1; // rowcnt == 0 => Inline-Add
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = "";
-		elm = fobj.elements["x" + infix + "_clientes_id"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->clientes_id->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_locales_id"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->locales_id->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_tiposincidencias_id"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->tiposincidencias_id->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_fecha"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->fecha->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_fecha"];
-		if (elm && !ew_CheckEuroDate(elm.value))
-			return ew_OnError(this, elm, "<?php echo ew_JsEncode2($alertas->fecha->FldErrMsg()) ?>");
-		elm = fobj.elements["x" + infix + "_hora"];
-		if (elm && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->hora->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_hora"];
-		if (elm && !ew_CheckTime(elm.value))
-			return ew_OnError(this, elm, "<?php echo ew_JsEncode2($alertas->hora->FldErrMsg()) ?>");
-		elm = fobj.elements["x" + infix + "_fotografia"];
-		aelm = fobj.elements["a" + infix + "_fotografia"];
-		var chk_fotografia = (aelm && aelm[0])?(aelm[2].checked):true;
-		if (elm && chk_fotografia && !ew_HasValue(elm))
-			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($alertas->fotografia->FldCaption()) ?>");
-		elm = fobj.elements["x" + infix + "_fotografia"];
-		if (elm && !ew_CheckFileType(elm.value))
-			return ew_OnError(this, elm, ewLanguage.Phrase("WrongFileType"));
 
 		// Set up row object
 		ew_ElementsToRow(fobj, infix);
@@ -1019,9 +748,7 @@ falertasedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-falertasedit.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-falertasedit.Lists["x_locales_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_direccion","",""],"ParentFields":["x_clientes_id"],"FilterFields":["x_clientes_id"],"Options":[]};
-falertasedit.Lists["x_tiposincidencias_id"] = {"LinkField":"x_tipi_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipi_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+falertasedit.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_accion","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
 </script>
@@ -1035,36 +762,25 @@ falertasedit.Lists["x_tiposincidencias_id"] = {"LinkField":"x_tipi_id","Ajax":nu
 <?php
 $alertas_edit->ShowMessage();
 ?>
-<form name="falertasedit" id="falertasedit" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post" enctype="multipart/form-data" onsubmit="return ewForms[this.id].Submit();">
+<form name="falertasedit" id="falertasedit" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post" onsubmit="return ewForms[this.id].Submit();">
 <br>
 <input type="hidden" name="t" value="alertas">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridMiddlePanel">
 <table id="tbl_alertasedit" class="ewTable">
-<?php if ($alertas->id->Visible) { // id ?>
-	<tr id="r_id"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->id->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $alertas->id->CellAttributes() ?>><span id="el_alertas_id">
-<span<?php echo $alertas->id->ViewAttributes() ?>>
-<?php echo $alertas->id->EditValue ?></span>
-<input type="hidden" name="x_id" id="x_id" value="<?php echo ew_HtmlEncode($alertas->id->CurrentValue) ?>">
-</span><?php echo $alertas->id->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->clientes_id->Visible) { // clientes_id ?>
-	<tr id="r_clientes_id"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->clientes_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->clientes_id->CellAttributes() ?>><span id="el_alertas_clientes_id">
-<?php $alertas->clientes_id->EditAttrs["onchange"] = "ew_UpdateOpt.call(this, ['x_locales_id']); " . @$alertas->clientes_id->EditAttrs["onchange"]; ?>
-<select id="x_clientes_id" name="x_clientes_id"<?php echo $alertas->clientes_id->EditAttributes() ?>>
+<?php if ($alertas->tiposacciones_id->Visible) { // tiposacciones_id ?>
+	<tr id="r_tiposacciones_id"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_tiposacciones_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposacciones_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->tiposacciones_id->CellAttributes() ?>><span id="el_alertas_tiposacciones_id">
+<select id="x_tiposacciones_id" name="x_tiposacciones_id"<?php echo $alertas->tiposacciones_id->EditAttributes() ?>>
 <?php
-if (is_array($alertas->clientes_id->EditValue)) {
-	$arwrk = $alertas->clientes_id->EditValue;
+if (is_array($alertas->tiposacciones_id->EditValue)) {
+	$arwrk = $alertas->tiposacciones_id->EditValue;
 	$rowswrk = count($arwrk);
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($alertas->clientes_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		$selwrk = (strval($alertas->tiposacciones_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
 		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
@@ -1076,142 +792,15 @@ if (is_array($alertas->clientes_id->EditValue)) {
 ?>
 </select>
 <script type="text/javascript">
-falertasedit.Lists["x_clientes_id"].Options = <?php echo (is_array($alertas->clientes_id->EditValue)) ? ew_ArrayToJson($alertas->clientes_id->EditValue, 1) : "[]" ?>;
+falertasedit.Lists["x_tiposacciones_id"].Options = <?php echo (is_array($alertas->tiposacciones_id->EditValue)) ? ew_ArrayToJson($alertas->tiposacciones_id->EditValue, 1) : "[]" ?>;
 </script>
-</span><?php echo $alertas->clientes_id->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->locales_id->Visible) { // locales_id ?>
-	<tr id="r_locales_id"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_locales_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->locales_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->locales_id->CellAttributes() ?>><span id="el_alertas_locales_id">
-<select id="x_locales_id" name="x_locales_id"<?php echo $alertas->locales_id->EditAttributes() ?>>
-<?php
-if (is_array($alertas->locales_id->EditValue)) {
-	$arwrk = $alertas->locales_id->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($alertas->locales_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-<?php if ($arwrk[$rowcntwrk][2] <> "") { ?>
-<?php echo ew_ValueSeparator(1,$alertas->locales_id) ?><?php echo $arwrk[$rowcntwrk][2] ?>
-<?php } ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-<script type="text/javascript">
-falertasedit.Lists["x_locales_id"].Options = <?php echo (is_array($alertas->locales_id->EditValue)) ? ew_ArrayToJson($alertas->locales_id->EditValue, 1) : "[]" ?>;
-</script>
-</span><?php echo $alertas->locales_id->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->tiposincidencias_id->Visible) { // tiposincidencias_id ?>
-	<tr id="r_tiposincidencias_id"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_tiposincidencias_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposincidencias_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->tiposincidencias_id->CellAttributes() ?>><span id="el_alertas_tiposincidencias_id">
-<select id="x_tiposincidencias_id" name="x_tiposincidencias_id"<?php echo $alertas->tiposincidencias_id->EditAttributes() ?>>
-<?php
-if (is_array($alertas->tiposincidencias_id->EditValue)) {
-	$arwrk = $alertas->tiposincidencias_id->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($alertas->tiposincidencias_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-<script type="text/javascript">
-falertasedit.Lists["x_tiposincidencias_id"].Options = <?php echo (is_array($alertas->tiposincidencias_id->EditValue)) ? ew_ArrayToJson($alertas->tiposincidencias_id->EditValue, 1) : "[]" ?>;
-</script>
-</span><?php echo $alertas->tiposincidencias_id->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->fecha->Visible) { // fecha ?>
-	<tr id="r_fecha"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_fecha"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fecha->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->fecha->CellAttributes() ?>><span id="el_alertas_fecha">
-<input type="text" name="x_fecha" id="x_fecha" value="<?php echo $alertas->fecha->EditValue ?>"<?php echo $alertas->fecha->EditAttributes() ?>>
-<?php if (!$alertas->fecha->ReadOnly && !$alertas->fecha->Disabled && @$alertas->fecha->EditAttrs["readonly"] == "" && @$alertas->fecha->EditAttrs["disabled"] == "") { ?>
-&nbsp;<img src="phpimages/calendar.png" id="falertasedit$x_fecha$" name="falertasedit$x_fecha$" alt="<?php echo $Language->Phrase("PickDate") ?>" title="<?php echo $Language->Phrase("PickDate") ?>" class="ewCalendar" style="border: 0;">
-<script type="text/javascript">
-ew_CreateCalendar("falertasedit", "x_fecha", "%d/%m/%Y");
-</script>
-<?php } ?>
-</span><?php echo $alertas->fecha->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->hora->Visible) { // hora ?>
-	<tr id="r_hora"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_hora"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->hora->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->hora->CellAttributes() ?>><span id="el_alertas_hora">
-<input type="text" name="x_hora" id="x_hora" size="30" value="<?php echo $alertas->hora->EditValue ?>"<?php echo $alertas->hora->EditAttributes() ?>>
-</span><?php echo $alertas->hora->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->comentarios->Visible) { // comentarios ?>
-	<tr id="r_comentarios"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_comentarios"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->comentarios->FldCaption() ?></td></tr></table></span></td>
-		<td<?php echo $alertas->comentarios->CellAttributes() ?>><span id="el_alertas_comentarios">
-<textarea name="x_comentarios" id="x_comentarios" cols="35" rows="4"<?php echo $alertas->comentarios->EditAttributes() ?>><?php echo $alertas->comentarios->EditValue ?></textarea>
-</span><?php echo $alertas->comentarios->CustomMsg ?></td>
-	</tr>
-<?php } ?>
-<?php if ($alertas->fotografia->Visible) { // fotografia ?>
-	<tr id="r_fotografia"<?php echo $alertas->RowAttributes() ?>>
-		<td class="ewTableHeader"><span id="elh_alertas_fotografia"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fotografia->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
-		<td<?php echo $alertas->fotografia->CellAttributes() ?>><span id="el_alertas_fotografia">
-<div id="old_x_fotografia">
-<?php if ($alertas->fotografia->LinkAttributes() <> "") { ?>
-<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<a<?php echo $alertas->fotografia->LinkAttributes() ?>><?php echo $alertas->fotografia->EditValue ?></a>
-<?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
-&nbsp;
-<?php } ?>
-<?php } else { ?>
-<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<?php echo $alertas->fotografia->EditValue ?>
-<?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
-&nbsp;
-<?php } ?>
-<?php } ?>
-</div>
-<div id="new_x_fotografia">
-<?php if ($alertas->fotografia->ReadOnly) { ?>
-<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<input type="hidden" name="a_fotografia" id="a_fotografia" value="1">
-<?php } ?>
-<?php } else { ?>
-<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
-<label><input type="radio" name="a_fotografia" id="a_fotografia" value="1" checked="checked"><?php echo $Language->Phrase("Keep") ?></label>&nbsp;
-<label><input type="radio" name="a_fotografia" id="a_fotografia" value="2" disabled="disabled"><?php echo $Language->Phrase("Remove") ?></label>&nbsp;
-<label><input type="radio" name="a_fotografia" id="a_fotografia" value="3"><?php echo $Language->Phrase("Replace") ?><br></label>
-<?php $alertas->fotografia->EditAttrs["onchange"] = "this.form.a_fotografia[2].checked=true;" . @$alertas->fotografia->EditAttrs["onchange"]; ?>
-<?php } else { ?>
-<input type="hidden" name="a_fotografia" id="a_fotografia" value="3">
-<?php } ?>
-<input type="file" name="x_fotografia" id="x_fotografia" size="30"<?php echo $alertas->fotografia->EditAttributes() ?>>
-<?php } ?>
-</div>
-</span><?php echo $alertas->fotografia->CustomMsg ?></td>
+</span><?php echo $alertas->tiposacciones_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 </table>
 </div>
 </td></tr></table>
+<input type="hidden" name="x_id" id="x_id" value="<?php echo ew_HtmlEncode($alertas->id->CurrentValue) ?>">
 <br>
 <input type="submit" name="btnAction" id="btnAction" value="<?php echo ew_BtnCaption($Language->Phrase("EditBtn")) ?>">
 </form>

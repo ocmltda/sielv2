@@ -1215,11 +1215,6 @@ $alertas_list->ShowMessage();
 </form>
 <?php } ?>
 <span class="phpmaker">
-<?php if ($Security->IsLoggedIn()) { ?>
-<?php if ($alertas_list->AddUrl <> "") { ?>
-<a class="ewGridLink" href="<?php echo $alertas_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
-<?php } ?>
-<?php } ?>
 <?php if ($alertas_list->TotalRecs > 0) { ?>
 <?php if ($Security->IsLoggedIn()) { ?>
 <a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.falertaslist, '<?php echo $alertas_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;
@@ -1518,11 +1513,6 @@ if ($alertas_list->Recordset)
 </form>
 <?php } ?>
 <span class="phpmaker">
-<?php if ($Security->IsLoggedIn()) { ?>
-<?php if ($alertas_list->AddUrl <> "") { ?>
-<a class="ewGridLink" href="<?php echo $alertas_list->AddUrl ?>"><?php echo $Language->Phrase("AddLink") ?></a>&nbsp;&nbsp;
-<?php } ?>
-<?php } ?>
 <?php if ($alertas_list->TotalRecs > 0) { ?>
 <?php if ($Security->IsLoggedIn()) { ?>
 <a class="ewGridLink" href="" onclick="ew_SubmitSelected(document.falertaslist, '<?php echo $alertas_list->MultiDeleteUrl ?>');return false;"><?php echo $Language->Phrase("DeleteSelectedLink") ?></a>&nbsp;&nbsp;

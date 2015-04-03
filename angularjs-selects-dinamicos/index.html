@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="selectsDesarrolloHidrocalido" lang="es">
     <head>
-        <meta charset="UTF-8">
+        <!-- <meta charset="UTF-8"> -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     </head>
@@ -9,34 +9,35 @@
     <div class="container">
 		<div style="width:99%; border:1px solid green; text-align: center; background-color: red; color: white; font-size:20pt">ALERTAS SHOPPER</div>
 		<div class="panel-body">
-			<form role="form">
+			<form name="formalerta" action="../addalerta.php" method="post" enctype="multipart/form-data">
 				<fieldset ng-controller="controllerForm">
-					<div style="width:99%">
-						<select ng-model="selCategorias" class="form-control" ng-change="mostrarPistos()" ng-options="categorias.id as categorias.nombre for categorias in JSONCategorias" required>
+					<div style="width:99%; margin-bottom:5px">
+						<select ng-model="selCategorias" class="form-control" ng-change="mostrarPistos()" ng-options="categorias.id as categorias.nombre for categorias in JSONCategorias" name="cliente" onchange="alert(selCategorias)" required>
 							<option value="" selected disabled>Seleccione el Cliente</option>
 						</select>
 					</div>
-					<div style="width:99%">
-						<select ng-model="selPistos" class="form-control" ng-options="pistos.id as pistos.nomdir for pistos in JSONPistos" required>
+					<div style="width:99%; margin-bottom:5px">
+						<select ng-model="selPistos" class="form-control" ng-options="pistos.id as pistos.nomdir for pistos in JSONPistos" name="local" required>
 							<option value="" selected disabled>Seleccione el Local</option>
 						</select> 
 					</div>
-					<div style="width:99%">
-						<select ng-model="selIncids" class="form-control" ng-options="incids.tipi_id as incids.tipi_nombre for incids in JSONIncids" required>
+					<div style="width:99%; margin-bottom:5px">
+						<select ng-model="selIncids" class="form-control" ng-options="incids.tipi_id as incids.tipi_nombre for incids in JSONIncids" name="incidencia" required>
 							<option value="" selected disabled>Seleccione la Incidencia</option>
 						</select>
 					</div>
-					<div style="width:99%">
-						<input type="file" class="form-control" onchange="//MyCtrl.prototype.setFile(this)" required>
+					<div style="width:99%; margin-bottom:5px">
+						<input type="file" class="form-control" name="foto" required>
 					</div>
-					<div style="width:99%">
-						<textarea ng-model="txtComentario" class="form-control" placeholder="Ingrese un comentario si desea"></textarea>
+					<div style="width:99%; margin-bottom:5px">
+						<textarea ng-model="txtComentario" class="form-control" placeholder="Ingrese un comentario (opcional)" style="height:100px" name="comentario"></textarea>
 					</div>
-					<div style="width:99%">
-						<button type="submit" class="form-control btn btn-primary pull-left" ng-click="upload()">Enviar</button>
+					<div style="width:99%; margin-bottom:15px">
+						<!-- <button type="submit" class="form-control btn btn-primary pull-left" ng-click="upload()" ng-disabled="formalerta.$invalid">Enviar</button> -->
+						<input type="submit" ngClick="Submit" >
 					</div>
-					<div style="width:99%">
-						<input ng-click="limpiar()" class="btn btn-lg btn-default btn-block" type="submit" value="Enviar">
+					<div style="width:99%; margin-bottom:5px">
+						<input class="btn btn-lg btn-primary btn-block" type="submit" value="Enviar" name="enviar">
 						<input ng-click="limpiar()" class="btn btn-lg btn-default btn-block" type="button" value="Limpiar">
 					</div>
 				</fieldset>
@@ -44,6 +45,19 @@
 		</div>
      </div> <!-- Fin del Container -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="controller/angular-post-fix.js"></script>
     <script src="controller/app.js"></script>
+	<script>
+		$http({
+	url: "api/getUserData",
+		method: "POST",
+		data:{user_id:app.user_id}
+	}).success(function(data, status, headers, config) {
+		$scope.data = data;
+	}).error(function(data, status, headers, config) {
+		$scope.status = status;
+});
+		var app = angular.module('my_app', [ ... , 'httpPostFix']);
+	</script>
     </body>
 </html>

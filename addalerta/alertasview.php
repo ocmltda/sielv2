@@ -716,11 +716,6 @@ falertasview.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","A
 <p class="phpmaker">
 <a href="<?php echo $alertas_view->ListUrl ?>" id="a_BackToList" class="ewLink"><?php echo $Language->Phrase("BackToList") ?></a>&nbsp;
 <?php if ($Security->IsLoggedIn()) { ?>
-<?php if ($alertas_view->AddUrl <> "") { ?>
-<a href="<?php echo $alertas_view->AddUrl ?>" id="a_AddLink" class="ewLink"><?php echo $Language->Phrase("ViewPageAddLink") ?></a>&nbsp;
-<?php } ?>
-<?php } ?>
-<?php if ($Security->IsLoggedIn()) { ?>
 <?php if ($alertas_view->EditUrl <> "") { ?>
 <a href="<?php echo $alertas_view->EditUrl ?>" id="a_EditLink" class="ewLink"><?php echo $Language->Phrase("ViewPageEditLink") ?></a>&nbsp;
 <?php } ?>
