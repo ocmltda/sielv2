@@ -49,40 +49,47 @@ else
 		}
 	}
 
-	$db2 = new DB_Sql;
-	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
-	if ($db2->nf() > 0)
+	if ($_SESSION['empids'])
 	{
-		while($db2->next_record())
+		$db2 = new DB_Sql;
+		$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+		if ($db2->nf() > 0)
 		{
-			$t->newBlock("empresas");
-			$t->assign("empresa",$db2->Record['nombre']);
-			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
-
-			$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . '');
-			if ($db->nf() > 0)
+			while($db2->next_record())
 			{
-				while($db->next_record())
+				$t->newBlock("empresas");
+				$t->assign("empresa",$db2->Record['nombre']);
+				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+				$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . '');
+				if ($db->nf() > 0)
 				{
-					$t->newBlock("alertas");
-					$t->assign("id",$db->Record['id']);
-					$t->assign("fecha",$db->Record['fecvisita']);
-					$t->assign("hora",$db->Record['hora']);
-					$t->assign("tienda",$db->Record['nombre']);
-					$t->assign("gps",$db->Record['coordenadas']);
-					$t->assign("incidencia",$db->Record['tipi_nombre']);
-					$t->assign("comentario",$db->Record['comentarios']);
+					while($db->next_record())
+					{
+						$t->newBlock("alertas");
+						$t->assign("id",$db->Record['id']);
+						$t->assign("fecha",$db->Record['fecvisita']);
+						$t->assign("hora",$db->Record['hora']);
+						$t->assign("tienda",$db->Record['nombre']);
+						$t->assign("gps",$db->Record['coordenadas']);
+						$t->assign("incidencia",$db->Record['tipi_nombre']);
+						$t->assign("comentario",$db->Record['comentarios']);
+					}
+				}
+				else
+				{
+					//$t->newBlock("alertas");
 				}
 			}
-			else
-			{
-				//$t->newBlock("alertas");
-			}
+		}
+		else
+		{
+			$t->newBlock("empresas");
 		}
 	}
 	else
 	{
-		$t->newBlock("empresas");
+		$t->assign("sinempresas", '<br><br><br><br><strong>USUARIO NO TIENE EMPRESAS ASOCIADAS.</strong>');
 	}
 
 	//print the result

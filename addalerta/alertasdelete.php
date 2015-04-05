@@ -356,10 +356,8 @@ class calertas_delete extends calertas {
 		// fecha
 		// hora
 		// coordenadas
-
-		$this->coordenadas->CellCssStyle = "white-space: nowrap;";
-
 		// incidencia
+
 		$this->incidencia->CellCssStyle = "white-space: nowrap;";
 
 		// comentarios
@@ -448,6 +446,10 @@ class calertas_delete extends calertas {
 			$this->hora->ViewValue = $this->hora->CurrentValue;
 			$this->hora->ViewCustomAttributes = "";
 
+			// coordenadas
+			$this->coordenadas->ViewValue = $this->coordenadas->CurrentValue;
+			$this->coordenadas->ViewCustomAttributes = "";
+
 			// tiposacciones_id
 			if (strval($this->tiposacciones_id->CurrentValue) <> "") {
 				$sFilterWrk = "`tipos_acciones_id`" . ew_SearchString("=", $this->tiposacciones_id->CurrentValue, EW_DATATYPE_NUMBER);
@@ -508,6 +510,17 @@ class calertas_delete extends calertas {
 			$this->hora->LinkCustomAttributes = "";
 			$this->hora->HrefValue = "";
 			$this->hora->TooltipValue = "";
+
+			// coordenadas
+			$this->coordenadas->LinkCustomAttributes = "";
+			if (!ew_Empty($this->coordenadas->CurrentValue)) {
+				$this->coordenadas->HrefValue = "http://www.google.es/maps/preview?q=" . ((!empty($this->coordenadas->ViewValue)) ? $this->coordenadas->ViewValue : $this->coordenadas->CurrentValue); // Add prefix/suffix
+				$this->coordenadas->LinkAttrs["target"] = "_blank"; // Add target
+				if ($this->Export <> "") $this->coordenadas->HrefValue = ew_ConvertFullUrl($this->coordenadas->HrefValue);
+			} else {
+				$this->coordenadas->HrefValue = "";
+			}
+			$this->coordenadas->TooltipValue = "";
 
 			// tiposacciones_id
 			$this->tiposacciones_id->LinkCustomAttributes = "";
@@ -750,6 +763,7 @@ $alertas_delete->ShowMessage();
 		<td><span id="elh_alertas_tiposincidencias_id" class="alertas_tiposincidencias_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposincidencias_id->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_fecha" class="alertas_fecha"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fecha->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_hora" class="alertas_hora"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->hora->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_alertas_coordenadas" class="alertas_coordenadas"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->coordenadas->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_tiposacciones_id" class="alertas_tiposacciones_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposacciones_id->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_fotografia" class="alertas_fotografia"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fotografia->FldCaption() ?></td></tr></table></span></td>
 	</tr>
@@ -796,6 +810,15 @@ while (!$alertas_delete->Recordset->EOF) {
 		<td<?php echo $alertas->hora->CellAttributes() ?>><span id="el<?php echo $alertas_delete->RowCnt ?>_alertas_hora" class="alertas_hora">
 <span<?php echo $alertas->hora->ViewAttributes() ?>>
 <?php echo $alertas->hora->ListViewValue() ?></span>
+</span></td>
+		<td<?php echo $alertas->coordenadas->CellAttributes() ?>><span id="el<?php echo $alertas_delete->RowCnt ?>_alertas_coordenadas" class="alertas_coordenadas">
+<span<?php echo $alertas->coordenadas->ViewAttributes() ?>>
+<?php if (!ew_EmptyStr($alertas->coordenadas->ListViewValue()) && $alertas->coordenadas->LinkAttributes() <> "") { ?>
+<a<?php echo $alertas->coordenadas->LinkAttributes() ?>><?php echo $alertas->coordenadas->ListViewValue() ?></a>
+<?php } else { ?>
+<?php echo $alertas->coordenadas->ListViewValue() ?>
+<?php } ?>
+</span>
 </span></td>
 		<td<?php echo $alertas->tiposacciones_id->CellAttributes() ?>><span id="el<?php echo $alertas_delete->RowCnt ?>_alertas_tiposacciones_id" class="alertas_tiposacciones_id">
 <span<?php echo $alertas->tiposacciones_id->ViewAttributes() ?>>

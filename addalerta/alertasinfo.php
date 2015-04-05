@@ -135,7 +135,7 @@ class calertas extends cTable {
 	}
 
 	function SqlOrderBy() { // Order By
-		return "";
+		return "`fecha` DESC,`hora` DESC";
 	}
 
 	// Check if Anonymous User is allowed
@@ -509,10 +509,8 @@ class calertas extends cTable {
 		// fecha
 		// hora
 		// coordenadas
-
-		$this->coordenadas->CellCssStyle = "white-space: nowrap;";
-
 		// incidencia
+
 		$this->incidencia->CellCssStyle = "white-space: nowrap;";
 
 		// comentarios
@@ -674,7 +672,13 @@ class calertas extends cTable {
 
 		// coordenadas
 		$this->coordenadas->LinkCustomAttributes = "";
-		$this->coordenadas->HrefValue = "";
+		if (!ew_Empty($this->coordenadas->CurrentValue)) {
+			$this->coordenadas->HrefValue = "http://www.google.es/maps/preview?q=" . ((!empty($this->coordenadas->ViewValue)) ? $this->coordenadas->ViewValue : $this->coordenadas->CurrentValue); // Add prefix/suffix
+			$this->coordenadas->LinkAttrs["target"] = "_blank"; // Add target
+			if ($this->Export <> "") $this->coordenadas->HrefValue = ew_ConvertFullUrl($this->coordenadas->HrefValue);
+		} else {
+			$this->coordenadas->HrefValue = "";
+		}
 		$this->coordenadas->TooltipValue = "";
 
 		// incidencia
@@ -733,6 +737,7 @@ class calertas extends cTable {
 				if ($this->tiposincidencias_id->Exportable) $Doc->ExportCaption($this->tiposincidencias_id);
 				if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
 				if ($this->hora->Exportable) $Doc->ExportCaption($this->hora);
+				if ($this->coordenadas->Exportable) $Doc->ExportCaption($this->coordenadas);
 				if ($this->comentarios->Exportable) $Doc->ExportCaption($this->comentarios);
 				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
 				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
@@ -743,6 +748,7 @@ class calertas extends cTable {
 				if ($this->tiposincidencias_id->Exportable) $Doc->ExportCaption($this->tiposincidencias_id);
 				if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
 				if ($this->hora->Exportable) $Doc->ExportCaption($this->hora);
+				if ($this->coordenadas->Exportable) $Doc->ExportCaption($this->coordenadas);
 				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
 				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
 			}
@@ -780,6 +786,7 @@ class calertas extends cTable {
 					if ($this->tiposincidencias_id->Exportable) $Doc->ExportField($this->tiposincidencias_id);
 					if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
 					if ($this->hora->Exportable) $Doc->ExportField($this->hora);
+					if ($this->coordenadas->Exportable) $Doc->ExportField($this->coordenadas);
 					if ($this->comentarios->Exportable) $Doc->ExportField($this->comentarios);
 					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
 					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
@@ -790,6 +797,7 @@ class calertas extends cTable {
 					if ($this->tiposincidencias_id->Exportable) $Doc->ExportField($this->tiposincidencias_id);
 					if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
 					if ($this->hora->Exportable) $Doc->ExportField($this->hora);
+					if ($this->coordenadas->Exportable) $Doc->ExportField($this->coordenadas);
 					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
 					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
 				}

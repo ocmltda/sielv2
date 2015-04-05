@@ -6,7 +6,7 @@
 	{
 		$db = new DB_Sql;
 		$new_file_name = date('Ymd_His').'_'.strtolower($_FILES['foto']['name']);
-		$db->query('INSERT INTO alertas (fecha, hora, locales_id, coordenadas, incidencia, comentarios, tiposacciones_id, fotografia, clientes_id, tiposincidencias_id) VALUES (\'' . date('Y-m-d') . '\', \'' . date('H:i:s') . '\', ' . $_POST['local'] . ', \'\', \'\', \'' . $_POST['comentario'] . '\', null, \'' . $new_file_name . '\', ' . $_POST['cliente'] . ', ' . $_POST['incidencia'] . ')');
+		$db->query('INSERT INTO alertas (fecha, hora, locales_id, coordenadas, incidencia, comentarios, tiposacciones_id, fotografia, clientes_id, tiposincidencias_id) VALUES (\'' . date('Y-m-d') . '\', \'' . date('H:i:s') . '\', ' . $_POST['local'] . ', \'' . $_POST['lat'] . ',' . $_POST['lon'] . '\', \'\', \'' . $_POST['comentario'] . '\', null, \'' . $new_file_name . '\', ' . $_POST['cliente'] . ', ' . $_POST['incidencia'] . ')');
 
 		if($_FILES['foto']['name'])
 		{
@@ -37,6 +37,8 @@
 				$message = 'Ooops!  Your upload triggered the following error:  '.$_FILES['foto']['error'];
 			}
 		}
+
+		echo '<meta http-equiv="refresh" content="0; url=okalerta.php" />';
 	}
 	else
 	{

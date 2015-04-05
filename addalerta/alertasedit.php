@@ -204,6 +204,7 @@ class calertas_edit extends calertas {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"];
+		$this->id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -305,6 +306,22 @@ class calertas_edit extends calertas {
 		$objForm->Index = -1;
 		$confirmPage = (strval($objForm->GetValue("a_confirm")) <> "");
 		$objForm->Index = $index; // Restore form index
+		$this->fotografia->Upload->Index = $objForm->Index;
+		$this->fotografia->Upload->RestoreDbFromSession();
+		if ($confirmPage) { // Post from confirm page
+			$this->fotografia->Upload->RestoreFromSession();
+		} else {
+			if ($this->fotografia->Upload->UploadFile()) {
+
+				// No action required
+			} else {
+				echo $this->fotografia->Upload->Message;
+				$this->Page_Terminate();
+				exit();
+			}
+			$this->fotografia->Upload->SaveToSession();
+			$this->fotografia->CurrentValue = $this->fotografia->Upload->FileName;
+		}
 	}
 
 	// Load form values
@@ -312,11 +329,34 @@ class calertas_edit extends calertas {
 
 		// Load from form
 		global $objForm;
+		$this->GetUploadFiles(); // Get upload files
+		if (!$this->id->FldIsDetailKey)
+			$this->id->setFormValue($objForm->GetValue("x_id"));
+		if (!$this->clientes_id->FldIsDetailKey) {
+			$this->clientes_id->setFormValue($objForm->GetValue("x_clientes_id"));
+		}
+		if (!$this->locales_id->FldIsDetailKey) {
+			$this->locales_id->setFormValue($objForm->GetValue("x_locales_id"));
+		}
+		if (!$this->tiposincidencias_id->FldIsDetailKey) {
+			$this->tiposincidencias_id->setFormValue($objForm->GetValue("x_tiposincidencias_id"));
+		}
+		if (!$this->fecha->FldIsDetailKey) {
+			$this->fecha->setFormValue($objForm->GetValue("x_fecha"));
+			$this->fecha->CurrentValue = ew_UnFormatDateTime($this->fecha->CurrentValue, 7);
+		}
+		if (!$this->hora->FldIsDetailKey) {
+			$this->hora->setFormValue($objForm->GetValue("x_hora"));
+		}
+		if (!$this->coordenadas->FldIsDetailKey) {
+			$this->coordenadas->setFormValue($objForm->GetValue("x_coordenadas"));
+		}
+		if (!$this->comentarios->FldIsDetailKey) {
+			$this->comentarios->setFormValue($objForm->GetValue("x_comentarios"));
+		}
 		if (!$this->tiposacciones_id->FldIsDetailKey) {
 			$this->tiposacciones_id->setFormValue($objForm->GetValue("x_tiposacciones_id"));
 		}
-		if (!$this->id->FldIsDetailKey)
-			$this->id->setFormValue($objForm->GetValue("x_id"));
 	}
 
 	// Restore form values
@@ -324,6 +364,14 @@ class calertas_edit extends calertas {
 		global $objForm;
 		$this->LoadRow();
 		$this->id->CurrentValue = $this->id->FormValue;
+		$this->clientes_id->CurrentValue = $this->clientes_id->FormValue;
+		$this->locales_id->CurrentValue = $this->locales_id->FormValue;
+		$this->tiposincidencias_id->CurrentValue = $this->tiposincidencias_id->FormValue;
+		$this->fecha->CurrentValue = $this->fecha->FormValue;
+		$this->fecha->CurrentValue = ew_UnFormatDateTime($this->fecha->CurrentValue, 7);
+		$this->hora->CurrentValue = $this->hora->FormValue;
+		$this->coordenadas->CurrentValue = $this->coordenadas->FormValue;
+		$this->comentarios->CurrentValue = $this->comentarios->FormValue;
 		$this->tiposacciones_id->CurrentValue = $this->tiposacciones_id->FormValue;
 	}
 
@@ -475,6 +523,14 @@ class calertas_edit extends calertas {
 			$this->hora->ViewValue = $this->hora->CurrentValue;
 			$this->hora->ViewCustomAttributes = "";
 
+			// coordenadas
+			$this->coordenadas->ViewValue = $this->coordenadas->CurrentValue;
+			$this->coordenadas->ViewCustomAttributes = "";
+
+			// comentarios
+			$this->comentarios->ViewValue = $this->comentarios->CurrentValue;
+			$this->comentarios->ViewCustomAttributes = "";
+
 			// tiposacciones_id
 			if (strval($this->tiposacciones_id->CurrentValue) <> "") {
 				$sFilterWrk = "`tipos_acciones_id`" . ew_SearchString("=", $this->tiposacciones_id->CurrentValue, EW_DATATYPE_NUMBER);
@@ -506,11 +562,166 @@ class calertas_edit extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// id
+			$this->id->LinkCustomAttributes = "";
+			$this->id->HrefValue = "";
+			$this->id->TooltipValue = "";
+
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
+
+			// locales_id
+			$this->locales_id->LinkCustomAttributes = "";
+			$this->locales_id->HrefValue = "";
+			$this->locales_id->TooltipValue = "";
+
+			// tiposincidencias_id
+			$this->tiposincidencias_id->LinkCustomAttributes = "";
+			$this->tiposincidencias_id->HrefValue = "";
+			$this->tiposincidencias_id->TooltipValue = "";
+
+			// fecha
+			$this->fecha->LinkCustomAttributes = "";
+			$this->fecha->HrefValue = "";
+			$this->fecha->TooltipValue = "";
+
+			// hora
+			$this->hora->LinkCustomAttributes = "";
+			$this->hora->HrefValue = "";
+			$this->hora->TooltipValue = "";
+
+			// coordenadas
+			$this->coordenadas->LinkCustomAttributes = "";
+			if (!ew_Empty($this->coordenadas->CurrentValue)) {
+				$this->coordenadas->HrefValue = "http://www.google.es/maps/preview?q=" . ((!empty($this->coordenadas->ViewValue)) ? $this->coordenadas->ViewValue : $this->coordenadas->CurrentValue); // Add prefix/suffix
+				$this->coordenadas->LinkAttrs["target"] = "_blank"; // Add target
+				if ($this->Export <> "") $this->coordenadas->HrefValue = ew_ConvertFullUrl($this->coordenadas->HrefValue);
+			} else {
+				$this->coordenadas->HrefValue = "";
+			}
+			$this->coordenadas->TooltipValue = "";
+
+			// comentarios
+			$this->comentarios->LinkCustomAttributes = "";
+			$this->comentarios->HrefValue = "";
+			$this->comentarios->TooltipValue = "";
+
 			// tiposacciones_id
 			$this->tiposacciones_id->LinkCustomAttributes = "";
 			$this->tiposacciones_id->HrefValue = "";
 			$this->tiposacciones_id->TooltipValue = "";
+
+			// fotografia
+			$this->fotografia->LinkCustomAttributes = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
+			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
+			$this->fotografia->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
+
+			// id
+			$this->id->EditCustomAttributes = "";
+			$this->id->EditValue = $this->id->CurrentValue;
+			$this->id->ViewCustomAttributes = "";
+
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->EditValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->EditValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->EditValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
+
+			// locales_id
+			$this->locales_id->EditCustomAttributes = "";
+			if (strval($this->locales_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->locales_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, `direccion` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `locales`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->locales_id->EditValue = $rswrk->fields('DispFld');
+					$this->locales_id->EditValue .= ew_ValueSeparator(1,$this->locales_id) . $rswrk->fields('Disp2Fld');
+					$rswrk->Close();
+				} else {
+					$this->locales_id->EditValue = $this->locales_id->CurrentValue;
+				}
+			} else {
+				$this->locales_id->EditValue = NULL;
+			}
+			$this->locales_id->ViewCustomAttributes = "";
+
+			// tiposincidencias_id
+			$this->tiposincidencias_id->EditCustomAttributes = "";
+			if (strval($this->tiposincidencias_id->CurrentValue) <> "") {
+				$sFilterWrk = "`tipi_id`" . ew_SearchString("=", $this->tiposincidencias_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `tipi_id`, `tipi_nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `tiposincidencias`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `tipi_nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->tiposincidencias_id->EditValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->tiposincidencias_id->EditValue = $this->tiposincidencias_id->CurrentValue;
+				}
+			} else {
+				$this->tiposincidencias_id->EditValue = NULL;
+			}
+			$this->tiposincidencias_id->ViewCustomAttributes = "";
+
+			// fecha
+			$this->fecha->EditCustomAttributes = "";
+			$this->fecha->EditValue = $this->fecha->CurrentValue;
+			$this->fecha->EditValue = ew_FormatDateTime($this->fecha->EditValue, 7);
+			$this->fecha->ViewCustomAttributes = "";
+
+			// hora
+			$this->hora->EditCustomAttributes = "";
+			$this->hora->EditValue = $this->hora->CurrentValue;
+			$this->hora->ViewCustomAttributes = "";
+
+			// coordenadas
+			$this->coordenadas->EditCustomAttributes = "";
+			$this->coordenadas->EditValue = $this->coordenadas->CurrentValue;
+			$this->coordenadas->ViewCustomAttributes = "";
+
+			// comentarios
+			$this->comentarios->EditCustomAttributes = "";
+			$this->comentarios->EditValue = $this->comentarios->CurrentValue;
+			$this->comentarios->ViewCustomAttributes = "";
 
 			// tiposacciones_id
 			$this->tiposacciones_id->EditCustomAttributes = "";
@@ -528,10 +739,61 @@ class calertas_edit extends calertas {
 			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
 			$this->tiposacciones_id->EditValue = $arwrk;
 
-			// Edit refer script
-			// tiposacciones_id
+			// fotografia
+			$this->fotografia->EditCustomAttributes = "";
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->EditValue = $this->fotografia->Upload->DbValue;
+			} else {
+				$this->fotografia->EditValue = "";
+			}
+			$this->fotografia->ViewCustomAttributes = "";
 
+			// Edit refer script
+			// id
+
+			$this->id->HrefValue = "";
+
+			// clientes_id
+			$this->clientes_id->HrefValue = "";
+
+			// locales_id
+			$this->locales_id->HrefValue = "";
+
+			// tiposincidencias_id
+			$this->tiposincidencias_id->HrefValue = "";
+
+			// fecha
+			$this->fecha->HrefValue = "";
+
+			// hora
+			$this->hora->HrefValue = "";
+
+			// coordenadas
+			if (!ew_Empty($this->coordenadas->CurrentValue)) {
+				$this->coordenadas->HrefValue = "http://www.google.es/maps/preview?q=" . ((!empty($this->coordenadas->EditValue)) ? $this->coordenadas->EditValue : $this->coordenadas->CurrentValue); // Add prefix/suffix
+				$this->coordenadas->LinkAttrs["target"] = "_blank"; // Add target
+				if ($this->Export <> "") $this->coordenadas->HrefValue = ew_ConvertFullUrl($this->coordenadas->HrefValue);
+			} else {
+				$this->coordenadas->HrefValue = "";
+			}
+
+			// comentarios
+			$this->comentarios->HrefValue = "";
+
+			// tiposacciones_id
 			$this->tiposacciones_id->HrefValue = "";
+
+			// fotografia
+			$this->fotografia->UploadPath = '../imgalerta';
+			if (!ew_Empty($this->fotografia->Upload->DbValue)) {
+				$this->fotografia->HrefValue = ew_UploadPathEx(FALSE, $this->fotografia->UploadPath) . $this->fotografia->Upload->DbValue; // Add prefix/suffix
+				$this->fotografia->LinkAttrs["target"] = ""; // Add target
+				if ($this->Export <> "") $this->fotografia->HrefValue = ew_ConvertFullUrl($this->fotografia->HrefValue);
+			} else {
+				$this->fotografia->HrefValue = "";
+			}
+			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -748,6 +1010,9 @@ falertasedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+falertasedit.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+falertasedit.Lists["x_locales_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","x_direccion","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+falertasedit.Lists["x_tiposincidencias_id"] = {"LinkField":"x_tipi_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_tipi_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 falertasedit.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_accion","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
@@ -762,13 +1027,98 @@ falertasedit.Lists["x_tiposacciones_id"] = {"LinkField":"x_tipos_acciones_id","A
 <?php
 $alertas_edit->ShowMessage();
 ?>
-<form name="falertasedit" id="falertasedit" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post" onsubmit="return ewForms[this.id].Submit();">
+<form name="falertasedit" id="falertasedit" class="ewForm" action="<?php echo ew_CurrentPage() ?>" method="post" enctype="multipart/form-data" onsubmit="return ewForms[this.id].Submit();">
 <br>
 <input type="hidden" name="t" value="alertas">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
 <table cellspacing="0" class="ewGrid"><tr><td class="ewGridContent">
 <div class="ewGridMiddlePanel">
 <table id="tbl_alertasedit" class="ewTable">
+<?php if ($alertas->id->Visible) { // id ?>
+	<tr id="r_id"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->id->CellAttributes() ?>><span id="el_alertas_id">
+<span<?php echo $alertas->id->ViewAttributes() ?>>
+<?php echo $alertas->id->EditValue ?></span>
+<input type="hidden" name="x_id" id="x_id" value="<?php echo ew_HtmlEncode($alertas->id->CurrentValue) ?>">
+</span><?php echo $alertas->id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->clientes_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->clientes_id->CellAttributes() ?>><span id="el_alertas_clientes_id">
+<span<?php echo $alertas->clientes_id->ViewAttributes() ?>>
+<?php echo $alertas->clientes_id->EditValue ?></span>
+<input type="hidden" name="x_clientes_id" id="x_clientes_id" value="<?php echo ew_HtmlEncode($alertas->clientes_id->CurrentValue) ?>">
+</span><?php echo $alertas->clientes_id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->locales_id->Visible) { // locales_id ?>
+	<tr id="r_locales_id"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_locales_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->locales_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->locales_id->CellAttributes() ?>><span id="el_alertas_locales_id">
+<span<?php echo $alertas->locales_id->ViewAttributes() ?>>
+<?php echo $alertas->locales_id->EditValue ?></span>
+<input type="hidden" name="x_locales_id" id="x_locales_id" value="<?php echo ew_HtmlEncode($alertas->locales_id->CurrentValue) ?>">
+</span><?php echo $alertas->locales_id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->tiposincidencias_id->Visible) { // tiposincidencias_id ?>
+	<tr id="r_tiposincidencias_id"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_tiposincidencias_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposincidencias_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->tiposincidencias_id->CellAttributes() ?>><span id="el_alertas_tiposincidencias_id">
+<span<?php echo $alertas->tiposincidencias_id->ViewAttributes() ?>>
+<?php echo $alertas->tiposincidencias_id->EditValue ?></span>
+<input type="hidden" name="x_tiposincidencias_id" id="x_tiposincidencias_id" value="<?php echo ew_HtmlEncode($alertas->tiposincidencias_id->CurrentValue) ?>">
+</span><?php echo $alertas->tiposincidencias_id->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->fecha->Visible) { // fecha ?>
+	<tr id="r_fecha"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_fecha"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fecha->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->fecha->CellAttributes() ?>><span id="el_alertas_fecha">
+<span<?php echo $alertas->fecha->ViewAttributes() ?>>
+<?php echo $alertas->fecha->EditValue ?></span>
+<input type="hidden" name="x_fecha" id="x_fecha" value="<?php echo ew_HtmlEncode($alertas->fecha->CurrentValue) ?>">
+</span><?php echo $alertas->fecha->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->hora->Visible) { // hora ?>
+	<tr id="r_hora"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_hora"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->hora->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->hora->CellAttributes() ?>><span id="el_alertas_hora">
+<span<?php echo $alertas->hora->ViewAttributes() ?>>
+<?php echo $alertas->hora->EditValue ?></span>
+<input type="hidden" name="x_hora" id="x_hora" value="<?php echo ew_HtmlEncode($alertas->hora->CurrentValue) ?>">
+</span><?php echo $alertas->hora->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->coordenadas->Visible) { // coordenadas ?>
+	<tr id="r_coordenadas"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_coordenadas"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->coordenadas->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->coordenadas->CellAttributes() ?>><span id="el_alertas_coordenadas">
+<span<?php echo $alertas->coordenadas->ViewAttributes() ?>>
+<?php if (!ew_EmptyStr($alertas->coordenadas->EditValue) && $alertas->coordenadas->LinkAttributes() <> "") { ?>
+<a<?php echo $alertas->coordenadas->LinkAttributes() ?>><?php echo $alertas->coordenadas->EditValue ?></a>
+<?php } else { ?>
+<?php echo $alertas->coordenadas->EditValue ?>
+<?php } ?>
+</span>
+<input type="hidden" name="x_coordenadas" id="x_coordenadas" value="<?php echo ew_HtmlEncode($alertas->coordenadas->CurrentValue) ?>">
+</span><?php echo $alertas->coordenadas->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->comentarios->Visible) { // comentarios ?>
+	<tr id="r_comentarios"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_comentarios"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->comentarios->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->comentarios->CellAttributes() ?>><span id="el_alertas_comentarios">
+<span<?php echo $alertas->comentarios->ViewAttributes() ?>>
+<?php echo $alertas->comentarios->EditValue ?></span>
+<input type="hidden" name="x_comentarios" id="x_comentarios" value="<?php echo ew_HtmlEncode($alertas->comentarios->CurrentValue) ?>">
+</span><?php echo $alertas->comentarios->CustomMsg ?></td>
+	</tr>
+<?php } ?>
 <?php if ($alertas->tiposacciones_id->Visible) { // tiposacciones_id ?>
 	<tr id="r_tiposacciones_id"<?php echo $alertas->RowAttributes() ?>>
 		<td class="ewTableHeader"><span id="elh_alertas_tiposacciones_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposacciones_id->FldCaption() ?></td></tr></table></span></td>
@@ -797,10 +1147,32 @@ falertasedit.Lists["x_tiposacciones_id"].Options = <?php echo (is_array($alertas
 </span><?php echo $alertas->tiposacciones_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
+<?php if ($alertas->fotografia->Visible) { // fotografia ?>
+	<tr id="r_fotografia"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_fotografia"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fotografia->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->fotografia->CellAttributes() ?>><span id="el_alertas_fotografia">
+<span<?php echo $alertas->fotografia->ViewAttributes() ?>>
+<?php if ($alertas->fotografia->LinkAttributes() <> "") { ?>
+<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
+<a<?php echo $alertas->fotografia->LinkAttributes() ?>><?php echo $alertas->fotografia->EditValue ?></a>
+<?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
+&nbsp;
+<?php } ?>
+<?php } else { ?>
+<?php if (!empty($alertas->fotografia->Upload->DbValue)) { ?>
+<?php echo $alertas->fotografia->EditValue ?>
+<?php } elseif (!in_array($alertas->CurrentAction, array("I", "edit", "gridedit"))) { ?>	
+&nbsp;
+<?php } ?>
+<?php } ?>
+</span>
+<input type="hidden" name="x_fotografia" id="x_fotografia" value="<?php echo ew_HtmlEncode($alertas->fotografia->CurrentValue) ?>">
+</span><?php echo $alertas->fotografia->CustomMsg ?></td>
+	</tr>
+<?php } ?>
 </table>
 </div>
 </td></tr></table>
-<input type="hidden" name="x_id" id="x_id" value="<?php echo ew_HtmlEncode($alertas->id->CurrentValue) ?>">
 <br>
 <input type="submit" name="btnAction" id="btnAction" value="<?php echo ew_BtnCaption($Language->Phrase("EditBtn")) ?>">
 </form>

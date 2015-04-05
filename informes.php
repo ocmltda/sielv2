@@ -49,57 +49,64 @@ else
 		}
 	}
 
-	$db2 = new DB_Sql;
-	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
-	if ($db2->nf() > 0)
+	if ($_SESSION['empids'])
 	{
-		while($db2->next_record())
+		$db2 = new DB_Sql;
+		$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+		if ($db2->nf() > 0)
 		{
-			$t->newBlock("empresas");
-			$t->assign("empresa",$db2->Record['nombre']);
-			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
-
-			$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' and DATE_FORMAT(i.periodo,\'%Y-%m\') = \'' . $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '\' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
-			if ($db->nf() > 0)
+			while($db2->next_record())
 			{
-				while($db->next_record())
+				$t->newBlock("empresas");
+				$t->assign("empresa",$db2->Record['nombre']);
+				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+				$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' and DATE_FORMAT(i.periodo,\'%Y-%m\') = \'' . $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '\' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
+				if ($db->nf() > 0)
 				{
-					$t->newBlock("informes");
-					$t->assign("id",$db->Record['informes_id']);
-					$t->assign("informe",$db->Record['nombre']);
-					$t->assign("periodo",$db->Record['periodo']);
-					$t->assign("fecpublic",$db->Record['fecpublic']);
+					while($db->next_record())
+					{
+						$t->newBlock("informes");
+						$t->assign("id",$db->Record['informes_id']);
+						$t->assign("informe",$db->Record['nombre']);
+						$t->assign("periodo",$db->Record['periodo']);
+						$t->assign("fecpublic",$db->Record['fecpublic']);
 
-					$estado = $db->Record['estado'];
-					switch ($estado) {
-						case 1:
-							$estado = 'En Proceso';
-							break;
-						case 2:
-							$estado = 'Terminado';
-							break;
-						default:
-						   $estado = 'En Proceso';
+						$estado = $db->Record['estado'];
+						switch ($estado) {
+							case 1:
+								$estado = 'En Proceso';
+								break;
+							case 2:
+								$estado = 'Terminado';
+								break;
+							default:
+							   $estado = 'En Proceso';
+						}
+						$t->assign("estado", $estado . '');
+
+						$archivo = trim($db->Record['archivo']);
+
+						if ($archivo)
+							$t->assign("acciones", '<a href="informes/' . $archivo . '">Descargar</a>');
+						else
+							$t->assign("acciones", '-');
 					}
-					$t->assign("estado", $estado . '');
-
-					$archivo = trim($db->Record['archivo']);
-
-					if ($archivo)
-						$t->assign("acciones", '<a href="informes/' . $archivo . '">Descargar</a>');
-					else
-						$t->assign("acciones", '-');
+				}
+				else
+				{
+					//$t->newBlock("informes");
 				}
 			}
-			else
-			{
-				//$t->newBlock("informes");
-			}
+		}
+		else
+		{
+			$t->newBlock("empresas");
 		}
 	}
 	else
 	{
-		$t->newBlock("empresas");
+		$t->assign("sinempresas", '<br><br><br><br><strong>USUARIO NO TIENE EMPRESAS ASOCIADAS.</strong>');
 	}
 
 	//print the result

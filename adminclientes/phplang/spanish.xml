@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/4/1" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/4/5" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -328,8 +328,6 @@
 		<phrase id="or" value="O"/>
 	</global>
 	<project><phrase id="footertext" value="&amp;copy;2013 e.World Technology Ltd. All rights reserved."/>
-<menu id="1"><phrase id="menutext" value="clientes"/>
-</menu>
 <menu id="3"><phrase id="menutext" value="Menús"/>
 </menu>
 <menu id="4"><phrase id="menutext" value="Menús por Perfiles"/>
@@ -344,13 +342,17 @@
 </menu>
 <menu id="8"><phrase id="menutext" value="Tipos Incidencias"/>
 </menu>
+<menu id="1"><phrase id="menutext" value="Clientes"/>
+</menu>
 <table id="alertas"/>
 <table id="clientes"><phrase id="tblcaption" value="Clientes"/>
-<field id="id"><phrase id="fldcaption" value="id"/>
+<field id="id"><phrase id="fldcaption" value="ID"/>
 </field>
-<field id="nombre"><phrase id="fldcaption" value="nombre"/>
+<field id="nombre"><phrase id="fldcaption" value="Nombre"/>
 </field>
-<field id="logo"><phrase id="fldcaption" value="logo"/>
+<field id="logo"><phrase id="fldcaption" value="Logo"/>
+</field>
+<field id="mailsalerta"><phrase id="fldcaption" value="Emails Alerta"/>
 </field>
 </table>
 <table id="empusu"><phrase id="tblcaption" value="Empresas Usuarios"/>

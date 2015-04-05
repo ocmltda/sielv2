@@ -44,6 +44,7 @@ $RootMenu->AddMenuItem(4, $Language->MenuPhrase("4", "MenuText"), "percatlist.ph
 $RootMenu->AddMenuItem(2, $Language->MenuPhrase("2", "MenuText"), "empusulist.php", -1, "", TRUE, FALSE);
 $RootMenu->AddMenuItem(7, $Language->MenuPhrase("7", "MenuText"), "informeslist.php", -1, "", TRUE, FALSE);
 $RootMenu->AddMenuItem(8, $Language->MenuPhrase("8", "MenuText"), "tiposincidenciaslist.php", -1, "", TRUE, FALSE);
+$RootMenu->AddMenuItem(1, $Language->MenuPhrase("1", "MenuText"), "clienteslist.php", -1, "", TRUE, FALSE);
 $RootMenu->Render();
 ?>
 	</div><!-- /content -->

@@ -49,50 +49,57 @@ else
 		}
 	}
 
-	$db2 = new DB_Sql;
-	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
-	if ($db2->nf() > 0)
+	if ($_SESSION['empids'])
 	{
-		while($db2->next_record())
+		$db2 = new DB_Sql;
+		$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+		if ($db2->nf() > 0)
 		{
-			$t->newBlock("empresas");
-			$t->assign("empresa",$db2->Record['nombre']);
-			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
-
-			$db->query('SELECT v.id,DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita,lo.nombre,p.servicio,lo.direccion FROM visitas AS v INNER JOIN locales AS lo ON lo.id = v.locales_id INNER JOIN planillas AS p ON p.id = v.planillas_id WHERE lo.clientes_id = ' . $db2->Record['id'] . ' and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ') and v.estado_visita = 2 and v.estado_revision = 2 ORDER BY v.fecha_visita DESC');
-			if ($db->nf() > 0)
+			while($db2->next_record())
 			{
-				while($db->next_record())
+				$t->newBlock("empresas");
+				$t->assign("empresa",$db2->Record['nombre']);
+				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+				$db->query('SELECT v.id,DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita,lo.nombre,p.servicio,lo.direccion FROM visitas AS v INNER JOIN locales AS lo ON lo.id = v.locales_id INNER JOIN planillas AS p ON p.id = v.planillas_id WHERE lo.clientes_id = ' . $db2->Record['id'] . ' and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ') and v.estado_visita = 2 and v.estado_revision = 2 ORDER BY v.fecha_visita DESC');
+				if ($db->nf() > 0)
 				{
-					$t->newBlock("evaluaciones");
-					$t->assign("id",$db->Record['id']);
-					$t->assign("fecvisita",$db->Record['fecvisita']);
-					$t->assign("local",$db->Record['nombre']);
-					$t->assign("servicio",$db->Record['servicio']);
-					$t->assign("direccion",$db->Record['direccion']);
-					$t->assign("empresa2",$db2->Record['nombre'] . '');
-
-					$db3 = new DB_Sql;
-
-					$db3->query('SELECT Sum(res.puntaje_obtenido) AS puntaje FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.id = ' . $db->Record['id']);
-					if ($db3->nf() > 0)
+					while($db->next_record())
 					{
-						$db3->next_record();
-						$t->assign("puntaje",$db3->Record['puntaje']);
-					}
+						$t->newBlock("evaluaciones");
+						$t->assign("id",$db->Record['id']);
+						$t->assign("fecvisita",$db->Record['fecvisita']);
+						$t->assign("local",$db->Record['nombre']);
+						$t->assign("servicio",$db->Record['servicio']);
+						$t->assign("direccion",$db->Record['direccion']);
+						$t->assign("empresa2",$db2->Record['nombre'] . '');
 
-					//$t->assign("estado",$db->Record['estado']);
+						$db3 = new DB_Sql;
+
+						$db3->query('SELECT Sum(res.puntaje_obtenido) AS puntaje FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.id = ' . $db->Record['id']);
+						if ($db3->nf() > 0)
+						{
+							$db3->next_record();
+							$t->assign("puntaje",$db3->Record['puntaje']);
+						}
+
+						//$t->assign("estado",$db->Record['estado']);
+					}
+				}
+				else
+				{
+					//$t->newBlock("evaluaciones");
 				}
 			}
-			else
-			{
-				//$t->newBlock("evaluaciones");
-			}
+		}
+		else
+		{
+			$t->newBlock("empresas");
 		}
 	}
 	else
 	{
-		$t->newBlock("empresas");
+		$t->assign("sinempresas", '<br><br><br><br><strong>USUARIO NO TIENE EMPRESAS ASOCIADAS.</strong>');
 	}
 
 	//print the result

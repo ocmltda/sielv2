@@ -512,6 +512,10 @@ class calertas_view extends calertas {
 			$this->hora->ViewValue = $this->hora->CurrentValue;
 			$this->hora->ViewCustomAttributes = "";
 
+			// coordenadas
+			$this->coordenadas->ViewValue = $this->coordenadas->CurrentValue;
+			$this->coordenadas->ViewCustomAttributes = "";
+
 			// comentarios
 			$this->comentarios->ViewValue = $this->comentarios->CurrentValue;
 			$this->comentarios->ViewCustomAttributes = "";
@@ -576,6 +580,17 @@ class calertas_view extends calertas {
 			$this->hora->LinkCustomAttributes = "";
 			$this->hora->HrefValue = "";
 			$this->hora->TooltipValue = "";
+
+			// coordenadas
+			$this->coordenadas->LinkCustomAttributes = "";
+			if (!ew_Empty($this->coordenadas->CurrentValue)) {
+				$this->coordenadas->HrefValue = "http://www.google.es/maps/preview?q=" . ((!empty($this->coordenadas->ViewValue)) ? $this->coordenadas->ViewValue : $this->coordenadas->CurrentValue); // Add prefix/suffix
+				$this->coordenadas->LinkAttrs["target"] = "_blank"; // Add target
+				if ($this->Export <> "") $this->coordenadas->HrefValue = ew_ConvertFullUrl($this->coordenadas->HrefValue);
+			} else {
+				$this->coordenadas->HrefValue = "";
+			}
+			$this->coordenadas->TooltipValue = "";
 
 			// comentarios
 			$this->comentarios->LinkCustomAttributes = "";
@@ -786,6 +801,20 @@ $alertas_view->ShowMessage();
 		<td<?php echo $alertas->hora->CellAttributes() ?>><span id="el_alertas_hora">
 <span<?php echo $alertas->hora->ViewAttributes() ?>>
 <?php echo $alertas->hora->ViewValue ?></span>
+</span></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->coordenadas->Visible) { // coordenadas ?>
+	<tr id="r_coordenadas"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_coordenadas"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->coordenadas->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->coordenadas->CellAttributes() ?>><span id="el_alertas_coordenadas">
+<span<?php echo $alertas->coordenadas->ViewAttributes() ?>>
+<?php if (!ew_EmptyStr($alertas->coordenadas->ViewValue) && $alertas->coordenadas->LinkAttributes() <> "") { ?>
+<a<?php echo $alertas->coordenadas->LinkAttributes() ?>><?php echo $alertas->coordenadas->ViewValue ?></a>
+<?php } else { ?>
+<?php echo $alertas->coordenadas->ViewValue ?>
+<?php } ?>
+</span>
 </span></td>
 	</tr>
 <?php } ?>

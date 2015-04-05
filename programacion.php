@@ -49,72 +49,79 @@ else
 		}
 	}
 
-	$db2 = new DB_Sql;
-	$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
-	if ($db2->nf() > 0)
+	if ($_SESSION['empids'])
 	{
-		while($db2->next_record())
+		$db2 = new DB_Sql;
+		$db2->query('SELECT c.* FROM clientes c WHERE c.id IN (' . $_SESSION['empids'] . ') ORDER BY c.nombre');
+		if ($db2->nf() > 0)
 		{
-			$t->newBlock("empresas");
-			$t->assign("empresa",$db2->Record['nombre']);
-			$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
-			
-			$db->query('SELECT v.*, l.nombre, l.direccion, p.servicio, DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita FROM visitas v, locales l, planillas p WHERE l.clientes_id = ' . $db2->Record['id'] . ' and v.locales_id = l.id and v.planillas_id = p.id and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ')');
-			if ($db->nf() > 0)
+			while($db2->next_record())
 			{
-				while($db->next_record())
+				$t->newBlock("empresas");
+				$t->assign("empresa",$db2->Record['nombre']);
+				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+				
+				$db->query('SELECT v.*, l.nombre, l.direccion, p.servicio, DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita FROM visitas v, locales l, planillas p WHERE l.clientes_id = ' . $db2->Record['id'] . ' and v.locales_id = l.id and v.planillas_id = p.id and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ')');
+				if ($db->nf() > 0)
 				{
-					$t->newBlock("programaciones");
-					$t->assign("id",$db->Record['id']);
-					$t->assign("locales",$db->Record['nombre']);
-					$t->assign("servicio",$db->Record['servicio']);
-					$t->assign("direccion",$db->Record['direccion']);
-					$t->assign("fecvisita",$db->Record['fecvisita']);
-					$estvisita = $db->Record['estado_visita'];
-					$estrevision = $db->Record['estado_revision'];
+					while($db->next_record())
+					{
+						$t->newBlock("programaciones");
+						$t->assign("id",$db->Record['id']);
+						$t->assign("locales",$db->Record['nombre']);
+						$t->assign("servicio",$db->Record['servicio']);
+						$t->assign("direccion",$db->Record['direccion']);
+						$t->assign("fecvisita",$db->Record['fecvisita']);
+						$estvisita = $db->Record['estado_visita'];
+						$estrevision = $db->Record['estado_revision'];
 
-					switch ($estvisita) {
-						case 1:
-							$estvisita = 'Vigente';
-							break;
-						case 2:
-							$estvisita = 'Realizada';
-							break;
-						case 3:
-							$estvisita = 'Atrasada';
-							break;
-						default:
-						   $estvisita = 'S/I';
-					}
-					
-					switch ($estrevision) {
-						case 0:
-							$estrevision = 'En Curso';
-							break;
-						case 1:
-							$estrevision = 'Sin Revisar';
-							break;
-						case 2:
-							$estrevision = 'Revisada';
-							break;
-						default:
-						   $estrevision = 'S/I';
-					}
+						switch ($estvisita) {
+							case 1:
+								$estvisita = 'Vigente';
+								break;
+							case 2:
+								$estvisita = 'Realizada';
+								break;
+							case 3:
+								$estvisita = 'Atrasada';
+								break;
+							default:
+							   $estvisita = 'S/I';
+						}
+						
+						switch ($estrevision) {
+							case 0:
+								$estrevision = 'En Curso';
+								break;
+							case 1:
+								$estrevision = 'Sin Revisar';
+								break;
+							case 2:
+								$estrevision = 'Revisada';
+								break;
+							default:
+							   $estrevision = 'S/I';
+						}
 
-					$t->assign("estvisita",$estvisita);
-					$t->assign("estrevision",$estrevision);
+						$t->assign("estvisita",$estvisita);
+						$t->assign("estrevision",$estrevision);
+					}
+				}
+				else
+				{
+					//$t->newBlock("programaciones");
+					//$t->assign("direccion", 'Sin información');
 				}
 			}
-			else
-			{
-				//$t->newBlock("programaciones");
-				//$t->assign("direccion", 'Sin información');
-			}
+		}
+		else
+		{
+			$t->newBlock("empresas");
 		}
 	}
 	else
 	{
-		$t->newBlock("empresas");
+		$t->assign("sinempresas", '<br><br><br><br><strong>USUARIO NO TIENE EMPRESAS ASOCIADAS.</strong>');
 	}
 
 	//print the result
