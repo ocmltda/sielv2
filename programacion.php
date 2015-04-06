@@ -61,7 +61,7 @@ else
 				$t->assign("empresa",$db2->Record['nombre']);
 				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
 				
-				$db->query('SELECT v.*, l.nombre, l.direccion, p.servicio, DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita FROM visitas v, locales l, planillas p WHERE l.clientes_id = ' . $db2->Record['id'] . ' and v.locales_id = l.id and v.planillas_id = p.id and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ')');
+				$db->query('SELECT v.*, l.nombre, l.direccion, p.servicio, DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita FROM visitas v, locales l, planillas p WHERE l.clientes_id = ' . $db2->Record['id'] . ' and v.locales_id = l.id and v.planillas_id = p.id and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ') ORDER BY v.fecha_visita ASC');
 				if ($db->nf() > 0)
 				{
 					while($db->next_record())

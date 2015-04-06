@@ -61,7 +61,7 @@ else
 				$t->assign("empresa",$db2->Record['nombre']);
 				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
 
-				$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . '');
+				$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . ' ORDER BY a.estado ASC, a.fecha DESC, a.hora DESC');
 				if ($db->nf() > 0)
 				{
 					while($db->next_record())
@@ -74,6 +74,11 @@ else
 						$t->assign("gps",$db->Record['coordenadas']);
 						$t->assign("incidencia",$db->Record['tipi_nombre']);
 						$t->assign("comentario",$db->Record['comentarios']);
+						$estado = $db->Record['estado'];
+						if ($estado == 1)
+							$t->assign("estado", 'Informada');
+						else
+							$t->assign("estado", 'Revisada');
 					}
 				}
 				else

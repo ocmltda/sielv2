@@ -336,6 +336,7 @@ class calertas_delete extends calertas {
 		$this->comentarios->setDbValue($rs->fields('comentarios'));
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
 	// Render row values based on field settings
@@ -363,6 +364,7 @@ class calertas_delete extends calertas {
 		// comentarios
 		// tiposacciones_id
 		// fotografia
+		// estado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -481,6 +483,23 @@ class calertas_delete extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// estado
+			if (strval($this->estado->CurrentValue) <> "") {
+				switch ($this->estado->CurrentValue) {
+					case $this->estado->FldTagValue(1):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+						break;
+					case $this->estado->FldTagValue(2):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+						break;
+					default:
+						$this->estado->ViewValue = $this->estado->CurrentValue;
+				}
+			} else {
+				$this->estado->ViewValue = NULL;
+			}
+			$this->estado->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -539,6 +558,11 @@ class calertas_delete extends calertas {
 			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
+
+			// estado
+			$this->estado->LinkCustomAttributes = "";
+			$this->estado->HrefValue = "";
+			$this->estado->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -766,6 +790,7 @@ $alertas_delete->ShowMessage();
 		<td><span id="elh_alertas_coordenadas" class="alertas_coordenadas"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->coordenadas->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_tiposacciones_id" class="alertas_tiposacciones_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->tiposacciones_id->FldCaption() ?></td></tr></table></span></td>
 		<td><span id="elh_alertas_fotografia" class="alertas_fotografia"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->fotografia->FldCaption() ?></td></tr></table></span></td>
+		<td><span id="elh_alertas_estado" class="alertas_estado"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->estado->FldCaption() ?></td></tr></table></span></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -840,6 +865,10 @@ while (!$alertas_delete->Recordset->EOF) {
 <?php } ?>
 <?php } ?>
 </span>
+</span></td>
+		<td<?php echo $alertas->estado->CellAttributes() ?>><span id="el<?php echo $alertas_delete->RowCnt ?>_alertas_estado" class="alertas_estado">
+<span<?php echo $alertas->estado->ViewAttributes() ?>>
+<?php echo $alertas->estado->ListViewValue() ?></span>
 </span></td>
 	</tr>
 <?php

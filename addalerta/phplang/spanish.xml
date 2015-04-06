@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/4/4" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
+<ew-language date="2015/4/6" version="9.1.0" id="es" name="Spanish_MX_v9" desc="Español_v9_Mexico" author="lutgardo@lut.mx">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** setting locale here will override the project locale setting *** -->
 		<phrase id="use_system_locale" value="1"/>
@@ -362,6 +362,12 @@
 </field>
 <field id="fotografia"><phrase id="fldcaption" value="Fotografía"/>
 </field>
+<field id="estado"><phrase id="fldcaption" value="Estado"/>
+<phrase id="fldtagvalue1" value="1"/>
+<phrase id="fldtagcaption1" value="Informada"/>
+<phrase id="fldtagvalue2" value="2"/>
+<phrase id="fldtagcaption2" value="Revisada"/>
+</field>
 </table>
 <table id="clientes"><phrase id="tblcaption" value="clientes"/>
 <field id="id"><phrase id="fldcaption" value="id"/>
@@ -369,6 +375,8 @@
 <field id="nombre"><phrase id="fldcaption" value="nombre"/>
 </field>
 <field id="logo"><phrase id="fldcaption" value="logo"/>
+</field>
+<field id="mailsalerta"><phrase id="fldcaption" value="mailsalerta"/>
 </field>
 </table>
 <table id="empusu"/>
@@ -435,6 +443,8 @@
 <field id="tipi_id"><phrase id="fldcaption" value="tipi id"/>
 </field>
 <field id="tipi_nombre"><phrase id="fldcaption" value="tipi nombre"/>
+</field>
+<field id="clientes_id"><phrase id="fldcaption" value="clientes id"/>
 </field>
 </table>
 </project>

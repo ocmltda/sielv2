@@ -553,6 +553,7 @@ class calertas_list extends calertas {
 			$this->UpdateSort($this->coordenadas); // coordenadas
 			$this->UpdateSort($this->tiposacciones_id); // tiposacciones_id
 			$this->UpdateSort($this->fotografia); // fotografia
+			$this->UpdateSort($this->estado); // estado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -596,6 +597,7 @@ class calertas_list extends calertas {
 				$this->coordenadas->setSort("");
 				$this->tiposacciones_id->setSort("");
 				$this->fotografia->setSort("");
+				$this->estado->setSort("");
 			}
 
 			// Reset start position
@@ -765,6 +767,7 @@ class calertas_list extends calertas {
 		$this->comentarios->setDbValue($rs->fields('comentarios'));
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
 	// Load old record
@@ -820,6 +823,7 @@ class calertas_list extends calertas {
 		// comentarios
 		// tiposacciones_id
 		// fotografia
+		// estado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -938,6 +942,23 @@ class calertas_list extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// estado
+			if (strval($this->estado->CurrentValue) <> "") {
+				switch ($this->estado->CurrentValue) {
+					case $this->estado->FldTagValue(1):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+						break;
+					case $this->estado->FldTagValue(2):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+						break;
+					default:
+						$this->estado->ViewValue = $this->estado->CurrentValue;
+				}
+			} else {
+				$this->estado->ViewValue = NULL;
+			}
+			$this->estado->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -996,6 +1017,11 @@ class calertas_list extends calertas {
 			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
+
+			// estado
+			$this->estado->LinkCustomAttributes = "";
+			$this->estado->HrefValue = "";
+			$this->estado->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1336,6 +1362,15 @@ $alertas_list->ListOptions->Render("header", "left");
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
+<?php if ($alertas->estado->Visible) { // estado ?>
+	<?php if ($alertas->SortUrl($alertas->estado) == "") { ?>
+		<td><span id="elh_alertas_estado" class="alertas_estado"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $alertas->estado->FldCaption() ?></td></tr></thead></table></span></td>
+	<?php } else { ?>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $alertas->SortUrl($alertas->estado) ?>',1);"><span id="elh_alertas_estado" class="alertas_estado">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $alertas->estado->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($alertas->estado->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($alertas->estado->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		</span></div></td>		
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -1470,6 +1505,12 @@ $alertas_list->ListOptions->Render("body", "left", $alertas_list->RowCnt);
 <?php } ?>
 <?php } ?>
 </span>
+</span><a id="<?php echo $alertas_list->PageObjName . "_row_" . $alertas_list->RowCnt ?>"></a></td>
+	<?php } ?>
+	<?php if ($alertas->estado->Visible) { // estado ?>
+		<td<?php echo $alertas->estado->CellAttributes() ?>><span id="el<?php echo $alertas_list->RowCnt ?>_alertas_estado" class="alertas_estado">
+<span<?php echo $alertas->estado->ViewAttributes() ?>>
+<?php echo $alertas->estado->ListViewValue() ?></span>
 </span><a id="<?php echo $alertas_list->PageObjName . "_row_" . $alertas_list->RowCnt ?>"></a></td>
 	<?php } ?>
 <?php

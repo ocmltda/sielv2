@@ -18,6 +18,7 @@ class calertas extends cTable {
 	var $comentarios;
 	var $tiposacciones_id;
 	var $fotografia;
+	var $estado;
 
 	//
 	// Table class constructor
@@ -91,6 +92,11 @@ class calertas extends cTable {
 		// fotografia
 		$this->fotografia = new cField('alertas', 'alertas', 'x_fotografia', 'fotografia', '`fotografia`', '`fotografia`', 200, -1, TRUE, '`fotografia`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['fotografia'] = &$this->fotografia;
+
+		// estado
+		$this->estado = new cField('alertas', 'alertas', 'x_estado', 'estado', '`estado`', '`estado`', 2, -1, FALSE, '`estado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->estado->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['estado'] = &$this->estado;
 	}
 
 	// Single column sort
@@ -492,6 +498,7 @@ class calertas extends cTable {
 		$this->comentarios->setDbValue($rs->fields('comentarios'));
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
 	// Render list row values
@@ -516,6 +523,7 @@ class calertas extends cTable {
 		// comentarios
 		// tiposacciones_id
 		// fotografia
+		// estado
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -640,6 +648,23 @@ class calertas extends cTable {
 		}
 		$this->fotografia->ViewCustomAttributes = "";
 
+		// estado
+		if (strval($this->estado->CurrentValue) <> "") {
+			switch ($this->estado->CurrentValue) {
+				case $this->estado->FldTagValue(1):
+					$this->estado->ViewValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+					break;
+				case $this->estado->FldTagValue(2):
+					$this->estado->ViewValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+					break;
+				default:
+					$this->estado->ViewValue = $this->estado->CurrentValue;
+			}
+		} else {
+			$this->estado->ViewValue = NULL;
+		}
+		$this->estado->ViewCustomAttributes = "";
+
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
@@ -709,6 +734,11 @@ class calertas extends cTable {
 		$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 		$this->fotografia->TooltipValue = "";
 
+		// estado
+		$this->estado->LinkCustomAttributes = "";
+		$this->estado->HrefValue = "";
+		$this->estado->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -741,6 +771,7 @@ class calertas extends cTable {
 				if ($this->comentarios->Exportable) $Doc->ExportCaption($this->comentarios);
 				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
 				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
+				if ($this->estado->Exportable) $Doc->ExportCaption($this->estado);
 			} else {
 				if ($this->id->Exportable) $Doc->ExportCaption($this->id);
 				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
@@ -751,6 +782,7 @@ class calertas extends cTable {
 				if ($this->coordenadas->Exportable) $Doc->ExportCaption($this->coordenadas);
 				if ($this->tiposacciones_id->Exportable) $Doc->ExportCaption($this->tiposacciones_id);
 				if ($this->fotografia->Exportable) $Doc->ExportCaption($this->fotografia);
+				if ($this->estado->Exportable) $Doc->ExportCaption($this->estado);
 			}
 			$Doc->EndExportRow();
 		}
@@ -790,6 +822,7 @@ class calertas extends cTable {
 					if ($this->comentarios->Exportable) $Doc->ExportField($this->comentarios);
 					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
 					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
+					if ($this->estado->Exportable) $Doc->ExportField($this->estado);
 				} else {
 					if ($this->id->Exportable) $Doc->ExportField($this->id);
 					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
@@ -800,6 +833,7 @@ class calertas extends cTable {
 					if ($this->coordenadas->Exportable) $Doc->ExportField($this->coordenadas);
 					if ($this->tiposacciones_id->Exportable) $Doc->ExportField($this->tiposacciones_id);
 					if ($this->fotografia->Exportable) $Doc->ExportField($this->fotografia);
+					if ($this->estado->Exportable) $Doc->ExportField($this->estado);
 				}
 				$Doc->EndExportRow();
 			}

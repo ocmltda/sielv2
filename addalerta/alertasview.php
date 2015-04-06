@@ -400,6 +400,7 @@ class calertas_view extends calertas {
 		$this->comentarios->setDbValue($rs->fields('comentarios'));
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
+		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
 	// Render row values based on field settings
@@ -429,6 +430,7 @@ class calertas_view extends calertas {
 		// comentarios
 		// tiposacciones_id
 		// fotografia
+		// estado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -551,6 +553,23 @@ class calertas_view extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// estado
+			if (strval($this->estado->CurrentValue) <> "") {
+				switch ($this->estado->CurrentValue) {
+					case $this->estado->FldTagValue(1):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+						break;
+					case $this->estado->FldTagValue(2):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+						break;
+					default:
+						$this->estado->ViewValue = $this->estado->CurrentValue;
+				}
+			} else {
+				$this->estado->ViewValue = NULL;
+			}
+			$this->estado->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -614,6 +633,11 @@ class calertas_view extends calertas {
 			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
+
+			// estado
+			$this->estado->LinkCustomAttributes = "";
+			$this->estado->HrefValue = "";
+			$this->estado->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -664,8 +688,37 @@ class calertas_view extends calertas {
 
 		// Example:
 		//$header = "your header";
+		// Example:
+			//$header = "your header";
 
-	}
+			/*echo $_GET['id'];
+			echo $this->locales_id->ViewValue;
+			echo $this->tiposacciones_id->ViewValue;
+			echo CurrentUserName();
+			echo 'OACM';*/         
+			if ($this->estado->ViewValue == 'Revisada')
+				echo '<p>Alerta ya revisada</p>';
+			else
+			{   
+				ew_Execute("UPDATE alertas SET estado = 2 WHERE id =" . $_GET['id']);
+
+				//envio de mails
+				$to = 'eayalamail@gmail.com';
+				$subject = "ALERTA ID " . $_GET['id'] . " REVISADA POR " . CurrentUserName() . " - " . $this->clientes_id->ViewValue . " " . date('d-m-Y H:i');
+				$message = '<html><head> <title>ALERTA REVISADA</title><meta name="generator" content="PHPMaker v9.2.0">
+</head><body><p>Informamos que el usuario ' . CurrentUserName() . ' ha revisado la Alerta ID ' . $_GET['id'] . ' de la empresa ' . $this->clientes_id->ViewValue . ' en la fecha ' . date('d-m-Y H:i') . '.</p><br></body></html>';
+				$headers  = "MIME-Version: 1.0\r\n";
+				$headers .= "Content-type: text/html; charset=utf-8\r\n";
+				$headers .= "From: Tack < no_responder@tack.cl >\r\n";
+
+				//$headers .= "Cc: obarria@chilevision.cl\r\n";
+				//$headers .= "Bcc: birthdaycheck@example.com\r\n";
+				// and now mail it 
+				//echo "$to, $subject, $message, $headers";
+
+				mail($to, $subject, $message, $headers);
+			}
+	}                                                    
 
 	// Page Data Rendered event
 	function Page_DataRendered(&$footer) {
@@ -855,6 +908,15 @@ $alertas_view->ShowMessage();
 <?php } ?>
 <?php } ?>
 </span>
+</span></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->estado->Visible) { // estado ?>
+	<tr id="r_estado"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_estado"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->estado->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->estado->CellAttributes() ?>><span id="el_alertas_estado">
+<span<?php echo $alertas->estado->ViewAttributes() ?>>
+<?php echo $alertas->estado->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>

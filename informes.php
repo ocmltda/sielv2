@@ -61,7 +61,8 @@ else
 				$t->assign("empresa",$db2->Record['nombre']);
 				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
 
-				$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' and DATE_FORMAT(i.periodo,\'%Y-%m\') = \'' . $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '\' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
+				//$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' and DATE_FORMAT(i.periodo,\'%Y-%m\') = \'' . $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '\' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
+				$db->query('SELECT i.*, DATE_FORMAT(i.periodo,\'%Y-%m\') as periodo, DATE_FORMAT(i.fecha_publicacion,\'%d-%m-%Y\') as fecpublic FROM informes i WHERE i.clientes_id = ' . $db2->Record['id'] . ' order by DATE_FORMAT(i.periodo,\'%Y-%m\') desc');
 				if ($db->nf() > 0)
 				{
 					while($db->next_record())

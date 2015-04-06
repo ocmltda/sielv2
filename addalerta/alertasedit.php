@@ -357,6 +357,9 @@ class calertas_edit extends calertas {
 		if (!$this->tiposacciones_id->FldIsDetailKey) {
 			$this->tiposacciones_id->setFormValue($objForm->GetValue("x_tiposacciones_id"));
 		}
+		if (!$this->estado->FldIsDetailKey) {
+			$this->estado->setFormValue($objForm->GetValue("x_estado"));
+		}
 	}
 
 	// Restore form values
@@ -373,6 +376,7 @@ class calertas_edit extends calertas {
 		$this->coordenadas->CurrentValue = $this->coordenadas->FormValue;
 		$this->comentarios->CurrentValue = $this->comentarios->FormValue;
 		$this->tiposacciones_id->CurrentValue = $this->tiposacciones_id->FormValue;
+		$this->estado->CurrentValue = $this->estado->FormValue;
 	}
 
 	// Load row based on key values
@@ -416,6 +420,7 @@ class calertas_edit extends calertas {
 		$this->tiposacciones_id->setDbValue($rs->fields('tiposacciones_id'));
 		$this->fotografia->Upload->DbValue = $rs->fields('fotografia');
 		$this->fotografia->Upload->SaveDbToSession();
+		$this->estado->setDbValue($rs->fields('estado'));
 	}
 
 	// Render row values based on field settings
@@ -440,6 +445,7 @@ class calertas_edit extends calertas {
 		// comentarios
 		// tiposacciones_id
 		// fotografia
+		// estado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -562,6 +568,23 @@ class calertas_edit extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// estado
+			if (strval($this->estado->CurrentValue) <> "") {
+				switch ($this->estado->CurrentValue) {
+					case $this->estado->FldTagValue(1):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+						break;
+					case $this->estado->FldTagValue(2):
+						$this->estado->ViewValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+						break;
+					default:
+						$this->estado->ViewValue = $this->estado->CurrentValue;
+				}
+			} else {
+				$this->estado->ViewValue = NULL;
+			}
+			$this->estado->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -625,6 +648,11 @@ class calertas_edit extends calertas {
 			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
 			$this->fotografia->TooltipValue = "";
+
+			// estado
+			$this->estado->LinkCustomAttributes = "";
+			$this->estado->HrefValue = "";
+			$this->estado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// id
@@ -749,6 +777,24 @@ class calertas_edit extends calertas {
 			}
 			$this->fotografia->ViewCustomAttributes = "";
 
+			// estado
+			$this->estado->EditCustomAttributes = "";
+			if (strval($this->estado->CurrentValue) <> "") {
+				switch ($this->estado->CurrentValue) {
+					case $this->estado->FldTagValue(1):
+						$this->estado->EditValue = $this->estado->FldTagCaption(1) <> "" ? $this->estado->FldTagCaption(1) : $this->estado->CurrentValue;
+						break;
+					case $this->estado->FldTagValue(2):
+						$this->estado->EditValue = $this->estado->FldTagCaption(2) <> "" ? $this->estado->FldTagCaption(2) : $this->estado->CurrentValue;
+						break;
+					default:
+						$this->estado->EditValue = $this->estado->CurrentValue;
+				}
+			} else {
+				$this->estado->EditValue = NULL;
+			}
+			$this->estado->ViewCustomAttributes = "";
+
 			// Edit refer script
 			// id
 
@@ -794,6 +840,9 @@ class calertas_edit extends calertas {
 				$this->fotografia->HrefValue = "";
 			}
 			$this->fotografia->HrefValue2 = $this->fotografia->UploadPath . $this->fotografia->Upload->DbValue;
+
+			// estado
+			$this->estado->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1168,6 +1217,16 @@ falertasedit.Lists["x_tiposacciones_id"].Options = <?php echo (is_array($alertas
 </span>
 <input type="hidden" name="x_fotografia" id="x_fotografia" value="<?php echo ew_HtmlEncode($alertas->fotografia->CurrentValue) ?>">
 </span><?php echo $alertas->fotografia->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($alertas->estado->Visible) { // estado ?>
+	<tr id="r_estado"<?php echo $alertas->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_alertas_estado"><table class="ewTableHeaderBtn"><tr><td><?php echo $alertas->estado->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $alertas->estado->CellAttributes() ?>><span id="el_alertas_estado">
+<span<?php echo $alertas->estado->ViewAttributes() ?>>
+<?php echo $alertas->estado->EditValue ?></span>
+<input type="hidden" name="x_estado" id="x_estado" value="<?php echo ew_HtmlEncode($alertas->estado->CurrentValue) ?>">
+</span><?php echo $alertas->estado->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 </table>
