@@ -318,6 +318,8 @@ class ctiposincidencias_add extends ctiposincidencias {
 	function LoadDefaultValues() {
 		$this->tipi_nombre->CurrentValue = NULL;
 		$this->tipi_nombre->OldValue = $this->tipi_nombre->CurrentValue;
+		$this->clientes_id->CurrentValue = NULL;
+		$this->clientes_id->OldValue = $this->clientes_id->CurrentValue;
 	}
 
 	// Load form values
@@ -328,6 +330,9 @@ class ctiposincidencias_add extends ctiposincidencias {
 		if (!$this->tipi_nombre->FldIsDetailKey) {
 			$this->tipi_nombre->setFormValue($objForm->GetValue("x_tipi_nombre"));
 		}
+		if (!$this->clientes_id->FldIsDetailKey) {
+			$this->clientes_id->setFormValue($objForm->GetValue("x_clientes_id"));
+		}
 	}
 
 	// Restore form values
@@ -335,6 +340,7 @@ class ctiposincidencias_add extends ctiposincidencias {
 		global $objForm;
 		$this->LoadOldRecord();
 		$this->tipi_nombre->CurrentValue = $this->tipi_nombre->FormValue;
+		$this->clientes_id->CurrentValue = $this->clientes_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -368,6 +374,7 @@ class ctiposincidencias_add extends ctiposincidencias {
 		$this->Row_Selected($row);
 		$this->tipi_id->setDbValue($rs->fields('tipi_id'));
 		$this->tipi_nombre->setDbValue($rs->fields('tipi_nombre'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Load old record
@@ -405,6 +412,7 @@ class ctiposincidencias_add extends ctiposincidencias {
 		// Common render codes for all row types
 		// tipi_id
 		// tipi_nombre
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -416,20 +424,66 @@ class ctiposincidencias_add extends ctiposincidencias {
 			$this->tipi_nombre->ViewValue = $this->tipi_nombre->CurrentValue;
 			$this->tipi_nombre->ViewCustomAttributes = "";
 
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
+
 			// tipi_nombre
 			$this->tipi_nombre->LinkCustomAttributes = "";
 			$this->tipi_nombre->HrefValue = "";
 			$this->tipi_nombre->TooltipValue = "";
+
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// tipi_nombre
 			$this->tipi_nombre->EditCustomAttributes = "";
 			$this->tipi_nombre->EditValue = ew_HtmlEncode($this->tipi_nombre->CurrentValue);
 
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->clientes_id->EditValue = $arwrk;
+
 			// Edit refer script
 			// tipi_nombre
 
 			$this->tipi_nombre->HrefValue = "";
+
+			// clientes_id
+			$this->clientes_id->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -455,6 +509,9 @@ class ctiposincidencias_add extends ctiposincidencias {
 		if (!is_null($this->tipi_nombre->FormValue) && $this->tipi_nombre->FormValue == "") {
 			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->tipi_nombre->FldCaption());
 		}
+		if (!is_null($this->clientes_id->FormValue) && $this->clientes_id->FormValue == "") {
+			ew_AddMessage($gsFormError, $Language->Phrase("EnterRequiredField") . " - " . $this->clientes_id->FldCaption());
+		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -475,6 +532,9 @@ class ctiposincidencias_add extends ctiposincidencias {
 
 		// tipi_nombre
 		$this->tipi_nombre->SetDbValueDef($rsnew, $this->tipi_nombre->CurrentValue, "", FALSE);
+
+		// clientes_id
+		$this->clientes_id->SetDbValueDef($rsnew, $this->clientes_id->CurrentValue, 0, FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
@@ -613,6 +673,9 @@ ftiposincidenciasadd.Validate = function(fobj) {
 		elm = fobj.elements["x" + infix + "_tipi_nombre"];
 		if (elm && !ew_HasValue(elm))
 			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($tiposincidencias->tipi_nombre->FldCaption()) ?>");
+		elm = fobj.elements["x" + infix + "_clientes_id"];
+		if (elm && !ew_HasValue(elm))
+			return ew_OnError(this, elm, ewLanguage.Phrase("EnterRequiredField") + " - <?php echo ew_JsEncode2($tiposincidencias->clientes_id->FldCaption()) ?>");
 
 		// Set up row object
 		ew_ElementsToRow(fobj, infix);
@@ -644,8 +707,9 @@ ftiposincidenciasadd.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ftiposincidenciasadd.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -670,6 +734,34 @@ $tiposincidencias_add->ShowMessage();
 		<td<?php echo $tiposincidencias->tipi_nombre->CellAttributes() ?>><span id="el_tiposincidencias_tipi_nombre">
 <input type="text" name="x_tipi_nombre" id="x_tipi_nombre" size="60" maxlength="128" value="<?php echo $tiposincidencias->tipi_nombre->EditValue ?>"<?php echo $tiposincidencias->tipi_nombre->EditAttributes() ?>>
 </span><?php echo $tiposincidencias->tipi_nombre->CustomMsg ?></td>
+	</tr>
+<?php } ?>
+<?php if ($tiposincidencias->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $tiposincidencias->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_tiposincidencias_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $tiposincidencias->clientes_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></td></tr></table></span></td>
+		<td<?php echo $tiposincidencias->clientes_id->CellAttributes() ?>><span id="el_tiposincidencias_clientes_id">
+<select id="x_clientes_id" name="x_clientes_id"<?php echo $tiposincidencias->clientes_id->EditAttributes() ?>>
+<?php
+if (is_array($tiposincidencias->clientes_id->EditValue)) {
+	$arwrk = $tiposincidencias->clientes_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($tiposincidencias->clientes_id->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+ftiposincidenciasadd.Lists["x_clientes_id"].Options = <?php echo (is_array($tiposincidencias->clientes_id->EditValue)) ? ew_ArrayToJson($tiposincidencias->clientes_id->EditValue, 1) : "[]" ?>;
+</script>
+</span><?php echo $tiposincidencias->clientes_id->CustomMsg ?></td>
 	</tr>
 <?php } ?>
 </table>

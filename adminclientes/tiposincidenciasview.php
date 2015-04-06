@@ -379,6 +379,7 @@ class ctiposincidencias_view extends ctiposincidencias {
 		$this->Row_Selected($row);
 		$this->tipi_id->setDbValue($rs->fields('tipi_id'));
 		$this->tipi_nombre->setDbValue($rs->fields('tipi_nombre'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Render row values based on field settings
@@ -399,6 +400,7 @@ class ctiposincidencias_view extends ctiposincidencias {
 		// Common render codes for all row types
 		// tipi_id
 		// tipi_nombre
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -410,6 +412,28 @@ class ctiposincidencias_view extends ctiposincidencias {
 			$this->tipi_nombre->ViewValue = $this->tipi_nombre->CurrentValue;
 			$this->tipi_nombre->ViewCustomAttributes = "";
 
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
+
 			// tipi_id
 			$this->tipi_id->LinkCustomAttributes = "";
 			$this->tipi_id->HrefValue = "";
@@ -419,6 +443,11 @@ class ctiposincidencias_view extends ctiposincidencias {
 			$this->tipi_nombre->LinkCustomAttributes = "";
 			$this->tipi_nombre->HrefValue = "";
 			$this->tipi_nombre->TooltipValue = "";
+
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -520,8 +549,9 @@ ftiposincidenciasview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ftiposincidenciasview.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -565,6 +595,15 @@ $tiposincidencias_view->ShowMessage();
 		<td<?php echo $tiposincidencias->tipi_nombre->CellAttributes() ?>><span id="el_tiposincidencias_tipi_nombre">
 <span<?php echo $tiposincidencias->tipi_nombre->ViewAttributes() ?>>
 <?php echo $tiposincidencias->tipi_nombre->ViewValue ?></span>
+</span></td>
+	</tr>
+<?php } ?>
+<?php if ($tiposincidencias->clientes_id->Visible) { // clientes_id ?>
+	<tr id="r_clientes_id"<?php echo $tiposincidencias->RowAttributes() ?>>
+		<td class="ewTableHeader"><span id="elh_tiposincidencias_clientes_id"><table class="ewTableHeaderBtn"><tr><td><?php echo $tiposincidencias->clientes_id->FldCaption() ?></td></tr></table></span></td>
+		<td<?php echo $tiposincidencias->clientes_id->CellAttributes() ?>><span id="el_tiposincidencias_clientes_id">
+<span<?php echo $tiposincidencias->clientes_id->ViewAttributes() ?>>
+<?php echo $tiposincidencias->clientes_id->ViewValue ?></span>
 </span></td>
 	</tr>
 <?php } ?>

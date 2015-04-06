@@ -339,6 +339,11 @@ class ctiposincidencias_list extends ctiposincidencias {
 			// Get basic search values
 			$this->LoadBasicSearchValues();
 
+			// Get and validate search values for advanced search
+			$this->LoadSearchValues(); // Get search values
+			if (!$this->ValidateSearch())
+				$this->setFailureMessage($gsSearchError);
+
 			// Restore search parms from Session if not searching / reset
 			if ($this->Command <> "search" && $this->Command <> "reset" && $this->Command <> "resetall")
 				$this->RestoreSearchParms();
@@ -352,6 +357,10 @@ class ctiposincidencias_list extends ctiposincidencias {
 			// Get basic search criteria
 			if ($gsSearchError == "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Get search criteria for advanced search
+			if ($gsSearchError == "")
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
 		}
 
 		// Restore display records
@@ -371,6 +380,11 @@ class ctiposincidencias_list extends ctiposincidencias {
 			$this->BasicSearch->LoadDefault();
 			if ($this->BasicSearch->Keyword != "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Load advanced search from default
+			if ($this->LoadAdvancedSearchDefault()) {
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
+			}
 		}
 
 		// Build search criteria
@@ -437,6 +451,75 @@ class ctiposincidencias_list extends ctiposincidencias {
 		return TRUE;
 	}
 
+	// Advanced search WHERE clause based on QueryString
+	function AdvancedSearchWhere() {
+		global $Security;
+		$sWhere = "";
+		$this->BuildSearchSql($sWhere, $this->tipi_id, FALSE); // tipi_id
+		$this->BuildSearchSql($sWhere, $this->tipi_nombre, FALSE); // tipi_nombre
+		$this->BuildSearchSql($sWhere, $this->clientes_id, FALSE); // clientes_id
+
+		// Set up search parm
+		if ($sWhere <> "") {
+			$this->Command = "search";
+		}
+		if ($this->Command == "search") {
+			$this->tipi_id->AdvancedSearch->Save(); // tipi_id
+			$this->tipi_nombre->AdvancedSearch->Save(); // tipi_nombre
+			$this->clientes_id->AdvancedSearch->Save(); // clientes_id
+		}
+		return $sWhere;
+	}
+
+	// Build search SQL
+	function BuildSearchSql(&$Where, &$Fld, $MultiValue) {
+		$FldParm = substr($Fld->FldVar, 2);
+		$FldVal = $Fld->AdvancedSearch->SearchValue; // @$_GET["x_$FldParm"]
+		$FldOpr = $Fld->AdvancedSearch->SearchOperator; // @$_GET["z_$FldParm"]
+		$FldCond = $Fld->AdvancedSearch->SearchCondition; // @$_GET["v_$FldParm"]
+		$FldVal2 = $Fld->AdvancedSearch->SearchValue2; // @$_GET["y_$FldParm"]
+		$FldOpr2 = $Fld->AdvancedSearch->SearchOperator2; // @$_GET["w_$FldParm"]
+		$sWrk = "";
+
+		//$FldVal = ew_StripSlashes($FldVal);
+		if (is_array($FldVal)) $FldVal = implode(",", $FldVal);
+
+		//$FldVal2 = ew_StripSlashes($FldVal2);
+		if (is_array($FldVal2)) $FldVal2 = implode(",", $FldVal2);
+		$FldOpr = strtoupper(trim($FldOpr));
+		if ($FldOpr == "") $FldOpr = "=";
+		$FldOpr2 = strtoupper(trim($FldOpr2));
+		if ($FldOpr2 == "") $FldOpr2 = "=";
+		if (EW_SEARCH_MULTI_VALUE_OPTION == 1 || $FldOpr <> "LIKE" ||
+			($FldOpr2 <> "LIKE" && $FldVal2 <> ""))
+			$MultiValue = FALSE;
+		if ($MultiValue) {
+			$sWrk1 = ($FldVal <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr, $FldVal) : ""; // Field value 1
+			$sWrk2 = ($FldVal2 <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr2, $FldVal2) : ""; // Field value 2
+			$sWrk = $sWrk1; // Build final SQL
+			if ($sWrk2 <> "")
+				$sWrk = ($sWrk <> "") ? "($sWrk) $FldCond ($sWrk2)" : $sWrk2;
+		} else {
+			$FldVal = $this->ConvertSearchValue($Fld, $FldVal);
+			$FldVal2 = $this->ConvertSearchValue($Fld, $FldVal2);
+			$sWrk = ew_GetSearchSql($Fld, $FldVal, $FldOpr, $FldCond, $FldVal2, $FldOpr2);
+		}
+		ew_AddFilter($Where, $sWrk);
+	}
+
+	// Convert search value
+	function ConvertSearchValue(&$Fld, $FldVal) {
+		if ($FldVal == EW_NULL_VALUE || $FldVal == EW_NOT_NULL_VALUE)
+			return $FldVal;
+		$Value = $FldVal;
+		if ($Fld->FldDataType == EW_DATATYPE_BOOLEAN) {
+			if ($FldVal <> "") $Value = ($FldVal == "1" || strtolower(strval($FldVal)) == "y" || strtolower(strval($FldVal)) == "t") ? $Fld->TrueValue : $Fld->FalseValue;
+		} elseif ($Fld->FldDataType == EW_DATATYPE_DATE) {
+			if ($FldVal <> "") $Value = ew_UnFormatDateTime($FldVal, $Fld->FldDateTimeFormat);
+		}
+		return $Value;
+	}
+
 	// Return basic search SQL
 	function BasicSearchSQL($Keyword) {
 		$sKeyword = ew_AdjustSql($Keyword);
@@ -493,6 +576,12 @@ class ctiposincidencias_list extends ctiposincidencias {
 		// Check basic search
 		if ($this->BasicSearch->IssetSession())
 			return TRUE;
+		if ($this->tipi_id->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->tipi_nombre->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->clientes_id->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -505,6 +594,9 @@ class ctiposincidencias_list extends ctiposincidencias {
 
 		// Clear basic search parameters
 		$this->ResetBasicSearchParms();
+
+		// Clear advanced search parameters
+		$this->ResetAdvancedSearchParms();
 	}
 
 	// Load advanced search default values
@@ -517,11 +609,23 @@ class ctiposincidencias_list extends ctiposincidencias {
 		$this->BasicSearch->UnsetSession();
 	}
 
+	// Clear all advanced search parameters
+	function ResetAdvancedSearchParms() {
+		$this->tipi_id->AdvancedSearch->UnsetSession();
+		$this->tipi_nombre->AdvancedSearch->UnsetSession();
+		$this->clientes_id->AdvancedSearch->UnsetSession();
+	}
+
 	// Restore all search parameters
 	function RestoreSearchParms() {
 
 		// Restore basic search values
 		$this->BasicSearch->Load();
+
+		// Restore advanced search values
+		$this->tipi_id->AdvancedSearch->Load();
+		$this->tipi_nombre->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -533,6 +637,7 @@ class ctiposincidencias_list extends ctiposincidencias {
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->tipi_id); // tipi_id
 			$this->UpdateSort($this->tipi_nombre); // tipi_nombre
+			$this->UpdateSort($this->clientes_id); // clientes_id
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -567,6 +672,7 @@ class ctiposincidencias_list extends ctiposincidencias {
 				$this->setSessionOrderBy($sOrderBy);
 				$this->tipi_id->setSort("");
 				$this->tipi_nombre->setSort("");
+				$this->clientes_id->setSort("");
 			}
 
 			// Reset start position
@@ -676,6 +782,28 @@ class ctiposincidencias_list extends ctiposincidencias {
 		$this->BasicSearch->Type = @$_GET[EW_TABLE_BASIC_SEARCH_TYPE];
 	}
 
+	//  Load search values for validation
+	function LoadSearchValues() {
+		global $objForm;
+
+		// Load search values
+		// tipi_id
+
+		$this->tipi_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_tipi_id"]);
+		if ($this->tipi_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->tipi_id->AdvancedSearch->SearchOperator = @$_GET["z_tipi_id"];
+
+		// tipi_nombre
+		$this->tipi_nombre->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_tipi_nombre"]);
+		if ($this->tipi_nombre->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->tipi_nombre->AdvancedSearch->SearchOperator = @$_GET["z_tipi_nombre"];
+
+		// clientes_id
+		$this->clientes_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_clientes_id"]);
+		if ($this->clientes_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->clientes_id->AdvancedSearch->SearchOperator = @$_GET["z_clientes_id"];
+	}
+
 	// Load recordset
 	function LoadRecordset($offset = -1, $rowcnt = -1) {
 		global $conn;
@@ -727,6 +855,7 @@ class ctiposincidencias_list extends ctiposincidencias {
 		$this->Row_Selected($row);
 		$this->tipi_id->setDbValue($rs->fields('tipi_id'));
 		$this->tipi_nombre->setDbValue($rs->fields('tipi_nombre'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Load old record
@@ -770,6 +899,7 @@ class ctiposincidencias_list extends ctiposincidencias {
 		// Common render codes for all row types
 		// tipi_id
 		// tipi_nombre
+		// clientes_id
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -781,6 +911,28 @@ class ctiposincidencias_list extends ctiposincidencias {
 			$this->tipi_nombre->ViewValue = $this->tipi_nombre->CurrentValue;
 			$this->tipi_nombre->ViewCustomAttributes = "";
 
+			// clientes_id
+			if (strval($this->clientes_id->CurrentValue) <> "") {
+				$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+				}
+			} else {
+				$this->clientes_id->ViewValue = NULL;
+			}
+			$this->clientes_id->ViewCustomAttributes = "";
+
 			// tipi_id
 			$this->tipi_id->LinkCustomAttributes = "";
 			$this->tipi_id->HrefValue = "";
@@ -790,11 +942,76 @@ class ctiposincidencias_list extends ctiposincidencias {
 			$this->tipi_nombre->LinkCustomAttributes = "";
 			$this->tipi_nombre->HrefValue = "";
 			$this->tipi_nombre->TooltipValue = "";
+
+			// clientes_id
+			$this->clientes_id->LinkCustomAttributes = "";
+			$this->clientes_id->HrefValue = "";
+			$this->clientes_id->TooltipValue = "";
+		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
+
+			// tipi_id
+			$this->tipi_id->EditCustomAttributes = "";
+			$this->tipi_id->EditValue = ew_HtmlEncode($this->tipi_id->AdvancedSearch->SearchValue);
+
+			// tipi_nombre
+			$this->tipi_nombre->EditCustomAttributes = "";
+			$this->tipi_nombre->EditValue = ew_HtmlEncode($this->tipi_nombre->AdvancedSearch->SearchValue);
+
+			// clientes_id
+			$this->clientes_id->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `clientes`";
+			$sWhereWrk = "";
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->clientes_id->EditValue = $arwrk;
+		}
+		if ($this->RowType == EW_ROWTYPE_ADD ||
+			$this->RowType == EW_ROWTYPE_EDIT ||
+			$this->RowType == EW_ROWTYPE_SEARCH) { // Add / Edit / Search row
+			$this->SetupFieldTitles();
 		}
 
 		// Call Row Rendered event
 		if ($this->RowType <> EW_ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
+	}
+
+	// Validate search
+	function ValidateSearch() {
+		global $gsSearchError;
+
+		// Initialize
+		$gsSearchError = "";
+
+		// Check if validation required
+		if (!EW_SERVER_VALIDATE)
+			return TRUE;
+
+		// Return validate result
+		$ValidateSearch = ($gsSearchError == "");
+
+		// Call Form_CustomValidate event
+		$sFormCustomError = "";
+		$ValidateSearch = $ValidateSearch && $this->Form_CustomValidate($sFormCustomError);
+		if ($sFormCustomError <> "") {
+			ew_AddMessage($gsSearchError, $sFormCustomError);
+		}
+		return $ValidateSearch;
+	}
+
+	// Load advanced search
+	function LoadAdvancedSearch() {
+		$this->tipi_id->AdvancedSearch->Load();
+		$this->tipi_nombre->AdvancedSearch->Load();
+		$this->clientes_id->AdvancedSearch->Load();
 	}
 
 	// Page Load event
@@ -917,9 +1134,45 @@ ftiposincidenciaslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ftiposincidenciaslist.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var ftiposincidenciaslistsrch = new ew_Form("ftiposincidenciaslistsrch");
+
+// Validate function for search
+ftiposincidenciaslistsrch.Validate = function(fobj) {
+	if (!this.ValidateRequired)
+		return true; // Ignore validation
+	fobj = fobj || this.Form;
+	this.PostAutoSuggest();
+	var infix = "";
+
+	// Set up row object
+	ew_ElementsToRow(fobj, infix);
+
+	// Fire Form_CustomValidate event
+	if (!this.Form_CustomValidate(fobj))
+		return false;
+	return true;
+}
+
+// Form_CustomValidate event
+ftiposincidenciaslistsrch.Form_CustomValidate = 
+ function(fobj) { // DO NOT CHANGE THIS LINE!
+
+ 	// Your custom validation code here, return false if invalid. 
+ 	return true;
+ }
+
+// Use JavaScript validation or not
+<?php if (EW_CLIENT_VALIDATE) { ?>
+ftiposincidenciaslistsrch.ValidateRequired = true; // uses JavaScript validation
+<?php } else { ?>
+ftiposincidenciaslistsrch.ValidateRequired = false; // no JavaScript validation
+<?php } ?>
+
+// Dynamic selection lists
+ftiposincidenciaslistsrch.Lists["x_clientes_id"] = {"LinkField":"x_id","Ajax":null,"AutoFill":false,"DisplayFields":["x_nombre","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -945,18 +1198,60 @@ var ftiposincidenciaslistsrch = new ew_Form("ftiposincidenciaslistsrch");
 <?php $tiposincidencias_list->ExportOptions->Render("body"); ?>
 </p>
 <?php if ($tiposincidencias->Export == "" && $tiposincidencias->CurrentAction == "") { ?>
-<form name="ftiposincidenciaslistsrch" id="ftiposincidenciaslistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>">
+<form name="ftiposincidenciaslistsrch" id="ftiposincidenciaslistsrch" class="ewForm" action="<?php echo ew_CurrentPage() ?>" onsubmit="return ewForms[this.id].Submit();">
 <a href="javascript:ftiposincidenciaslistsrch.ToggleSearchPanel();" style="text-decoration: none;"><img id="ftiposincidenciaslistsrch_SearchImage" src="phpimages/collapse.gif" alt="" width="9" height="9" style="border: 0;"></a><span class="phpmaker">&nbsp;<?php echo $Language->Phrase("Search") ?></span><br>
 <div id="ftiposincidenciaslistsrch_SearchPanel">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="tiposincidencias">
 <div class="ewBasicSearch">
+<?php
+if ($gsSearchError == "")
+	$tiposincidencias_list->LoadAdvancedSearch(); // Load advanced search
+
+// Render for search
+$tiposincidencias->RowType = EW_ROWTYPE_SEARCH;
+
+// Render row
+$tiposincidencias->ResetAttrs();
+$tiposincidencias_list->RenderRow();
+?>
 <div id="xsr_1" class="ewRow">
+<?php if ($tiposincidencias->clientes_id->Visible) { // clientes_id ?>
+	<span id="xsc_clientes_id" class="ewCell">
+		<span class="ewSearchCaption"><?php echo $tiposincidencias->clientes_id->FldCaption() ?></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_clientes_id" id="z_clientes_id" value="="></span>
+		<span class="ewSearchField">
+<select id="x_clientes_id" name="x_clientes_id"<?php echo $tiposincidencias->clientes_id->EditAttributes() ?>>
+<?php
+if (is_array($tiposincidencias->clientes_id->EditValue)) {
+	$arwrk = $tiposincidencias->clientes_id->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($tiposincidencias->clientes_id->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+ftiposincidenciaslistsrch.Lists["x_clientes_id"].Options = <?php echo (is_array($tiposincidencias->clientes_id->EditValue)) ? ew_ArrayToJson($tiposincidencias->clientes_id->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+	</span>
+<?php } ?>
+</div>
+<div id="xsr_2" class="ewRow">
 	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" size="20" value="<?php echo ew_HtmlEncode($tiposincidencias_list->BasicSearch->getKeyword()) ?>">
 	<input type="submit" name="btnsubmit" id="btnsubmit" value="<?php echo ew_BtnCaption($Language->Phrase("QuickSearchBtn")) ?>">&nbsp;
 	<a href="<?php echo $tiposincidencias_list->PageUrl() ?>cmd=reset" id="a_ShowAll" class="ewLink"><?php echo $Language->Phrase("ShowAll") ?></a>&nbsp;
 </div>
-<div id="xsr_2" class="ewRow">
+<div id="xsr_3" class="ewRow">
 	<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="="<?php if ($tiposincidencias_list->BasicSearch->getType() == "=") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("ExactPhrase") ?></label>&nbsp;&nbsp;<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="AND"<?php if ($tiposincidencias_list->BasicSearch->getType() == "AND") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("AllWord") ?></label>&nbsp;&nbsp;<label><input type="radio" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="OR"<?php if ($tiposincidencias_list->BasicSearch->getType() == "OR") { ?> checked="checked"<?php } ?>><?php echo $Language->Phrase("AnyWord") ?></label>
 </div>
 </div>
@@ -1062,6 +1357,15 @@ $tiposincidencias_list->ListOptions->Render("header", "left");
 		</span></div></td>		
 	<?php } ?>
 <?php } ?>		
+<?php if ($tiposincidencias->clientes_id->Visible) { // clientes_id ?>
+	<?php if ($tiposincidencias->SortUrl($tiposincidencias->clientes_id) == "") { ?>
+		<td><span id="elh_tiposincidencias_clientes_id" class="tiposincidencias_clientes_id"><table class="ewTableHeaderBtn"><thead><tr><td><?php echo $tiposincidencias->clientes_id->FldCaption() ?></td></tr></thead></table></span></td>
+	<?php } else { ?>
+		<td><div onmousedown="ew_Sort(event,'<?php echo $tiposincidencias->SortUrl($tiposincidencias->clientes_id) ?>',1);"><span id="elh_tiposincidencias_clientes_id" class="tiposincidencias_clientes_id">
+			<table class="ewTableHeaderBtn"><thead><tr><td class="ewTableHeaderCaption"><?php echo $tiposincidencias->clientes_id->FldCaption() ?></td><td class="ewTableHeaderSort"><?php if ($tiposincidencias->clientes_id->getSort() == "ASC") { ?><img src="phpimages/sortup.gif" width="10" height="9" alt="" style="border: 0;"><?php } elseif ($tiposincidencias->clientes_id->getSort() == "DESC") { ?><img src="phpimages/sortdown.gif" width="10" height="9" alt="" style="border: 0;"><?php } ?></td></tr></thead></table>
+		</span></div></td>		
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -1136,6 +1440,12 @@ $tiposincidencias_list->ListOptions->Render("body", "left", $tiposincidencias_li
 		<td<?php echo $tiposincidencias->tipi_nombre->CellAttributes() ?>><span id="el<?php echo $tiposincidencias_list->RowCnt ?>_tiposincidencias_tipi_nombre" class="tiposincidencias_tipi_nombre">
 <span<?php echo $tiposincidencias->tipi_nombre->ViewAttributes() ?>>
 <?php echo $tiposincidencias->tipi_nombre->ListViewValue() ?></span>
+</span><a id="<?php echo $tiposincidencias_list->PageObjName . "_row_" . $tiposincidencias_list->RowCnt ?>"></a></td>
+	<?php } ?>
+	<?php if ($tiposincidencias->clientes_id->Visible) { // clientes_id ?>
+		<td<?php echo $tiposincidencias->clientes_id->CellAttributes() ?>><span id="el<?php echo $tiposincidencias_list->RowCnt ?>_tiposincidencias_clientes_id" class="tiposincidencias_clientes_id">
+<span<?php echo $tiposincidencias->clientes_id->ViewAttributes() ?>>
+<?php echo $tiposincidencias->clientes_id->ListViewValue() ?></span>
 </span><a id="<?php echo $tiposincidencias_list->PageObjName . "_row_" . $tiposincidencias_list->RowCnt ?>"></a></td>
 	<?php } ?>
 <?php

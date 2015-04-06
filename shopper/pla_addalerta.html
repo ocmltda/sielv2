@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ingreso de Alerta</title>
@@ -12,6 +15,7 @@ $(document).ready(function($) {
   navigator.geolocation.getCurrentPosition(useposition);
   var list_target_id = 'list-target'; //first select list ID
   var list_select_id = 'list-select'; //second select list ID
+  var list_incidencias = 'incidencia'; //second select list ID
   var initial_target_html = '<option value="">Please select a colour...</option>'; //Initial prompt for target select
  
   //$('#'+list_target_id).html(initial_target_html); //Give the target select the prompt option
@@ -36,6 +40,15 @@ $(document).ready(function($) {
           error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + " "+ thrownError);
           }});
+
+	  $.ajax({url: 'incidencias.php?svalue='+selectvalue,
+             success: function(output) {
+                //alert(output);
+                $('#'+list_incidencias).html(output);
+            },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + " "+ thrownError);
+          }});
         }
     });
 
@@ -44,6 +57,8 @@ $(document).ready(function($) {
 		var local = $("#list-target").val();
 		var incidencia = $("#incidencia").val();
 		var foto = $("#foto").val();
+		$("#nomcliente").val($("#list-select").children("option").filter(":selected").text());
+		$("#nomlocal").val($("#list-target").children("option").filter(":selected").text());
 		if (cliente == '' || cliente == null || local == '' || local == null || incidencia == '' || incidencia == null || foto == '' || foto == null) {
 		e.preventDefault();
 		alert("Favor ingrese los campos.");
@@ -76,12 +91,16 @@ $(function(){
 <body>
 <div data-role="page">
 	<div class="header" style="width:99%;margin-bottom:15px">
-		<div style="width:99%; border:1px solid green; text-align: center; background-color: red; color: white; font-size:20pt">ALERTAS SHOPPER</div>
-    </div>
+		<div style="width:99%; border:1px solid green; text-align: center; background-color: red; color: white; font-size:20pt; float:left">ALERTAS SHOPPER</div>
+        <div style="width:60%; text-align: left; background-color: white; color: green; font-size:10pt; float:left">Bienvenido: {nomshopper}</div>
+        <div style="width:39%; text-align: right; background-color: white; color: green; font-size:10pt; float:left"><a href="logout.php">Salir</a></div>
+  </div>
     <div data-role="content">
     	<form name="formalerta" id="formalerta" action="addalerta.php" method="post" enctype="multipart/form-data" data-ajax="false">
 			<input type="hidden" name="lat" id="lat">
 			<input type="hidden" name="lon" id="lon">
+			<input type="hidden" name="nomlocal" id="nomlocal">
+			<input type="hidden" name="nomcliente" id="nomcliente">
 			<!-- <fieldset data-role="fieldcontain"> -->
 			  <select name="cliente" onChange="//alert(selCategorias)" id="list-select" required>
 					<option value="" selected disabled>Seleccione el Cliente</option>

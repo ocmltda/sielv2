@@ -1,4 +1,21 @@
 <?php
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Cache-Control: no-cache");
+header("Pragma: no-cache");
+
+//creamos la sesion
+session_start();
+	
+//validamos si se ha hecho o no el inicio de sesion correctamente
+	
+//si no se ha hecho la sesion nos regresará a login.php
+if(!isset($_SESSION['sulogin']))
+{
+	header('Location: login.php');
+	exit();
+}
+else
+{
 	require_once('../include/class.TemplatePower.inc.php');
 	require_once('../include/db_mysql.inc');
 
@@ -38,13 +55,48 @@
 			}
 		}
 
-		echo '<meta http-equiv="refresh" content="0; url=okalerta.php" />';
+		//rescato los mails de la empresa
+		$db = new DB_Sql;
+		$db->query('SELECT mailsalerta FROM clientes WHERE id = ' . $_POST['cliente'] . '');
+		$mailsalerta = '';
+		while($db->next_record())
+		{
+			$mailsalerta = trim($db->Record['mailsalerta']) . '';
+		}
+
+		//si hay mails definidos entonces envio el mail
+		if ($mailsalerta)
+		{
+			//envio de mails
+			$to = $mailsalerta;
+			
+			$subject = "SIEL CLIENTES: Nueva alerta - " . $_POST['nomcliente'] . " - " . date('d-m-Y H:i');
+			
+			
+			$message = '<html><head> <title>SIEL CLIENTES</title></head><body><p>Estimados de la empresa ' . $_POST['nomcliente'] . '. Informamos que el Cliente incognito ha producido una alerta en el local ' . $_POST['nomlocal'] . '. Para más detalles invitamos a ingresar a ver la alerta en el sistema.</p><br></body></html>';
+
+			$headers  = "MIME-Version: 1.0\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8\r\n";
+
+			$headers .= "From: Tack < no_responder@tack.cl >\r\n";
+			//$headers .= "Cc: obarria@chilevision.cl\r\n";
+			//$headers .= "Bcc: birthdaycheck@example.com\r\n";
+
+			// and now mail it 
+			//echo "$to, $subject, $message, $headers";
+			mail($to, $subject, $message, $headers);
+		}
+
+		//echo '<meta http-equiv="refresh" content="0; url=okalerta.php" />';
+		header('Location: okalerta.php');
 	}
 	else
 	{
 
 		$t = new TemplatePower("pla_addalerta.html");
 		$t->prepare();
+
+		$t->assign('nomshopper', $_SESSION['suname'] . '');
 
 		$db = new DB_Sql;
 		$db->query('SELECT id, nombre FROM clientes order by nombre');
@@ -55,15 +107,16 @@
 			$t->assign('nomcli', $db->Record['nombre'] . '');
 		}
 
-		$db->query('SELECT tipi_id, tipi_nombre FROM tiposincidencias order by tipi_nombre');
+		/*$db->query('SELECT tipi_id, tipi_nombre FROM tiposincidencias order by tipi_nombre');
 		while($db->next_record())
 		{
 			$t->newBlock('incidencias');
 			$t->assign('idinc', $db->Record['tipi_id'] . '');
 			$t->assign('nominc', $db->Record['tipi_nombre'] . '');
-		}
+		}*/
 
 		//print the result
 		$t->printToScreen();
 	}
+}
 ?>

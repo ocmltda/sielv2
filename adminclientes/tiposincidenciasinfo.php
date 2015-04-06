@@ -9,6 +9,7 @@ $tiposincidencias = NULL;
 class ctiposincidencias extends cTable {
 	var $tipi_id;
 	var $tipi_nombre;
+	var $clientes_id;
 
 	//
 	// Table class constructor
@@ -40,6 +41,11 @@ class ctiposincidencias extends cTable {
 		// tipi_nombre
 		$this->tipi_nombre = new cField('tiposincidencias', 'tiposincidencias', 'x_tipi_nombre', 'tipi_nombre', '`tipi_nombre`', '`tipi_nombre`', 200, -1, FALSE, '`tipi_nombre`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['tipi_nombre'] = &$this->tipi_nombre;
+
+		// clientes_id
+		$this->clientes_id = new cField('tiposincidencias', 'tiposincidencias', 'x_clientes_id', 'clientes_id', '`clientes_id`', '`clientes_id`', 2, -1, FALSE, '`clientes_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->clientes_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['clientes_id'] = &$this->clientes_id;
 	}
 
 	// Single column sort
@@ -432,6 +438,7 @@ class ctiposincidencias extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->tipi_id->setDbValue($rs->fields('tipi_id'));
 		$this->tipi_nombre->setDbValue($rs->fields('tipi_nombre'));
+		$this->clientes_id->setDbValue($rs->fields('clientes_id'));
 	}
 
 	// Render list row values
@@ -444,6 +451,7 @@ class ctiposincidencias extends cTable {
    // Common render codes
 		// tipi_id
 		// tipi_nombre
+		// clientes_id
 		// tipi_id
 
 		$this->tipi_id->ViewValue = $this->tipi_id->CurrentValue;
@@ -452,6 +460,28 @@ class ctiposincidencias extends cTable {
 		// tipi_nombre
 		$this->tipi_nombre->ViewValue = $this->tipi_nombre->CurrentValue;
 		$this->tipi_nombre->ViewCustomAttributes = "";
+
+		// clientes_id
+		if (strval($this->clientes_id->CurrentValue) <> "") {
+			$sFilterWrk = "`id`" . ew_SearchString("=", $this->clientes_id->CurrentValue, EW_DATATYPE_NUMBER);
+		$sSqlWrk = "SELECT `id`, `nombre` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `clientes`";
+		$sWhereWrk = "";
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `nombre` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->clientes_id->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->clientes_id->ViewValue = $this->clientes_id->CurrentValue;
+			}
+		} else {
+			$this->clientes_id->ViewValue = NULL;
+		}
+		$this->clientes_id->ViewCustomAttributes = "";
 
 		// tipi_id
 		$this->tipi_id->LinkCustomAttributes = "";
@@ -462,6 +492,11 @@ class ctiposincidencias extends cTable {
 		$this->tipi_nombre->LinkCustomAttributes = "";
 		$this->tipi_nombre->HrefValue = "";
 		$this->tipi_nombre->TooltipValue = "";
+
+		// clientes_id
+		$this->clientes_id->LinkCustomAttributes = "";
+		$this->clientes_id->HrefValue = "";
+		$this->clientes_id->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -487,9 +522,11 @@ class ctiposincidencias extends cTable {
 			if ($ExportPageType == "view") {
 				if ($this->tipi_id->Exportable) $Doc->ExportCaption($this->tipi_id);
 				if ($this->tipi_nombre->Exportable) $Doc->ExportCaption($this->tipi_nombre);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 			} else {
 				if ($this->tipi_id->Exportable) $Doc->ExportCaption($this->tipi_id);
 				if ($this->tipi_nombre->Exportable) $Doc->ExportCaption($this->tipi_nombre);
+				if ($this->clientes_id->Exportable) $Doc->ExportCaption($this->clientes_id);
 			}
 			$Doc->EndExportRow();
 		}
@@ -521,9 +558,11 @@ class ctiposincidencias extends cTable {
 				if ($ExportPageType == "view") {
 					if ($this->tipi_id->Exportable) $Doc->ExportField($this->tipi_id);
 					if ($this->tipi_nombre->Exportable) $Doc->ExportField($this->tipi_nombre);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 				} else {
 					if ($this->tipi_id->Exportable) $Doc->ExportField($this->tipi_id);
 					if ($this->tipi_nombre->Exportable) $Doc->ExportField($this->tipi_nombre);
+					if ($this->clientes_id->Exportable) $Doc->ExportField($this->clientes_id);
 				}
 				$Doc->EndExportRow();
 			}
