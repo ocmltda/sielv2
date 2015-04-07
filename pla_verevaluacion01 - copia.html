@@ -90,24 +90,19 @@
       </tr>
       <tr>
         <td bgcolor="#DFDFDF">
-        <table width="950" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td width="720" height="25">&nbsp;</td>
-            <td width="230" height="25">&nbsp;</td>
-          </tr>
-          <tr>
-            <td style="font-size:30px; font-weight:bold; padding-left: 20px">{local}</td>
-            <td style="font-size:36px; font-weight:bold">Puntaje: {puntaje}</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>
-            <img src="img/camara.png" name="foto" width="33" height="25" hspace="20" border="0" align="right" class="link_popup" id="foto" style="cursor:hand">
-  <script type="text/javascript">
+        <div style="width:630px; float:left">
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Fecha Visita</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecvisita}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Visita</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{estvisita}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Boleta</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center"><img src="img/camara.png" width="33" height="25" border="0" style="cursor:hand" class="link_popup" id="foto">
+                <script type="text/javascript">
 				$('.link_popup').click(function(){
 					//alert($(this).attr('myid'));
 					var p = new Popelt({
@@ -123,13 +118,22 @@
 					p.addButton('Cerrar');
 					p.show();
 				});
-				</script>            </td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-        </table>
+				</script>
+                </div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Fechas Disponibles</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{fecdispo}</div>
+            </div>
+            <div style="width:315px; float:left; margin-bottom: 10px">
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">Estado Revisión</div>
+                <div style="width:310px; float:left; font-weight:bold; text-align:center">{estrev}</div>
+            </div>
+        </div>
+        <div style="width:300px; float:left">
+            <div style="width:160px; float:left; font-weight:bold; text-align:center; font-size:24px">Puntaje Obtenido</div>
+            <div style="width:140px; float:left; font-weight:bold; text-align:center; font-size:30px">{puntaje}</div>
+        </div>
         </td>
       </tr>
       <tr bgcolor="#F5AA1D">

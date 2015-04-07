@@ -73,6 +73,7 @@ else
 						$t->assign("servicio",$db->Record['servicio']);
 						$t->assign("direccion",$db->Record['direccion']);
 						$t->assign("empresa2",$db2->Record['nombre'] . '');
+						$t->assign("local2",$db->Record['nombre'] . '');
 
 						$db3 = new DB_Sql;
 
