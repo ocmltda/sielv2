@@ -1,7 +1,9 @@
 <?php
 //creamos la sesion
 session_start();
-	
+
+$mesesAnio=array(1=>'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+
 //validamos si se ha hecho o no el inicio de sesion correctamente
 	
 //si no se ha hecho la sesion nos regresará a login.php
@@ -73,6 +75,8 @@ else
 				$t->assign('CLI', $db2->Record['id'] . '');
 				$t->assign('MES', $_REQUEST['mes'] . '');
 				$t->assign('ANIO', $_REQUEST['anio'] . '');
+
+				$t->assign("nommes", $mesesAnio[($_REQUEST['mes']*1)]);
 
 				//total evaluaciones programadas
 				$db->query('SELECT Count(V.fecha_visita) AS TOTPRG FROM visitas AS V INNER JOIN locales AS L ON L.id = V.locales_id WHERE L.clientes_id = ' . $db2->Record['id'] . ' AND year(V.fecha_visita) = ' . $_REQUEST['anio'] . ' and month(V.fecha_visita)= ' . $_REQUEST['mes'] . ' AND (V.estado_visita = 1 OR V.estado_visita = 2 OR V.estado_visita = 3)');

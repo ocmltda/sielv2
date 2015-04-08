@@ -44,7 +44,7 @@ else
 	$db2 = new DB_Sql;
 
 	//encabezado y detalle
-	$db->query('SELECT V.id, V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles FROM visitas AS V WHERE V.id = ' . $_REQUEST['IDE']);
+	$db->query('SELECT V.id, V.fecha_visita, V.estado_visita, V.estado_revision, V.boleta, V.observaciones, V.fechas_disponibles, V.locales_id, V.planillas_id FROM visitas AS V WHERE V.id = ' . $_REQUEST['IDE']);
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -80,6 +80,10 @@ else
 				   $estrevision = 'S/I';
 			}
 
+			$fec_visita = $db->Record['fecha_visita'];
+			$locales_id = $db->Record['locales_id'];
+			$planillas_id = $db->Record['planillas_id'];
+
 			$t->assign("fecvisita", $db->Record['fecha_visita'] . '');
 			$t->assign("estvisita", $estvisita . '');
 			$t->assign("estrev", $estrevision . '');
@@ -112,6 +116,7 @@ else
 		$t->newBlock("generales");
 	}
 
+	//puntos perdidos por momentos
 	$db->query('SELECT I.item, Sum(IF(PR.puntaje = 0 and PR.tipos_id = 3,7,PR.puntaje)) AS TOTMOM, Sum(R.puntaje_obtenido) AS TOTRESP, I.id FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id INNER JOIN preguntas AS PR ON I.id = PR.items_id INNER JOIN respuestas AS R ON PR.id = R.preguntas_id AND V.id = R.visitas_id WHERE V.id = ' . $_REQUEST['IDE'] . ' GROUP BY I.item, I.id ORDER BY I.id ASC');
 	if ($db->nf() > 0)
 	{
@@ -150,6 +155,47 @@ else
 		$t->newBlock("items");
 	}
 
+	//preguntas mas perdidas ultimos 4 meses
+	$db->query('SELECT P.pregunta, count(P.pregunta) as VECESPERDIDA FROM visitas AS V INNER JOIN respuestas AS R ON V.id = R.visitas_id, preguntas AS P WHERE P.id = R.preguntas_id AND V.locales_id = ' . $locales_id . ' AND V.planillas_id = ' . $planillas_id . ' AND V.fecha_visita BETWEEN DATE_SUB(\'' . $fec_visita . '\', INTERVAL 2 MONTH) AND \'' . $fec_visita . '\' and IF(P.puntaje = 0	AND P.tipos_id = 3,	7, P.puntaje) - R.puntaje_obtenido > 0 GROUP BY P.pregunta ORDER BY 2 desc LIMIT 0,4');
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$t->newBlock("preguntas");
+			$t->assign("pregper", $db->Record['pregunta'] . '<br><br>');
+			$t->assign("totper", $db->Record['VECESPERDIDA'] . '');
+		}
+	}
+	else
+	{
+		$t->newBlock("preguntas");
+	}
+
+	//grafico puntos ultimos 4 meses
+	/*SELECT
+		DATE_FORMAT(v.fecha_visita,'%Y-%m') as MES,
+		FLOOR(SUM(res.puntaje_obtenido) / count(DISTINCT V.id)) AS puntaje3
+	FROM
+		visitas AS v
+	INNER JOIN respuestas AS res ON v.id = res.visitas_id
+	WHERE
+		v.locales_id = 40
+	GROUP BY
+		DATE_FORMAT(v.fecha_visita,'%Y-%m') desc*/
+
+	/*SELECT
+		visitas.id,
+		DATE_FORMAT(visitas.fecha_visita,'%Y-%m'),
+		SUM(respuestas.puntaje_obtenido)
+	FROM
+		visitas
+	INNER JOIN respuestas ON visitas.id = respuestas.visitas_id
+	WHERE
+		visitas.locales_id = 40
+	GROUP BY
+		visitas.id
+	ORDER BY
+		2 DESC*/
 
 	//print the result
 	$t->printToScreen();

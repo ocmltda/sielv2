@@ -1,6 +1,8 @@
 <?php
 //creamos la sesion
 session_start();
+
+$mesesAnio=array(1=>'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 	
 //validamos si se ha hecho o no el inicio de sesion correctamente
 	
@@ -60,6 +62,8 @@ else
 				$t->newBlock("empresas");
 				$t->assign("empresa",$db2->Record['nombre']);
 				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+				$t->assign("nommes", $mesesAnio[($_REQUEST['mes']*1)]);
 
 				$db->query('SELECT v.id,DATE_FORMAT(v.fecha_visita,\'%d-%m-%Y\') as fecvisita,lo.nombre,p.servicio,lo.direccion FROM visitas AS v INNER JOIN locales AS lo ON lo.id = v.locales_id INNER JOIN planillas AS p ON p.id = v.planillas_id WHERE lo.clientes_id = ' . $db2->Record['id'] . ' and (month(v.fecha_visita) = ' . $_REQUEST['mes'] . ' and year(v.fecha_visita) = ' . $_REQUEST['anio'] . ') and v.estado_visita = 2 and v.estado_revision = 2 ORDER BY v.fecha_visita DESC');
 				if ($db->nf() > 0)

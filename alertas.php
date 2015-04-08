@@ -1,7 +1,9 @@
 <?php
 //creamos la sesion
 session_start();
-	
+
+$mesesAnio=array(1=>'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+
 //validamos si se ha hecho o no el inicio de sesion correctamente
 	
 //si no se ha hecho la sesion nos regresará a login.php
@@ -60,6 +62,8 @@ else
 				$t->newBlock("empresas");
 				$t->assign("empresa",$db2->Record['nombre']);
 				$t->assign('periodosel', $_REQUEST['anio'] . '-' . $_REQUEST['mes'] . '');
+
+				$t->assign("nommes", $mesesAnio[($_REQUEST['mes']*1)]);
 
 				$db->query('SELECT a.*, l.nombre, DATE_FORMAT(a.fecha,\'%d-%m-%Y\') as fecvisita, t.tipi_nombre FROM alertas a, locales l, tiposincidencias t WHERE a.locales_id = l.id AND a.tiposincidencias_id = t.tipi_id AND a.clientes_id = ' . $db2->Record['id'] . ' and YEAR(a.fecha) = ' . $_REQUEST['anio'] . ' AND MONTH(a.fecha) = ' . $_REQUEST['mes'] . ' ORDER BY a.estado ASC, a.fecha DESC, a.hora DESC');
 				if ($db->nf() > 0)

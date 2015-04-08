@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="css/demoz.css" />
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/popelt-v1.0.min.js"></script>
+    <style type="text/css">
+<!--
+.Estilo1 {color: #FFFFFF}
+-->
+    </style>
     <!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -111,7 +116,7 @@
 				$('.link_popup').click(function(){
 					//alert($(this).attr('myid'));
 					var p = new Popelt({
-						title: 'Boleta',
+						title: 'Registro Fotográfico',
 						content: '<img src="{boleta}" border="0" style="cursor:hand" class="link_popup" id="foto">',
 						//contentType: 'ajax',
 						//loadUrl: '{boleta}',
@@ -129,8 +134,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
-        </table>
-        </td>
+        </table>        </td>
       </tr>
       <tr bgcolor="#F5AA1D">
         <td><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
@@ -142,8 +146,7 @@
         <td>
         	<!-- START BLOCK : generales -->
         	<div style="width:475px; float:left">{pregunta}</div><div style="width:475px; float:left; font-weight:bold">{respuesta}</div>
-            <!-- END BLOCK : generales -->
-        </td>
+            <!-- END BLOCK : generales -->        </td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>
@@ -191,20 +194,20 @@
       <tr>
         <td align="center"><table width="950" border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="475">Tendencia de la tienda</td>
-            <td width="475">Los puntos mas perdidos de los ultimos 4 meses</td>
+            <td width="475" height="28">Tendencia de la tienda</td>
+            <td width="475" height="28" style="background-color:#FF0000;"><span class="Estilo1" style="padding-left:10px">Los puntos más perdidos de los últimos 4 meses</span></td>
           </tr>
           <tr valign="top">
             <td>{graficott}</td>
             <td><table width="460" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td height="24">Preguntas</td>
-                <td height="24">N° Veces Perdidos</td>
+                <td width="330" height="24" style="padding-left:10px"><strong>Preguntas</strong></td>
+                <td width="130" height="24" align="center"><strong>N° Veces Perdidos</strong></td>
               </tr>
               <!-- START BLOCK : preguntas -->
               <tr valign="top">
-                <td height="24">{pregunta}</td>
-                <td height="24">{totper}</td>
+                <td height="24" style="padding-left:10px">{pregper}</td>
+                <td height="24" align="center"><strong>{totper}</strong></td>
               </tr>
 			  <!-- END BLOCK : preguntas -->
             </table></td>
@@ -216,6 +219,9 @@
       </tr>
       <tr>
         <td align="right"><a href="verevaluacion02.php?IDE={IDE}&EMP={empresa}">Ver detalle de la Evaluación</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="center">&nbsp;</td>
       </tr>
       <tr>
         <td align="center">&nbsp;</td>
