@@ -16,6 +16,11 @@
 .Estilo1 {color: #FFFFFF}
 -->
     </style>
+    <style type="text/css">
+<!--
+.Estilo2 {color: #FFFFFF; font-weight: bold; }
+-->
+    </style>
     <!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -194,11 +199,59 @@
       <tr>
         <td align="center"><table width="950" border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="475" height="28">Tendencia de la tienda</td>
-            <td width="475" height="28" style="background-color:#FF0000;"><span class="Estilo1" style="padding-left:10px">Los puntos más perdidos de los últimos 4 meses</span></td>
+            <td width="475" height="28" style="background-color:#89CE4E"><span class="Estilo1" style="padding-left:10px"><strong>Tendencia de la tienda</strong></span></td>
+            <td width="475" height="28" style="background-color:#FF0000;"><span class="Estilo2" style="padding-left:10px">Los puntos más perdidos de los últimos 4 meses</span></td>
           </tr>
           <tr valign="top">
-            <td>{graficott}</td>
+            <td><div id="graphtend"></div>
+            <script type="text/javascript"
+              src="https://www.google.com/jsapi?autoload={
+                'modules':[{
+                  'name':'visualization',
+                  'version':'1',
+                  'packages':['corechart']
+                }]
+              }"></script>
+            <script type="text/javascript">
+          google.setOnLoadCallback(drawChart);
+    
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Puntaje',          'Mes', { role: 'annotation' }],
+				/*['Ene', 21, 21],
+				['Feb', 45, 45]*/
+                <!-- START BLOCK : puntajes -->
+              ['{mesg}', {totmes}, {totmes}]{coma1}
+              <!-- END BLOCK : puntajes -->
+              ]);
+        
+              var options = {
+                //title: 'Puntaje últimos 4 meses',
+                legend: 'none',
+                //backgroundColor: '#EFEFEF',
+                colors: ['#5B9CD6'],
+                width: 470,
+                height: 210,
+                'chartArea': {'width': '80%', 'height': '85%'},
+                isStacked: true,
+				fontSize: 10,
+				fontName: 'Verdana, Arial',
+                hAxis: {
+                  //title: 'Puntaje',
+                  minValue: 0,
+                },
+                vAxis: {
+                  title: 'Puntaje últimos 4 meses',
+				  titleTextStyle: {italic: false, fontSize: 12}
+                }
+              };
+        
+              var chart = new google.visualization.ColumnChart(document.getElementById('graphtend'));
+        
+              chart.draw(data, options);
+          }
+        </script>
+            </td>
             <td><table width="460" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="330" height="24" style="padding-left:10px"><strong>Preguntas</strong></td>

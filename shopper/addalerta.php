@@ -70,10 +70,10 @@ else
 			//envio de mails
 			$to = $mailsalerta;
 			
-			$subject = "SIEL CLIENTES: Nueva alerta - " . $_POST['nomcliente'] . " - " . date('d-m-Y H:i');
+			$subject = "Alerta - " . $_POST['nomcliente'] . " - " . date('d-m-Y H:i');
 			
 			
-			$message = '<html><head> <title>SIEL CLIENTES</title></head><body><p>Estimados de la empresa ' . $_POST['nomcliente'] . '. Informamos que el Cliente incognito ha producido una alerta en el local ' . $_POST['nomlocal'] . '. Para más detalles invitamos a ingresar a ver la alerta en el sistema.</p><br></body></html>';
+			$message = '<html><head> <title>ALERTA</title></head><body><p>Informamos que el Cliente incógnito ha producido una alerta en el local ' . $_POST['nomlocal'] . '. Para más detalles invitamos a ingresar a <a href="http://tack.cl/siel_clientes/addalerta/" target="_blank">ver la alerta en el sistema</a>.</p><br></body></html>';
 
 			$headers  = "MIME-Version: 1.0\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8\r\n";

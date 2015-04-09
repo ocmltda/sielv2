@@ -182,6 +182,41 @@ else
 		v.locales_id = 40
 	GROUP BY
 		DATE_FORMAT(v.fecha_visita,'%Y-%m') desc*/
+	//grafico puntos ultimos 4 meses
+	$mesesAnioAbrv=array(1=>'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
+
+	$arrTend = null;
+
+	//$db->query('SELECT DATE_FORMAT(v.fecha_visita,\'%Y-%m\') as MES, FLOOR(SUM(res.puntaje_obtenido) / count(DISTINCT V.id)) AS puntaje3 FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.locales_id = ' . $locales_id . ' GROUP BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') ORDER BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') DESC LIMIT 0,4');
+	//echo 'SELECT DATE_FORMAT(v.fecha_visita,\'%Y-%m\') as MES, FLOOR(SUM(res.puntaje_obtenido) / count(DISTINCT v.id)) AS puntaje3 FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.locales_id = ' . $locales_id . ' and v.planillas_id = ' . $planillas_id . ' and DATE_FORMAT(\'' . $fec_visita . '\',\'%Y%m\') >= DATE_FORMAT(v.fecha_visita,\'%Y%m\') GROUP BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') ORDER BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') DESC LIMIT 0,4';
+	$db->query('SELECT DATE_FORMAT(v.fecha_visita,\'%Y-%m\') as MES, FLOOR(SUM(res.puntaje_obtenido) / count(DISTINCT v.id)) AS puntaje3 FROM visitas AS v INNER JOIN respuestas AS res ON v.id = res.visitas_id WHERE v.locales_id = ' . $locales_id . ' and v.planillas_id = ' . $planillas_id . ' and DATE_FORMAT(\'' . $fec_visita . '\',\'%Y%m\') >= DATE_FORMAT(v.fecha_visita,\'%Y%m\') GROUP BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') ORDER BY DATE_FORMAT(v.fecha_visita,\'%Y-%m\') DESC LIMIT 0,4');
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$aniomes = explode('-', $db->Record['MES']);
+			$nommes = $mesesAnioAbrv[$aniomes[1] * 1];
+			$arrTend[$nommes] = $db->Record['puntaje3'];
+		}
+	}
+
+	if (is_array($arrTend))
+	{
+		$arrTend = array_reverse($arrTend);
+		$tf = 1;
+		foreach ($arrTend as $clave => $valor) {
+			$t->newBlock("puntajes");
+			$t->assign("mesg", $clave . '');
+			$t->assign("totmes", $valor . '');
+			if ($tf < $db->nf())
+				$t->assign("coma1", ',');
+			$tf++;
+		}
+	}
+	else
+	{
+		//$t->newBlock("puntajes");
+	}
 
 	/*SELECT
 		visitas.id,
