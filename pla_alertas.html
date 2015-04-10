@@ -11,6 +11,30 @@
     <link rel="stylesheet" href="css/demoz.css" />
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/popelt-v1.0.min.js"></script>
+    <script type="text/javascript">//&lt;![CDATA[ 
+	$(window).load(function(){
+		// Con estas 3 líneas sobreescribimos el Constains para que no sea case sensitive pues por default en jquery  viene con case sensitive. Si no lo pones, queda como Case sensitive
+		$.expr[':'].Contains = function(x, y, z){
+			return jQuery(x).text().toLowerCase().indexOf(z[3].toLowerCase())>=0;
+		};
+	
+		// cada que escribamos, vamos a revisar lo que hay escrito 
+		$('#buscarloc').keyup(function() 
+		{
+			//tomamos el valor que tiene el input
+			var search = $('#buscarloc').val();
+			//mostramos todos los valores, para despues ir ocultando los que no coinciden
+			$('.filatienda').show();
+			
+			//esto es para revisar si tenemos algo que buscar, sino, que no lo haga.
+			if(search.length>0)
+			{
+			// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
+			$(".filatienda td.ntienda").not(":Contains('"+search+"')").parent().hide();
+			}
+		});
+	});//]]&gt;
+	</script>
 	<!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
 	<script src="scripts/angular.min.js"></script>
@@ -39,12 +63,12 @@
       <tr>
         <td><table width="970" border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="425" height="40" style="outline:0px solid #CCCCCC"><!--<table width="420" border="0" cellspacing="0" cellpadding="0">
+            <td width="425" height="40" style="outline:0px solid #CCCCCC"><table width="420" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td width="130">&nbsp;Filtrar por locales:</td>
                   <td width="290"><input name="buscarloc" type="text" id="buscarloc" maxlength="32" style="width:250px"></td>
                 </tr>
-            </table> --></td>
+            </table></td>
             <td width="100" height="40">&nbsp;</td>
             <td width="445" height="40" style="outline:1px solid #CCCCCC"><form name="form1" method="post" action="">
               <table width="440" border="0" cellspacing="0" cellpadding="0">
@@ -103,10 +127,10 @@
             <td width="26">&nbsp;</td>
           </tr>
           <!-- START BLOCK : alertas -->
-          <tr bgcolor="#FFFFFF">
+          <tr bgcolor="#FFFFFF" class="filatienda">
             <td>{fecha}</td>
             <td>{hora}</td>
-            <td>{tienda}</td>
+            <td class="ntienda">{tienda}</td>
             <td><div style="width:120px;word-wrap:break-word;"><a href="http://www.google.es/maps/preview?q={gps}" target="_blank" title="Ver ubicación del Cliente Incógnito">{gps}</a></div></td>
             <td>{incidencia}</td>
             <td>{comentario}</td>
