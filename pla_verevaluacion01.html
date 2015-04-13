@@ -19,6 +19,13 @@
     <style type="text/css">
 <!--
 .Estilo2 {color: #FFFFFF; font-weight: bold; }
+.imagen
+{
+transform:rotate(90deg);
+-ms-transform:rotate(90deg); /* IE 9 */
+-webkit-transform:rotate(90deg); /* Safari and Chrome */
+-mox-transform:rotate(90deg); /* Safari and Chrome */
+}
 -->
     </style>
     <!-- InstanceEndEditable -->
@@ -118,18 +125,35 @@
             <td>
             <img src="img/camara.png" name="foto" width="33" height="25" hspace="20" border="0" align="right" class="link_popup" id="foto" style="cursor:hand">
   <script type="text/javascript">
+  				$(document).ready(function() {
+					$('#foto3').click(function(){
+						alert('hola');
+					});    
+				});
+				
+				$('#foto2').on('click', function() {
+				  //$('img').removeClass('optionSelected');
+				  //$(this).addClass('optionSelected');
+				  alert('hola');
+				});
+				
 				$('.link_popup').click(function(){
 					//alert($(this).attr('myid'));
 					var p = new Popelt({
 						title: 'Registro Fotográfico',
-						content: '<img src="{boleta}" border="0" style="cursor:hand" class="link_popup" id="foto">',
+						content: '<img src="{boleta}" border="0" style="cursor:hand" width="630" class="link_popup" id="foto2" onclick="$(this).addClass(\'imagen\');">',
 						//contentType: 'ajax',
 						//loadUrl: '{boleta}',
-						width: 950,
+						width: 700,
 						height: 500,
 						focus: true
 					});
 					//p.addCloseButton();
+					//p.addButton('Rotar Imagen', function(){
+						//$('#foto2').addClass('imagen');
+						//$('#foto2').removeClass('imagen');
+						//document.getElementById('foto2').className+=' imagen'
+					//});
 					p.addButton('Cerrar');
 					p.show();
 				});
@@ -142,7 +166,7 @@
         </table>        </td>
       </tr>
       <tr bgcolor="#F5AA1D">
-        <td><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
+        <td><span class="titenc">&nbsp;&nbsp;&nbsp;&nbsp;Detalle de la visita</span></td>
       </tr>
       <tr>
         <td align="center"></td>
@@ -160,7 +184,7 @@
         <td align="center">&nbsp;</td>
       </tr>
       <tr>
-        <td bgcolor="#FF0000"><span class="menutop">&nbsp;&nbsp;&nbsp;&nbsp;Detalles adicionales importantes observados durante su visita:</span></td>
+        <td bgcolor="#FF0000"><span class="titenc">&nbsp;&nbsp;&nbsp;&nbsp;Detalles adicionales importantes observados durante su visita:</span></td>
       </tr>
       <tr>
         <td align="center"><table width="950" border="0" cellspacing="0" cellpadding="0">
