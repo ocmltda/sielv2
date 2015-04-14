@@ -59,7 +59,7 @@ else
 	}
 
 	//hitos o momentos
-	$db->query('SELECT I.id, I.item FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id WHERE V.id = ' . $_REQUEST['IDE']);
+	$db->query('SELECT I.id, I.item, R.respuesta FROM visitas AS V INNER JOIN planillas AS P ON P.id = V.planillas_id INNER JOIN items AS I ON P.id = I.planillas_id LEFT JOIN respuestas AS R ON V.id = R.visitas_id AND I.id = R.items_id WHERE V.id = ' . $_REQUEST['IDE']);
 	if ($db->nf() > 0)
 	{
 		while($db->next_record())
@@ -91,6 +91,12 @@ else
 			else
 			{
 				$t->newBlock("preguntas");
+			}
+
+			if (trim($db->Record['respuesta']))
+			{
+				$t->gotoBlock("hitos");
+				$t->assign("comentario", '<strong>Comentario:</strong> ' . $db->Record['respuesta'] . '');
 			}
 		}
 	}

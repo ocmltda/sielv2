@@ -124,22 +124,29 @@ else
 		{
 			$t->newBlock("items");
 			$t->assign("item", $db->Record['item'] . '');
-			$perdidos = $db->Record['TOTMOM'] - $db->Record['TOTRESP'];
+			$perdidos = $db->Record['TOTMOM'] - $db->Record['TOTRESP']; //puntos perdidos
+			$porcperdidos = ($perdidos * 100) / $db->Record['TOTMOM']; //porcentaje perdido
 
 			if ($perdidos > 0)
 			{
 				$minmargen = 64;
 
-				$t->assign("perd", 'Perdidos: ' . $perdidos . '');
+				$t->assign("perd", 'Perdidos: ' . number_format($porcperdidos,0) . '%' . '');
+				//$t->assign("perd", 'Perdidos: ' . $porcperdidos . '/' . $db->Record['TOTMOM'] . '');
 				/*if ($perdidos > 100 && $perdidos < 170)
 					$perdidos = $perdidos * 2;
 				if ($perdidos > 50 && $perdidos <= 100)
 					$perdidos = $perdidos * 4;
 				if ($perdidos > 0 && $perdidos <= 50)
 					$perdidos = $perdidos * 5;*/
-				$perdidos = $minmargen + $perdidos;
-				$sobra = 350 - $perdidos;
-				$t->assign("ancho", $perdidos . '');
+				$pixcelbarra = (350 * $porcperdidos) / 100;
+				if ($pixcelbarra < $minmargen)
+					$pixcelbarra = $minmargen;
+				//$perdidos = $minmargen + $perdidos;
+				//$sobra = 350 - $perdidos;
+				$sobra = 350 - $pixcelbarra;
+				//$t->assign("ancho", $perdidos . '');
+				$t->assign("ancho", $pixcelbarra . '');
 				$t->assign("margen", $sobra . '');
 			}
 			else
