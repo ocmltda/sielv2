@@ -95,6 +95,9 @@ else
 				{
 					//$t->newBlock("evaluaciones");
 				}
+
+				$t->gotoBlock("empresas");
+				$t->assign('totxemp', $db->nf() . '');
 			}
 		}
 		else

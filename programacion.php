@@ -116,6 +116,9 @@ else
 					//$t->newBlock("programaciones");
 					//$t->assign("direccion", 'Sin información');
 				}
+
+				$t->gotoBlock("empresas");
+				$t->assign('totxemp', $db->nf() . '');
 			}
 		}
 		else

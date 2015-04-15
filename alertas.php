@@ -89,6 +89,9 @@ else
 				{
 					//$t->newBlock("alertas");
 				}
+
+				$t->gotoBlock("empresas");
+				$t->assign('totxemp', $db->nf() . '');
 			}
 		}
 		else
