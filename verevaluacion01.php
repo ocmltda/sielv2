@@ -21,7 +21,7 @@ else
 	$t->assign("usrlogin", $_SESSION['uname']);
 
 	$t->assign("empresa", $_REQUEST['EMP']);
-	$t->assign("local", $_REQUEST['LOC']);
+	$t->assign("local", strtoupper($_REQUEST['LOC']));
 
 	$db = new DB_Sql;
 	$db->query('SELECT MN.men_id, MN.men_link, MN.men_nombre FROM percat AS PC INNER JOIN menu AS MN ON MN.men_id = PC.men_id WHERE PC.tipos_usuarios_id = ' .$_SESSION['utus']. ' ORDER BY MN.men_orden ASC');
