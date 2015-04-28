@@ -17,19 +17,47 @@
 		// cada que escribamos, vamos a revisar lo que hay escrito 
 		$('#buscarloc').keyup(function() 
 		{
+			searchTable($(this).val());
 			//tomamos el valor que tiene el input
-			var search = $('#buscarloc').val();
+			//var search = $('#buscarloc').val();
 			//mostramos todos los valores, para despues ir ocultando los que no coinciden
-			$('.filatienda').show();
+			//$('.filatienda').show();
 			
 			//esto es para revisar si tenemos algo que buscar, sino, que no lo haga.
-			if(search.length>0)
-			{
+			//if(search.length>0)
+			//{
 			// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
-			$(".filatienda td.ntienda").not(":Contains('"+search+"')").parent().hide();
-			}
+			//$(".ntienda,.nservicio").not(":Contains('"+search+"')").parent().hide();
+			//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
+			//}
 		});
 	});//]]&gt;
+
+	function searchTable(inputVal)
+	{
+		var table = $('.tablasearch');
+		table.find('tr.filatienda').each(function(index, row)
+		{
+			var allCells = $(row).find('td.ntienda, td.nservicio');
+			if(allCells.length > 0)
+			{
+				var found = false;
+				allCells.each(function(index, td)
+				{
+					//if ($(td).is('.ntienda') || $(td).is('.servicio'))
+					//{
+						var regExp = new RegExp(inputVal, 'i');
+						if(regExp.test($(td).text()))
+						{
+							found = true;
+							return false;
+						}
+					//}
+				});
+				if(found == true)$(row).show();else $(row).hide();
+			}
+		});
+	}
 	</script>
 	<!-- InstanceEndEditable -->
     <link href="css/sielv2.css" rel="stylesheet" type="text/css" />
@@ -111,7 +139,7 @@
         </table></td>
       </tr>
       <tr>
-        <td><table width="970" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">
+        <td><table width="970" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC" class="tablasearch">
           <tr>
             <td width="50">ID</td>
             <td width="90">Fecha Visita</td>
@@ -126,7 +154,7 @@
             <td>{id}</td>
             <td>{fecvisita}</td>
             <td class="ntienda">{local}</td>
-            <td>{servicio}</td>
+            <td class="nservicio">{servicio}</td>
             <td>{direccion}</td>
             <td align="center">{puntaje}</td>
             <td align="center" bgcolor="#FFFFFF"><a href="verevaluacion01.php?IDE={id}&EMP={empresa2}&LOC={local2}">Ver</a></td>

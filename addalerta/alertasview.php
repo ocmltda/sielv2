@@ -700,9 +700,10 @@ class calertas_view extends calertas {
 				echo '<p>Alerta ya revisada</p>';
 			else
 			{   
-				ew_Execute("UPDATE alertas SET estado = 2 WHERE id =" . $_GET['id']);
 
+				//ew_Execute("UPDATE alertas SET estado = 2 WHERE id =" . $_GET['id']);
 				//envio de mails
+
 				$to = 'eayalamail@gmail.com';
 				$subject = "ALERTA ID " . $_GET['id'] . " REVISADA POR " . CurrentUserName() . " - " . $this->clientes_id->ViewValue . " " . date('d-m-Y H:i');
 				$message = '<html><head> <title>ALERTA REVISADA</title><meta name="generator" content="PHPMaker v9.2.0">
@@ -715,8 +716,8 @@ class calertas_view extends calertas {
 				//$headers .= "Bcc: birthdaycheck@example.com\r\n";
 				// and now mail it 
 				//echo "$to, $subject, $message, $headers";
+				//mail($to, $subject, $message, $headers);   
 
-				mail($to, $subject, $message, $headers);
 			}
 	}                                                    
 

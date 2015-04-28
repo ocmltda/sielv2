@@ -57,6 +57,43 @@ else
 		$t->newBlock("tipos_acciones");
 	}
 
+	//consulto estado de la alerta
+	$db->query('SELECT A.estado, L.nombre AS LOCAL, C.nombre AS CLIENTE FROM alertas AS A INNER JOIN clientes AS C ON C.id = A.clientes_id INNER JOIN locales AS L ON L.id = A.locales_id WHERE A.id = ' . $_REQUEST['IA']);
+	if ($db->nf() > 0)
+	{
+		while($db->next_record())
+		{
+			$estadoalerta = $db->Record['estado'];
+			$nombrecliente = $db->Record['CLIENTE'];
+			$localcliente = $db->Record['LOCAL'];
+		}
+	}
+
+	if ($estadoalerta == 1)
+	{
+		//actualizo el estado
+		$db->query('UPDATE alertas SET estado = 2 WHERE id = ' . $_REQUEST['IA']);
+
+		//envio de mails
+		//$to = 'eayalamail@gmail.com';
+		$to = 'ocmchile@gmail.com';
+
+		$subject = "ALERTA LOCAL " . $localcliente . " REVISADA POR " . $_SESSION['uname'] . " - " . date('d-m-Y H:i');
+				 
+		$message = '<html><head> <title>ALERTA REVISADA</title></head><body><p>Informamos que el usuario ' . $_SESSION['uname'] . ' ha revisado la Alerta del Local ' . $localcliente . ', del Cliente ' . $nombrecliente . ' en la fecha ' . date('d-m-Y H:i') . '.</p><br></body></html>';
+
+		$headers  = "MIME-Version: 1.0\r\n";
+		$headers .= "Content-type: text/html; charset=utf-8\r\n";
+
+		$headers .= "From: Tack < no_responder@tack.cl >\r\n";
+		//$headers .= "Cc: obarria@chilevision.cl\r\n";
+		//$headers .= "Bcc: birthdaycheck@example.com\r\n";
+
+		// and now mail it 
+		//echo "$to, $subject, $message, $headers";
+		mail($to, $subject, $message, $headers);
+	}
+
 	//print the result
 	$t->printToScreen();
 //}

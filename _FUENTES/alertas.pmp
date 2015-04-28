@@ -109,7 +109,7 @@ function Page_DataRendering(&$header) {
 			echo '<p>Alerta ya revisada</p>';
 		else
 		{   
-			ew_Execute("UPDATE alertas SET estado = 2 WHERE id =" . $_GET['id']);
+			//ew_Execute("UPDATE alertas SET estado = 2 WHERE id =" . $_GET['id']);
 
 			//envio de mails
 			$to = 'eayalamail@gmail.com';
@@ -127,7 +127,7 @@ function Page_DataRendering(&$header) {
 
 			// and now mail it 
 			//echo "$to, $subject, $message, $headers";
-			mail($to, $subject, $message, $headers);
+			//mail($to, $subject, $message, $headers);   
 		}
 }                                                    
 ]]>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
-<configuration date="2015/04/06" author="e.World Technology Ltd.">
-<project id="{01BDD2DE-C1A6-464D-8FDD-3525837E1545}" file="C:\wamp25-32b\www\sielv2\_FUENTES\alertas.pmp" name="alertas" product="PHPMaker" version="9.2" datetime="2015/04/06 14:16:03" languagefolder="phplang" userlevel="">
+<configuration date="2015/04/27" author="e.World Technology Ltd.">
+<project id="{01BDD2DE-C1A6-464D-8FDD-3525837E1545}" file="C:\wamp25-32b\www\sielv2\_FUENTES\alertas.pmp" name="alertas" product="PHPMaker" version="9.2" datetime="2015/04/27 14:15:55" languagefolder="phplang" userlevel="">
 <table id="alertas" name="alertas" caption="Alertas" userlevel="" priv="1"/>
 <table id="clientes" name="clientes" caption="clientes" userlevel="" priv="1"/>
 <table id="locales" name="locales" caption="locales" userlevel="" priv="1"/>
