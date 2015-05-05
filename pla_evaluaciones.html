@@ -17,7 +17,8 @@
 		// cada que escribamos, vamos a revisar lo que hay escrito 
 		$('#buscarloc').keyup(function() 
 		{
-			searchTable($(this).val());
+			//searchTable($(this).val());
+			buscarCampos();
 			//tomamos el valor que tiene el input
 			//var search = $('#buscarloc').val();
 			//mostramos todos los valores, para despues ir ocultando los que no coinciden
@@ -26,12 +27,53 @@
 			//esto es para revisar si tenemos algo que buscar, sino, que no lo haga.
 			//if(search.length>0)
 			//{
-			// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
-			//$(".ntienda,.nservicio").not(":Contains('"+search+"')").parent().hide();
-			//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
+				// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
+				//$(".ntienda").not(":Contains('"+search+"')").parent().hide();
+				//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
+			//}
+		});
+		
+		$('#buscarserv').keyup(function() 
+		{
+			//searchTable($(this).val());
+			buscarCampos();
+			//tomamos el valor que tiene el input
+			//var search = $('#buscarserv').val();
+			//mostramos todos los valores, para despues ir ocultando los que no coinciden
+			//$('.filatienda').show();
+			
+			//esto es para revisar si tenemos algo que buscar, sino, que no lo haga.
+			//if(search.length>0)
+			//{
+				// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
+				//$(".nservicio").not(":Contains('"+search+"')").parent().hide();
+				//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
 			//}
 		});
 	});//]]&gt;
+	
+	function buscarCampos()
+	{
+		var search1 = $('#buscarloc').val();
+		var search2 = $('#buscarserv').val();
+		//mostramos todos los valores, para despues ir ocultando los que no coinciden
+		$('.filatienda').show();
+		
+		//esto es para revisar si tenemos algo que buscar, sino, que no lo haga.
+		if(search1.length>0)
+		{
+			// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
+			$(".ntienda").not(":Contains('"+search1+"')").parent().hide();
+			//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
+		}
+		
+		if(search2.length>0)
+		{
+			// con la clase .nombre le decimos en cual de las celdas buscar y si no coincide, ocultamos el tr que contiene a esa celda. 
+			$(".nservicio").not(":Contains('"+search2+"')").parent().hide();
+			//$(".filatienda td.nservicio").not(":Contains('"+search+"')").parent().hide();
+		}
+	}
 
 	function searchTable(inputVal)
 	{
@@ -89,8 +131,10 @@
           <tr>
             <td width="425" height="40" style="outline:1px solid #CCCCCC"><table width="420" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="130">&nbsp;Filtrar por locales:</td>
-                  <td width="290"><input name="buscarloc" type="text" id="buscarloc" maxlength="32" style="width:250px"></td>
+                  <td width="80">&nbsp;Filtrar por:</td>
+                  <td width="340"><input name="buscarloc" type="text" id="buscarloc" maxlength="32" style="width:150px" placeholder="Local">
+                  ó
+                    <input name="buscarserv" type="text" id="buscarserv" maxlength="32" style="width:150px" placeholder="Servicio"></td>
                 </tr>
             </table></td>
             <td width="100" height="40">&nbsp;</td>
